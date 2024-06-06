@@ -1,22 +1,21 @@
 // import logo from "./logo.svg";
 import OAuthCard from "./login";
 import "./App.css";
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Route,
-  Link,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/login",
     element: <OAuthCard />,
   },
-  // {
-  //   path: "about",
-  //   element: <div>About</div>,
-  // },
+  {
+    path: "/callback",
+    element: <OAuthCard />,
+  },
+  {
+    path: "/home",
+    element: <div>HOME BABYYY</div>,
+  },
 ]);
 
 function App() {
