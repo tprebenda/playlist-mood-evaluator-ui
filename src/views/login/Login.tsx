@@ -6,10 +6,8 @@ import { green } from "@mui/material/colors";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
-import SpotifyLogoIcon from "./common/SpotifyLogoIcon";
-
-import { requestUserAuth } from "./helpers/auth/authHelpers";
-import UseSpotifyAuth from "./hooks/useSpotifyAuth";
+import SpotifyLogoIcon from "../../common/SpotifyLogoIcon";
+import UseSpotifyAuth from "../../hooks/useSpotifyAuth";
 import { useNavigate } from "react-router-dom";
 
 const welcomeMessage =
@@ -17,10 +15,10 @@ const welcomeMessage =
   "to your Spotify playlists to view song titles. This requires you to " +
   "authenticate your Spotify account.\nPlease sign in to Spotify here:";
 
-// TODO: move to components
-export default function OAuthCard() {
+// TODO: move to components, OR RENAME?
+export default function Login() {
   const navigate = useNavigate();
-  const { accessToken } = UseSpotifyAuth();
+  const { accessToken, requestUserAuth } = UseSpotifyAuth();
 
   useEffect(() => {
     if (accessToken) {
