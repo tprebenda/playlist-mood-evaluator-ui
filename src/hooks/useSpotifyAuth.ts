@@ -14,7 +14,7 @@ const CLIENT_ID = "5b9ee404632b45f6a6d6cc35824554a6";
 const SCOPE =
   "playlist-read-private,playist-read-collaborative,user-library-read";
 
-const REDIRECT_URI = "http://localhost:3000/callback";
+const REDIRECT_URI = "http://localhost:3000/login/callback";
 const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
 const TOKEN_ENDPOINT = "https://accounts.spotify.com/api/token";
 const STATE_KEY_LENGTH = 16;
@@ -28,17 +28,19 @@ const DUD_TOKEN: AccessTokenResponse = {
 };
 // Contains logic for Spotify OAuth2.0 with PCKE, returning:
 // - access_token
-// -  requestUserAuth()
+// - requestUserAuth()
 const UseSpotifyAuth = () => {
   const navigate = useNavigate();
-  const access_token = localStorage.getItem("access_token");
-  const [accessToken, setAccessToken] = useState(access_token || "");
+  // Pull from local storage if present
+  const [accessToken, setAccessToken] = useState(
+    localStorage.getItem("access_token") || "",
+  );
 
   const saveToken = (response: AccessTokenResponse) => {
     const { access_token, refresh_token, expires_in } = response;
-    localStorage.setItem("access_token", access_token || "");
-    localStorage.setItem("refresh_token", refresh_token || "");
-    localStorage.setItem("expires_in", expires_in.toString());
+    localStorage.setItem("accessToken", access_token || "");
+    localStorage.setItem("refreshToken", refresh_token || "");
+    localStorage.setItem("expiresIn", expires_in.toString());
 
     const now = new Date();
     const expiry = new Date(now.getTime() + expires_in * 1000);
@@ -50,7 +52,7 @@ const UseSpotifyAuth = () => {
   // https://developer.spotify.com/documentation/web-api/tutorials/code-pkce-flow
   const requestUserAuth = async () => {
     const codeVerifier = generateRandomString(64);
-    window.localStorage.setItem("code_verifier", codeVerifier);
+    window.localStorage.setItem("codeVerifier", codeVerifier);
 
     const hashed = await sha256(codeVerifier);
     const codeChallenge = base64encode(hashed);
@@ -73,7 +75,7 @@ const UseSpotifyAuth = () => {
   };
 
   const getToken = async (code: string): Promise<AccessTokenResponse> => {
-    const codeVerifier = localStorage.getItem("code_verifier");
+    const codeVerifier = localStorage.getItem("codeVerifier");
     if (!codeVerifier) {
       console.warn("No code verifier found in local storage...");
       return DUD_TOKEN;
@@ -92,22 +94,24 @@ const UseSpotifyAuth = () => {
     return response.data;
   };
 
-  // TODO: github.com/spotify/web-api-examples/blob/master/authorization/authorization_code_pkce/public/app.js#L116
-  // async function refreshToken() {
-  //   const response = await fetch(tokenEndpoint, {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/x-www-form-urlencoded'
-  //     },
-  //     body: new URLSearchParams({
-  //       client_id: clientId,
-  //       grant_type: 'refresh_token',
-  //       refresh_token: currentToken.refresh_token
-  //     }),
-  //   });
+  // TODO: do I need this?
+  async function refreshToken() {
+    const refreshToken = localStorage.getItem("refreshToken");
+    if (!refreshToken) {
+      console.warn("NO REFRESH TOKEN FOUND IN LOCAL STORAGE");
+      return DUD_TOKEN;
+    }
 
-  //   return await response.json();
-  // }
+    const params = {
+      client_id: CLIENT_ID,
+      grant_type: "refresh_token",
+      refresh_token: refreshToken,
+    };
+    const response = await axios.post(TOKEN_ENDPOINT, params, {
+      headers: HEADERS,
+    });
+    return response.data;
+  }
 
   // Main logic for authenticating
   useEffect(() => {

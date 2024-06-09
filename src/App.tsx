@@ -13,13 +13,19 @@ function App() {
 
   const router = createBrowserRouter([
     {
-      path: "/login",
+      // TODO: make this /home? (add useEffect to redirect to login if auth token not present?)
+      index: true,
       element: <Login />,
     },
     {
-      // TODO: remove?
-      path: "/callback",
+      path: "/login",
       element: <Login />,
+      children: [
+        {
+          path: "callback",
+          element: <Login />,
+        },
+      ],
     },
     {
       path: "/home",

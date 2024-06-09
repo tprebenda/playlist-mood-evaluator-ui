@@ -4,6 +4,5 @@ export interface AccessTokenResponse {
   token_type: string;
   expires_in: number;
   scope?: string | undefined;
-  id_token?: string | undefined;
   refresh_token?: string | undefined;
 }
