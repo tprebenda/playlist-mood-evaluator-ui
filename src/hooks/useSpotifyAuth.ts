@@ -12,7 +12,7 @@ import axios from "axios";
 // https://developer.spotify.com/documentation/web-api/tutorials/code-pkce-flow
 const CLIENT_ID = "5b9ee404632b45f6a6d6cc35824554a6";
 const SCOPE =
-  "playlist-read-private,playist-read-collaborative,user-library-read";
+  "playlist-read-private playlist-read-collaborative user-library-read";
 
 const REDIRECT_URI = "http://localhost:3000/login/callback";
 const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
@@ -36,6 +36,9 @@ const UseSpotifyAuth = () => {
     localStorage.getItem("access_token") || "",
   );
 
+  // Loads access token info into local storage for later usage
+  // TODO: STOP USING LOCAL STORAGE (SECURITY RISK)?
+  // https://stackoverflow.com/a/57826596/11972470
   const saveToken = (response: AccessTokenResponse) => {
     const { access_token, refresh_token, expires_in } = response;
     localStorage.setItem("accessToken", access_token || "");
@@ -61,7 +64,7 @@ const UseSpotifyAuth = () => {
     const params = {
       response_type: "code",
       client_id: CLIENT_ID,
-      // scope: SCOPE,
+      scope: SCOPE,
       code_challenge_method: "S256",
       code_challenge: codeChallenge,
       redirect_uri: REDIRECT_URI,
@@ -95,23 +98,23 @@ const UseSpotifyAuth = () => {
   };
 
   // TODO: do I need this?
-  async function refreshToken() {
-    const refreshToken = localStorage.getItem("refreshToken");
-    if (!refreshToken) {
-      console.warn("NO REFRESH TOKEN FOUND IN LOCAL STORAGE");
-      return DUD_TOKEN;
-    }
+  // async function refreshToken() {
+  //   const refreshToken = localStorage.getItem("refreshToken");
+  //   if (!refreshToken) {
+  //     console.warn("NO REFRESH TOKEN FOUND IN LOCAL STORAGE");
+  //     return DUD_TOKEN;
+  //   }
 
-    const params = {
-      client_id: CLIENT_ID,
-      grant_type: "refresh_token",
-      refresh_token: refreshToken,
-    };
-    const response = await axios.post(TOKEN_ENDPOINT, params, {
-      headers: HEADERS,
-    });
-    return response.data;
-  }
+  //   const params = {
+  //     client_id: CLIENT_ID,
+  //     grant_type: "refresh_token",
+  //     refresh_token: refreshToken,
+  //   };
+  //   const response = await axios.post(TOKEN_ENDPOINT, params, {
+  //     headers: HEADERS,
+  //   });
+  //   return response.data;
+  // }
 
   // Main logic for authenticating
   useEffect(() => {
