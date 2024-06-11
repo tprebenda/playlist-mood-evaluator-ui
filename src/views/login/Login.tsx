@@ -15,7 +15,6 @@ const welcomeMessage =
   "to your Spotify playlists to view song titles. This requires you to " +
   "authenticate your Spotify account.\nPlease sign in to Spotify here:";
 
-// TODO: move to components, OR RENAME?
 export default function Login() {
   const navigate = useNavigate();
   const { accessToken, requestUserAuth } = UseSpotifyAuth();

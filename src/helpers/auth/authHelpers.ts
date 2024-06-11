@@ -1,3 +1,5 @@
+// Utility functions related to Spotify Authentication
+
 export const generateRandomString = (length: number) => {
   const possible =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

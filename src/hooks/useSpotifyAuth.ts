@@ -26,8 +26,9 @@ const DUD_TOKEN: AccessTokenResponse = {
   token_type: "",
   expires_in: 0,
 };
+
 // Contains logic for Spotify OAuth2.0 with PCKE, returning:
-// - access_token
+// - access_token: string
 // - requestUserAuth()
 const UseSpotifyAuth = () => {
   const navigate = useNavigate();
@@ -97,7 +98,7 @@ const UseSpotifyAuth = () => {
     return response.data;
   };
 
-  // TODO: do I need this?
+  // TODO: USE IN ERROR HANDLING WHEN MAKING REQUESTS: https://stackoverflow.com/a/59846335/11972470
   // async function refreshToken() {
   //   const refreshToken = localStorage.getItem("refreshToken");
   //   if (!refreshToken) {
