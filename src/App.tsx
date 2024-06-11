@@ -1,27 +1,38 @@
 // import logo from "./logo.svg";
-import OAuthCard from "./login";
+import Login from "./views/login/Login";
 import "./App.css";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Home from "./views/home/Home";
 
 function App() {
-  return (
-    // <div className="App">
-    //   <header className="App-header">
-    //     <img src={logo} className="App-logo" alt="logo" />
-    //     <p>
-    //       Edit <code>src/App.tsx</code> and save to reload.
-    //     </p>
-    //     <a
-    //       className="App-link"
-    //       href="https://reactjs.org"
-    //       target="_blank"
-    //       rel="noopener noreferrer"
-    //     >
-    //       Learn React
-    //     </a>
-    //   </header>
-    // </div>
-    <OAuthCard />
-  );
+  // TODO: move to component, use useNavigate()?
+  const logout = () => {
+    localStorage.removeItem("access_token");
+    window.location.href = "http://localhost:3000/login";
+  };
+
+  const router = createBrowserRouter([
+    {
+      // TODO: make this /home? (add useEffect to redirect to login if auth token not present?)
+      index: true,
+      element: <Login />,
+    },
+    {
+      path: "/login",
+      element: <Login />,
+      children: [
+        {
+          path: "callback",
+          element: <Login />,
+        },
+      ],
+    },
+    {
+      path: "/home",
+      element: <Home signOut={logout} />,
+    },
+  ]);
+  return <RouterProvider router={router} />;
 }
 
 export default App;
