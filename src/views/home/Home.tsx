@@ -33,26 +33,25 @@ const Home = ({ signOut }: Home) => {
       justifyContent="space-evenly"
       alignItems="center"
     >
-      <Grid item xs={4}>
-        <Button
-          size="large"
-          variant="outlined"
-          sx={{ color: "blue" }}
-          onClick={signOut}
-        >
-          Log out
-        </Button>
-      </Grid>
-      <Grid item xs={4} m={7}>
+      <Grid item xs={4}></Grid>
+      <Grid item xs={4} m={4}>
         <Box className="square pulse">
           <LogoTextfield text="Playlist" color="green" />
           <LogoTextfield text="Mood" color="black" />
           <LogoTextfield text="Evaluator" color="green" />
         </Box>
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} m={3}>
         <TextField variant="filled" label="Enter playlist name..." />
       </Grid>
+      <Button
+        size="large"
+        variant="outlined"
+        sx={{ color: "blue" }}
+        onClick={signOut}
+      >
+        (Log out)
+      </Button>
     </Grid>
   );
 };
