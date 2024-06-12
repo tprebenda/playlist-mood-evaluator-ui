@@ -11,7 +11,7 @@ import UseSpotifyAuth from "../../hooks/useSpotifyAuth";
 import { useNavigate } from "react-router-dom";
 
 const welcomeMessage =
-  "Hello!\nThe Spotify Mood Playlist Evaluator app will require access " +
+  "Hello!\nThe Playlist Mood Evaluator app will require access " +
   "to your Spotify playlists to view song titles. This requires you to " +
   "authenticate your Spotify account.\nPlease sign in to Spotify here:";
 
