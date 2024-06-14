@@ -4,6 +4,12 @@ import "./Home.css";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import getPlaylists from "../../api/playlists/getPlaylist";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import getUser from "../../api/user/getUser";
+import CircularProgress from "@mui/material/CircularProgress";
+import Autocomplete from "@mui/material/Autocomplete";
 
 interface LogoTextfieldProps {
   text: string;
@@ -19,12 +25,43 @@ const LogoTextfield = ({ text, color }: LogoTextfieldProps) => {
 };
 
 // TODO: remove?
-interface Home {
+interface HomeProps {
   signOut: () => void;
 }
 
-const Home = ({ signOut }: Home) => {
-  return (
+const Home = ({ signOut }: HomeProps) => {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [displayName, setDisplayName] = useState("");
+  const [userPlaylists, setUserPlaylists] = useState<string[]>([]);
+  const accessToken = localStorage.getItem("accessToken") || "";
+
+  useEffect(() => {
+    if (!accessToken) {
+      navigate("/login");
+    }
+    const setupHomePage = async () => {
+      const { display_name, id } = await getUser(accessToken);
+      if (display_name && isNaN(+display_name)) {
+        setDisplayName(display_name);
+      } else {
+        setDisplayName(`User ${display_name}`);
+      }
+
+      const playlists = await getPlaylists(accessToken, id);
+      const playlistNames = Object.keys(playlists || []);
+      console.log(playlistNames);
+      setUserPlaylists(playlistNames);
+      setIsLoading(false);
+    };
+    setupHomePage();
+  }, [accessToken, navigate]);
+
+  return isLoading === true ? (
+    <Box sx={{ display: "flex" }}>
+      <CircularProgress />
+    </Box>
+  ) : (
     // TODO: use standard <div> since MUI grid doesn't support col widths for direction="column"?
     // https://mui.com/material-ui/react-grid/#direction-column-column-reverse
     <Grid
@@ -41,8 +78,20 @@ const Home = ({ signOut }: Home) => {
           <LogoTextfield text="Evaluator" color="green" />
         </Box>
       </Grid>
+      <Grid item xs={6} m={3}>
+        <Typography variant="h4" fontFamily="IBM Plex Sans Condensed">
+          Welcome, {displayName}!
+        </Typography>
+      </Grid>
       <Grid item xs={12} m={3}>
-        <TextField variant="filled" label="Enter playlist name..." />
+        <Autocomplete
+          id="playlist-select"
+          options={userPlaylists}
+          sx={{ width: 300 }}
+          renderInput={(params) => (
+            <TextField {...params} label="Playlist Name" />
+          )}
+        />
       </Grid>
       <Button
         size="large"

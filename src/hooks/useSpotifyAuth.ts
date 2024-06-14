@@ -11,8 +11,11 @@ import axios from "axios";
 // Used for Spotify OAuth flow
 // https://developer.spotify.com/documentation/web-api/tutorials/code-pkce-flow
 const CLIENT_ID = "5b9ee404632b45f6a6d6cc35824554a6";
+
+// user-read-private user-read-email: required to get userId
+// playlist-read-private playlist-read-collaborative: required to view playlists
 const SCOPE =
-  "playlist-read-private playlist-read-collaborative user-library-read";
+  "playlist-read-private playlist-read-collaborative user-read-private user-read-email";
 
 const REDIRECT_URI = "http://localhost:3000/login/callback";
 const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
@@ -140,8 +143,6 @@ const UseSpotifyAuth = () => {
     }
   }, [navigate]);
 
-  // TODO: return refreshToken()
-  // https://github.com/spotify/web-api-examples/blob/master/authorization/authorization_code_pkce/public/app.js#L116
   return { accessToken, requestUserAuth };
 };
 
