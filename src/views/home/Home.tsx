@@ -24,38 +24,33 @@ const LogoTextfield = ({ text, color }: LogoTextfieldProps) => {
   );
 };
 
-// TODO: remove?
-interface HomeProps {
-  signOut: () => void;
-}
-
-const Home = ({ signOut }: HomeProps) => {
+const Home = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [displayName, setDisplayName] = useState("");
   const [userPlaylists, setUserPlaylists] = useState<string[]>([]);
-  const accessToken = localStorage.getItem("accessToken") || "";
+
+  // TODO: clear state as well? or will that happen automatically
+  // when I navigate to /login and back to /home?
+  const signOut = () => navigate("/login");
 
   useEffect(() => {
-    if (!accessToken) {
-      navigate("/login");
-    }
     const setupHomePage = async () => {
-      const { display_name, id } = await getUser(accessToken);
+      const { display_name } = await getUser();
       if (display_name && isNaN(+display_name)) {
         setDisplayName(display_name);
       } else {
         setDisplayName(`User ${display_name}`);
       }
 
-      const playlists = await getPlaylists(accessToken, id);
+      const playlists = await getPlaylists();
       const playlistNames = Object.keys(playlists || []);
       console.log(playlistNames);
       setUserPlaylists(playlistNames);
       setIsLoading(false);
     };
     setupHomePage();
-  }, [accessToken, navigate]);
+  }, [navigate]);
 
   return isLoading === true ? (
     <Box sx={{ display: "flex" }}>
@@ -64,6 +59,8 @@ const Home = ({ signOut }: HomeProps) => {
   ) : (
     // TODO: use standard <div> since MUI grid doesn't support col widths for direction="column"?
     // https://mui.com/material-ui/react-grid/#direction-column-column-reverse
+    // OR: should I just wrap this whole thing in a div flexbox and customize that, with a
+    // spash art background behind it (centered by MUI grid)?
     <Grid
       container
       direction="column"

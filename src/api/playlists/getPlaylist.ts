@@ -1,15 +1,11 @@
 import axios from "axios";
-
-const _API_URL = "http://127.0.0.1:8000";
+import { API_URL_BASE } from "../../constants";
 
 // TODO:
-// MOVE SOMEWHERE ELSE (RESTRUCTURE FILE TREE?)?
-// USE PYDANTIC MODELS?
+// use pydantic?
 // add error handling for failed requests (401 unauthorized) - call refresh token and retry
-const getPlaylists = async (accessToken: string, userId: string) => {
-  const response = await axios.get(`${_API_URL}/playlists`, {
-    params: { auth_token: accessToken, user_id: userId },
-  });
+const getPlaylists = async () => {
+  const response = await axios.get(`${API_URL_BASE}/playlists`);
   return response.data;
 };
 
