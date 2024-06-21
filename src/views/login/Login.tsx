@@ -14,7 +14,11 @@ const welcomeMessage =
   "authenticate your Spotify account.\nPlease sign in to Spotify here:";
 
 export default function Login() {
-  const { requestUserAuth } = UseSpotifyAuth();
+  // Provides method for initiatiating Auth Flow with Spotify OAuth server
+  // Also checks browser URL for Auth callback code, which is sent to our backend API to perform
+  // the token exchange (no token maintenance on frontend)
+  const { initiateOAuthFlow } = UseSpotifyAuth();
+
   return (
     <Grid
       container
@@ -49,7 +53,7 @@ export default function Login() {
           </Typography>
         </CardContent>
         <CardActions sx={{ display: "flex" }}>
-          <Button size="small" onClick={requestUserAuth}>
+          <Button size="small" onClick={initiateOAuthFlow}>
             <SpotifyLogoIcon />
           </Button>
         </CardActions>

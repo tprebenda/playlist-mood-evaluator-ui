@@ -1,35 +1,38 @@
 import { useEffect } from "react";
-import { AccessTokenResponse } from "../interface";
 import {
   generateRandomString,
   sha256,
   base64encode,
 } from "../helpers/auth/authHelpers";
 import { useNavigate } from "react-router-dom";
-import initiateUserAuthForApi from "../api/login/getLogin";
+import exchangeSpotifyAuthToken from "../api/auth/getSpotifyAuth";
 
-// Used for Spotify OAuth flow
-// https://developer.spotify.com/documentation/web-api/tutorials/code-pkce-flow
+// Used for Spotify OAuth Code flow:
+// https://developer.spotify.com/documentation/web-api/tutorials/code-flow
 const CLIENT_ID = "5b9ee404632b45f6a6d6cc35824554a6";
 
 // user-read-private user-read-email: required to get userId
 // playlist-read-private playlist-read-collaborative: required to view playlists
 const SCOPE =
   "playlist-read-private playlist-read-collaborative user-read-private user-read-email";
-
 const REDIRECT_URI = "http://localhost:3000/login/callback";
 const OAUTH_AUTHORIZE_URL = "https://accounts.spotify.com/authorize";
 const STATE_KEY_LENGTH = 16;
+const CODE_VERIFIER_LENGTH = 64;
 
-// Contains logic for Spotify OAuth2.0 with PCKE, returning:
-// - requestUserAuth()
+// UseSpotifyAuth: contains logic for Spotify OAuth2.0 Code Flow
+// - Checks browser URL for auth codes in URL params, and initiates token exchange by making
+//    request to API backend
+// - initiateOAuthFlow(): sets browser window URL to Spotify OAuth request URL
 const UseSpotifyAuth = () => {
   const navigate = useNavigate();
 
   // Generates code challenge for Spotify OAuth2.0 authorization code flow
   // https://developer.spotify.com/documentation/web-api/tutorials/code-flow
-  const requestUserAuth = async () => {
-    const codeVerifier = generateRandomString(64);
+  // The actual token exchange occurs server-side, to completely avoid token maintenance on the
+  // frontend (see useEffect hook below)
+  const initiateOAuthFlow = async () => {
+    const codeVerifier = generateRandomString(CODE_VERIFIER_LENGTH);
     window.localStorage.setItem("codeVerifier", codeVerifier);
 
     const hashed = await sha256(codeVerifier);
@@ -52,12 +55,14 @@ const UseSpotifyAuth = () => {
     window.location.href = spotifyUserAuthUrl.toString();
   };
 
-  // Main logic for authenticating
+  // Used for retrieving 'code' sent from Spotify OAuth server in URL
+  // Sends to API backend for token exchange
   useEffect(() => {
     const initiateAccessTokenExchange = async (code: string) => {
-      const accessTokenRequest = await initiateUserAuthForApi(code);
+      const accessTokenRequest = await exchangeSpotifyAuthToken(code);
       if (!accessTokenRequest["tokenSaved"]) {
-        console.warn("Access token was not found");
+        console.warn("Access token exchange failed, NOT authenticated...");
+        navigate("/login");
       }
     };
 
@@ -67,15 +72,15 @@ const UseSpotifyAuth = () => {
       console.warn(error);
     }
 
+    // If we find a code in URL, we're in a callback, do a token exchange
     const code = args.get("code");
-    // If we find a code, we're in a callback, do a token exchange
     if (code) {
       initiateAccessTokenExchange(code);
       navigate("/home");
     }
   }, [navigate]);
 
-  return { requestUserAuth };
+  return { initiateOAuthFlow };
 };
 
 export default UseSpotifyAuth;

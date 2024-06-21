@@ -45,7 +45,6 @@ const Home = () => {
 
       const playlists = await getPlaylists();
       const playlistNames = Object.keys(playlists || []);
-      console.log(playlistNames);
       setUserPlaylists(playlistNames);
       setIsLoading(false);
     };

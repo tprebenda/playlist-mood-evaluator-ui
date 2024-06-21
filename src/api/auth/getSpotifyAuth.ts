@@ -6,15 +6,15 @@ interface AccessTokenReponse {
 }
 
 // This will initiate the User Auth for the web API backend
-const initiateUserAuthForApi = async (
+const exchangeSpotifyAuthToken = async (
   code: string,
 ): Promise<AccessTokenReponse> => {
   const searchParams = new URLSearchParams();
   searchParams.append("code", code);
-  const response = await axios.get(
-    `${API_URL_BASE}/callback?` + searchParams.toString(),
+  const response = await axios.post(
+    `${API_URL_BASE}/spotify-token?` + searchParams.toString(),
   );
   return response.data;
 };
 
-export default initiateUserAuthForApi;
+export default exchangeSpotifyAuthToken;
