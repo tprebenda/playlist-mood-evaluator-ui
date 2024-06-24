@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import SpotifyLogoIcon from "../../common/SpotifyLogoIcon";
-import UseSpotifyAuth from "../../hooks/useSpotifyAuth";
+import { initiateOAuthFlow } from "../../helpers/auth/authHelpers";
 
 const welcomeMessage =
   "Hello!\nThe Playlist Mood Evaluator app will require access " +
@@ -14,11 +14,7 @@ const welcomeMessage =
   "authenticate your Spotify account.\nPlease sign in to Spotify here:";
 
 export default function Login() {
-  // Provides method for initiatiating Auth Flow with Spotify OAuth server
-  // Also checks browser URL for Auth callback code, which is sent to our backend API to perform
-  // the token exchange (no token maintenance on frontend)
-  const { initiateOAuthFlow } = UseSpotifyAuth();
-
+  console.log("suh");
   return (
     <Grid
       container

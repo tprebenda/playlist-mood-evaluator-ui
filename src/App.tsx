@@ -13,16 +13,14 @@ function App() {
       // Alternative login path
       path: "/login",
       element: <Login />,
-      children: [
-        {
-          // This is used as the redirect path for for Spotify OAuth2.0 Authorization Code Flow
-          path: "callback",
-          element: <Login />,
-        },
-      ],
     },
     {
       path: "/home",
+      element: <Home />,
+    },
+    {
+      // This is used as the redirect path for for Spotify OAuth2.0 Authorization Code Flow
+      path: "/callback",
       element: <Home />,
     },
   ]);

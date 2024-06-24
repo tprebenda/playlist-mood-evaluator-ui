@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import getUser from "../../api/user/getUser";
 import CircularProgress from "@mui/material/CircularProgress";
 import Autocomplete from "@mui/material/Autocomplete";
+import UseSpotifyAuth from "../../hooks/useSpotifyAuth";
 
 interface LogoTextfieldProps {
   text: string;
@@ -26,13 +27,15 @@ const LogoTextfield = ({ text, color }: LogoTextfieldProps) => {
 
 const Home = () => {
   const navigate = useNavigate();
+  const { logout } = UseSpotifyAuth();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [displayName, setDisplayName] = useState("");
   const [userPlaylists, setUserPlaylists] = useState<string[]>([]);
 
-  // TODO: clear state as well? or will that happen automatically
-  // when I navigate to /login and back to /home?
-  const signOut = () => navigate("/login");
+  const signOut = () => {
+    // TODO: hit '/logout' endpoint in backend to clear server session
+    logout(); //
+  };
 
   useEffect(() => {
     const setupHomePage = async () => {

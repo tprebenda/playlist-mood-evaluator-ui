@@ -6,6 +6,7 @@ interface AccessTokenReponse {
 }
 
 // This will initiate the User Auth for the web API backend
+// todo: add interface for response data
 const exchangeSpotifyAuthToken = async (
   code: string,
 ): Promise<AccessTokenReponse> => {
