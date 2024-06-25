@@ -27,24 +27,29 @@ const LogoTextfield = ({ text, color }: LogoTextfieldProps) => {
 
 const Home = () => {
   const navigate = useNavigate();
-  const { logout } = UseSpotifyAuth();
+  const { authenticated, logout } = UseSpotifyAuth();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [displayName, setDisplayName] = useState("");
   const [userPlaylists, setUserPlaylists] = useState<string[]>([]);
 
   const signOut = () => {
-    // TODO: hit '/logout' endpoint in backend to clear server session
+    // TODO: hit '/logout' endpoint in backend to clear server session?
     logout(); //
   };
 
   useEffect(() => {
     const setupHomePage = async () => {
-      const { display_name } = await getUser();
-      if (display_name && isNaN(+display_name)) {
-        setDisplayName(display_name);
-      } else {
-        setDisplayName(`User ${display_name}`);
+      if (!authenticated) {
+        navigate("/login");
       }
+
+      const { display_name } = await getUser();
+      // If User profile name is a string, use it. If it's just an ID, use `User ${ID}`
+      const displayName =
+        display_name && isNaN(+display_name)
+          ? display_name
+          : `User ${display_name}`;
+      setDisplayName(displayName);
 
       const playlists = await getPlaylists();
       const playlistNames = Object.keys(playlists || []);
@@ -52,7 +57,7 @@ const Home = () => {
       setIsLoading(false);
     };
     setupHomePage();
-  }, [navigate]);
+  }, [authenticated, navigate]);
 
   return isLoading === true ? (
     <Box sx={{ display: "flex" }}>

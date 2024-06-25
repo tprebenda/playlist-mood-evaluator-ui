@@ -14,7 +14,6 @@ const welcomeMessage =
   "authenticate your Spotify account.\nPlease sign in to Spotify here:";
 
 export default function Login() {
-  console.log("suh");
   return (
     <Grid
       container
