@@ -7,6 +7,7 @@ import { API_URL_BASE } from "../../constants";
 const getPlaylistTitles = async (playlistName: string) => {
   const response = await axios.get(
     `${API_URL_BASE}/playlist/${playlistName}/titles`,
+    { withCredentials: true },
   );
   return response.data;
 };

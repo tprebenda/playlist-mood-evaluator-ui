@@ -9,7 +9,9 @@ interface UserProfileResponse {
 // add interface for response data
 // add error handling for failed requests (401 unauthorized) - call refresh token and retry
 const getUser = async (): Promise<UserProfileResponse> => {
-  const response = await axios.get(`${API_URL_BASE}/user`);
+  const response = await axios.get(`${API_URL_BASE}/user`, {
+    withCredentials: true,
+  });
   return response.data;
 };
 

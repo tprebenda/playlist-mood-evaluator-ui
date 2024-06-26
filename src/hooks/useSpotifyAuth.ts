@@ -40,7 +40,6 @@ const UseSpotifyAuth = () => {
       // Confirm state matches before requesting access token
       const state = args.get("state");
       const storedState = localStorage.getItem(STATE_KEY);
-      console.log({ storedState });
       if (!state || state !== storedState) {
         throw new Error(
           "Returned state from Auth request does not match locally-generated state...",

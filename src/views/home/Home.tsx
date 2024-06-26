@@ -39,10 +39,6 @@ const Home = () => {
 
   useEffect(() => {
     const setupHomePage = async () => {
-      if (!authenticated) {
-        navigate("/login");
-      }
-
       const { display_name } = await getUser();
       // If User profile name is a string, use it. If it's just an ID, use `User ${ID}`
       const displayName =
@@ -56,6 +52,9 @@ const Home = () => {
       setUserPlaylists(playlistNames);
       setIsLoading(false);
     };
+    if (!authenticated) {
+      navigate("/login");
+    }
     setupHomePage();
   }, [authenticated, navigate]);
 

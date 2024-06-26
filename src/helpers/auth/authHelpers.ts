@@ -6,10 +6,10 @@ const CLIENT_ID = "5b9ee404632b45f6a6d6cc35824554a6";
 // playlist-read-private playlist-read-collaborative: required to view playlists
 const SCOPE =
   "playlist-read-private playlist-read-collaborative user-read-private user-read-email";
-const REDIRECT_URI = "http://localhost:3000/callback";
+const REDIRECT_URI = "http://127.0.0.1:3000/callback";
 const OAUTH_AUTHORIZE_URL = "https://accounts.spotify.com/authorize";
 const STATE_LENGTH = 16;
-export const STATE_KEY = "auth-Request-State";
+export const STATE_KEY = "auth-request-state";
 // const CODE_VERIFIER_LENGTH = 64;
 
 // Sends user to Spotify Auth endpoint to initiate Spotify OAuth2.0 authorization code flow
@@ -17,11 +17,6 @@ export const STATE_KEY = "auth-Request-State";
 // token maintenance on the frontend, improving security.
 // https://developer.spotify.com/documentation/web-api/tutorials/code-flow
 export const initiateOAuthFlow = () => {
-  // const codeVerifier = generateRandomString(CODE_VERIFIER_LENGTH);
-  // localStorage.setItem("codeVerifier", codeVerifier);
-  // const hashed = await sha256(codeVerifier);
-  // const codeChallenge = base64encode(hashed);
-
   const state = generateRandomString(STATE_LENGTH);
   localStorage.setItem(STATE_KEY, state);
 
@@ -29,8 +24,6 @@ export const initiateOAuthFlow = () => {
     response_type: "code",
     client_id: CLIENT_ID,
     scope: SCOPE,
-    // code_challenge_method: "S256",
-    // code_challenge: codeChallenge,
     redirect_uri: REDIRECT_URI,
     state: state,
   };
@@ -47,17 +40,4 @@ const generateRandomString = (length: number = STATE_LENGTH) => {
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   const values = crypto.getRandomValues(new Uint8Array(length));
   return values.reduce((acc, x) => acc + possible[x % possible.length], "");
-};
-
-const sha256 = async (plain: string) => {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(plain);
-  return window.crypto.subtle.digest("SHA-256", data);
-};
-
-const base64encode = (input: ArrayBuffer) => {
-  return btoa(String.fromCharCode(...new Uint8Array(input)))
-    .replace(/=/g, "")
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_");
 };
