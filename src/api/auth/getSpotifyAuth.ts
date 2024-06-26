@@ -1,5 +1,4 @@
-import axios from "axios";
-import { API_URL_BASE } from "../../constants";
+import { axiosInstance } from "../axiosInstance";
 
 interface AccessTokenReponse {
   tokenSaved: boolean;
@@ -14,9 +13,8 @@ const exchangeSpotifyAuthToken = async (
 ): Promise<AccessTokenReponse> => {
   const searchParams = new URLSearchParams();
   searchParams.append("code", code);
-  const response = await axios.post(
-    `${API_URL_BASE}/spotify-auth?` + searchParams.toString(),
-    { withCredentials: true },
+  const response = await axiosInstance.post(
+    "/spotify-auth?" + searchParams.toString(),
   );
   return response.data;
 };

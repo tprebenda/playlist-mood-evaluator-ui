@@ -4,7 +4,7 @@ import "./Home.css";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import getPlaylists from "../../api/playlists/getPlaylist";
+import getPlaylists from "../../api/playlists/getPlaylists";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import getUser from "../../api/user/getUser";

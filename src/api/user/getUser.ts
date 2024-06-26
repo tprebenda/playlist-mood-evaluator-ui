@@ -1,5 +1,4 @@
-import axios from "axios";
-import { API_URL_BASE } from "../../constants";
+import { axiosInstance } from "../axiosInstance";
 
 interface UserProfileResponse {
   display_name: string;
@@ -9,9 +8,7 @@ interface UserProfileResponse {
 // add interface for response data
 // add error handling for failed requests (401 unauthorized) - call refresh token and retry
 const getUser = async (): Promise<UserProfileResponse> => {
-  const response = await axios.get(`${API_URL_BASE}/user`, {
-    withCredentials: true,
-  });
+  const response = await axiosInstance.get("/user");
   return response.data;
 };
 
