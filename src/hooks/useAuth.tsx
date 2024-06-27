@@ -9,7 +9,7 @@ import {
 } from "react";
 import { useNavigate } from "react-router-dom";
 import exchangeSpotifyAuthToken from "../api/auth/getSpotifyAuth";
-import { STATE_KEY } from "../helpers/auth/authHelpers";
+import { logoutOfSpotify, STATE_KEY } from "../helpers/auth/authHelpers";
 import initiateOAuthFlow from "../helpers/auth/authHelpers";
 
 interface AuthContextType {
@@ -62,15 +62,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }, [isAuthenticated, navigate]);
 
+  // redirects to Spotify Auth page, to generate code for Auth Code flow. The useEffect hook
+  // (above) will catch the callback and complete the login
   const login = () => {
     initiateOAuthFlow();
-    // useEffect hook above will catch the callback and finish login
   };
 
-  // call this function to sign out logged in user
+  // Logs out the user from Spotify
   const logout = useCallback(() => {
     setIsAuthenticated(false);
     // TODO: hit backend /logout endpoint
+    logoutOfSpotify();
     navigate("/login", { replace: true });
   }, [navigate]);
 

@@ -42,4 +42,15 @@ const generateRandomString = (length: number = STATE_LENGTH) => {
   return values.reduce((acc, x) => acc + possible[x % possible.length], "");
 };
 
+export const logoutOfSpotify = () => {
+  // Opens popup to show user was logged out
+  const spotifyLogoutUrl = "https://accounts.spotify.com/en/logout";
+  const spotifyLogoutWindow = window.open(
+    spotifyLogoutUrl,
+    "Spotify Logout",
+    "width=700,height=500,top=40,left=40",
+  );
+  setTimeout(() => spotifyLogoutWindow?.close(), 2000);
+};
+
 export default initiateOAuthFlow;
