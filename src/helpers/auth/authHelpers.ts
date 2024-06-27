@@ -42,6 +42,7 @@ const generateRandomString = (length: number = STATE_LENGTH) => {
   return values.reduce((acc, x) => acc + possible[x % possible.length], "");
 };
 
+// https://stackoverflow.com/a/50738483/11972470
 export const logoutOfSpotify = () => {
   // Opens popup to show user was logged out
   const spotifyLogoutUrl = "https://accounts.spotify.com/en/logout";
@@ -53,4 +54,11 @@ export const logoutOfSpotify = () => {
   setTimeout(() => spotifyLogoutWindow?.close(), 2000);
 };
 
-export default initiateOAuthFlow;
+// Throws error if Spotify Auth endpoint returns one, otherwise returns "code" argument
+export const getAuthCodeFromArgs = (args: URLSearchParams) => {
+  const error = args.get("error");
+  if (error) {
+    throw new Error(error);
+  }
+  return args.get("code");
+};

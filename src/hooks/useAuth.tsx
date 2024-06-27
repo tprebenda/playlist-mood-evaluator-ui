@@ -5,12 +5,17 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { useNavigate } from "react-router-dom";
 import exchangeSpotifyAuthToken from "../api/auth/getSpotifyAuth";
-import { logoutOfSpotify, STATE_KEY } from "../helpers/auth/authHelpers";
-import initiateOAuthFlow from "../helpers/auth/authHelpers";
+import {
+  initiateOAuthFlow,
+  logoutOfSpotify,
+  getAuthCodeFromArgs,
+  STATE_KEY,
+} from "../helpers/auth/authHelpers";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -28,27 +33,28 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const navigate = useNavigate();
 
+  // used to ensure useEffect (below) doesn't run twice due to React Strict mode
+  // https://taig.medium.com/prevent-react-from-triggering-useeffect-twice-307a475714d7
+  const initialized = useRef(false);
+
   // Used for retrieving 'code' sent from Spotify OAuth server in URL
   // Sends to API backend for token exchange
   useEffect(() => {
     const authenticateViaSpotify = async (code: string) => {
       const tokenResponse = await exchangeSpotifyAuthToken(code);
       if (!tokenResponse["tokenSaved"]) {
-        console.warn("Access token exchange failed, NOT authenticated...");
-        return;
+        throw new Error("Access token exchange failed, NOT authenticated...");
       }
       setIsAuthenticated(true);
       navigate("/home");
     };
 
-    if (isAuthenticated) return;
+    // Don't check for callback if unauthenticated, or if component has already rendered
+    if (isAuthenticated || initialized.current) return;
+
+    // if we're in a callback, retrieve the auth code and send to backend for token exchange
     const args = new URLSearchParams(window.location.search);
-    const error = args.get("error");
-    if (error) {
-      throw new Error(error);
-    }
-    // If we find a code in URL, we're in a callback, do a token exchange
-    const code = args.get("code");
+    const code = getAuthCodeFromArgs(args);
     if (code) {
       // Confirm state matches before requesting access token
       const state = args.get("state");
@@ -60,6 +66,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }
       authenticateViaSpotify(code);
     }
+    return () => {
+      initialized.current = true;
+    };
   }, [isAuthenticated, navigate]);
 
   // redirects to Spotify Auth page, to generate code for Auth Code flow. The useEffect hook
