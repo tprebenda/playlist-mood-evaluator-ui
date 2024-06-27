@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import SpotifyLogoIcon from "../../common/SpotifyLogoIcon";
-import { initiateOAuthFlow } from "../../helpers/auth/authHelpers";
+import { useAuth } from "../../hooks/useAuth";
 
 const welcomeMessage =
   "Hello!\nThe Playlist Mood Evaluator app will require access " +
@@ -14,6 +14,8 @@ const welcomeMessage =
   "authenticate your Spotify account.\nPlease sign in to Spotify here:";
 
 export default function Login() {
+  const { login } = useAuth();
+
   return (
     <Grid
       container
@@ -48,7 +50,7 @@ export default function Login() {
           </Typography>
         </CardContent>
         <CardActions sx={{ display: "flex" }}>
-          <Button size="small" onClick={initiateOAuthFlow}>
+          <Button size="small" onClick={() => login()}>
             <SpotifyLogoIcon />
           </Button>
         </CardActions>

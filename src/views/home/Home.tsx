@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import getUser from "../../api/user/getUser";
 import CircularProgress from "@mui/material/CircularProgress";
 import Autocomplete from "@mui/material/Autocomplete";
-import UseSpotifyAuth from "../../hooks/useSpotifyAuth";
+import { useAuth } from "../../hooks/useAuth";
 
 interface LogoTextfieldProps {
   text: string;
@@ -27,36 +27,33 @@ const LogoTextfield = ({ text, color }: LogoTextfieldProps) => {
 
 const Home = () => {
   const navigate = useNavigate();
-  const { authenticated, logout } = UseSpotifyAuth();
+  const { isAuthenticated, logout } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [displayName, setDisplayName] = useState("");
   const [userPlaylists, setUserPlaylists] = useState<string[]>([]);
 
-  const signOut = () => {
-    // TODO: hit '/logout' endpoint in backend to clear server session?
-    logout(); //
-  };
-
   useEffect(() => {
     const setupHomePage = async () => {
-      const { display_name } = await getUser();
-      // If User profile name is a string, use it. If it's just an ID, use `User ${ID}`
-      const displayName =
-        display_name && isNaN(+display_name)
-          ? display_name
-          : `User ${display_name}`;
+      // const { display_name } = await getUser();
+      // // If User profile name is a string, use it. If it's just an ID, use `User ${ID}`
+      // const displayName =
+      //   display_name && isNaN(+display_name)
+      //     ? display_name
+      //     : `User ${display_name}`;
+      const displayName = "Prisoner 24601";
       setDisplayName(displayName);
 
-      const playlists = await getPlaylists();
-      const playlistNames = Object.keys(playlists || []);
+      // const playlists = await getPlaylists();
+      // const playlistNames = Object.keys(playlists || []);
+      const playlistNames = ["ayo", "nice playlist bro"];
       setUserPlaylists(playlistNames);
       setIsLoading(false);
     };
-    if (!authenticated) {
+    if (!isAuthenticated) {
       navigate("/login");
     }
     setupHomePage();
-  }, [authenticated, navigate]);
+  }, [isAuthenticated, navigate]);
 
   return isLoading === true ? (
     <Box sx={{ display: "flex" }}>
@@ -100,7 +97,7 @@ const Home = () => {
         size="large"
         variant="outlined"
         sx={{ color: "blue" }}
-        onClick={signOut}
+        onClick={logout}
       >
         (Log out)
       </Button>
