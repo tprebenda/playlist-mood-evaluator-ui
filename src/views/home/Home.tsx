@@ -4,13 +4,17 @@ import "./Home.css";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import getPlaylists from "../../api/playlists/getPlaylists";
+import {
+  getPlaylists,
+  PlaylistsResponse,
+} from "../../api/playlists/getPlaylists";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import getUser from "../../api/user/getUser";
 import CircularProgress from "@mui/material/CircularProgress";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useAuth } from "../../hooks/useAuth";
+import getPlaylistTitles from "../../api/playlists/getPlaylistSongs";
 
 interface LogoTextfieldProps {
   text: string;
@@ -25,28 +29,32 @@ const LogoTextfield = ({ text, color }: LogoTextfieldProps) => {
   );
 };
 
+type UserPlaylist = PlaylistsResponse;
+
 const Home = () => {
   const navigate = useNavigate();
   const { isAuthenticated, logout } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [displayName, setDisplayName] = useState("");
-  const [userPlaylists, setUserPlaylists] = useState<string[]>([]);
+  const [playlists, setPlaylists] = useState<UserPlaylist[]>([]);
+  const [playlistNames, setPlaylistNames] = useState<string[]>([]);
+  const [selectedPlaylistId, setSelectedPlaylistId] = useState<string>("");
 
   useEffect(() => {
     const setupHomePage = async () => {
-      // const { display_name } = await getUser();
-      // // If User profile name is a string, use it. If it's just an ID, use `User ${ID}`
-      // const displayName =
-      //   display_name && isNaN(+display_name)
-      //     ? display_name
-      //     : `User ${display_name}`;
-      const displayName = "Prisoner 24601";
+      const { display_name } = await getUser();
+      // If User profile name is a string, use it. If it's just an ID, use `User ${ID}`
+      const displayName =
+        display_name && isNaN(+display_name)
+          ? display_name
+          : `User ${display_name}`;
       setDisplayName(displayName);
 
-      // const playlists = await getPlaylists();
-      // const playlistNames = Object.keys(playlists || []);
-      const playlistNames = ["ayo", "nice playlist bro"];
-      setUserPlaylists(playlistNames);
+      const playlists = await getPlaylists();
+      setPlaylists(playlists);
+      setPlaylistNames(
+        playlists.map((playlist: UserPlaylist) => playlist.name)
+      );
       setIsLoading(false);
     };
     if (!isAuthenticated) {
@@ -54,6 +62,25 @@ const Home = () => {
     }
     setupHomePage();
   }, [isAuthenticated, navigate]);
+
+  const onSelectedPlaylistChange = (
+    e: SyntheticEvent<Element, Event>,
+    value: string | null
+  ) => {
+    if (!playlists || !value) {
+      setSelectedPlaylistId("");
+      return;
+    }
+    const playlist = playlists.find(
+      (playlist: UserPlaylist) => playlist.name === value
+    );
+    setSelectedPlaylistId(playlist!.id);
+  };
+
+  const getPlaylistMood = (playlistId: string) => {
+    getPlaylistTitles(playlistId);
+    // TODO: display mood
+  };
 
   return isLoading === true ? (
     <Box sx={{ display: "flex" }}>
@@ -86,13 +113,23 @@ const Home = () => {
       <Grid item xs={12} m={3}>
         <Autocomplete
           id="playlist-select"
-          options={userPlaylists}
+          options={playlistNames}
           sx={{ width: 300 }}
           renderInput={(params) => (
             <TextField {...params} label="Playlist Name" />
           )}
+          onChange={onSelectedPlaylistChange}
         />
       </Grid>
+      <Button
+        size="large"
+        variant="outlined"
+        sx={{ color: "green" }}
+        disabled={!selectedPlaylistId}
+        onClick={() => getPlaylistMood(selectedPlaylistId)}
+      >
+        Generate Mood for Playlist!
+      </Button>
       <Button
         size="large"
         variant="outlined"

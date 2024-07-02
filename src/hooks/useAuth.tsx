@@ -29,6 +29,8 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
+// AuthProvider wrapper that handles OAuth with Spotify and generates access token on the backend
+// Component reference: https://blog.logrocket.com/authentication-react-router-v6/
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -41,10 +43,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   // Sends to API backend for token exchange
   useEffect(() => {
     const authenticateViaSpotify = async (code: string) => {
-      const tokenResponse = await exchangeSpotifyAuthToken(code);
-      if (!tokenResponse["tokenSaved"]) {
-        throw new Error("Access token exchange failed, NOT authenticated...");
-      }
+      await exchangeSpotifyAuthToken(code);
       setIsAuthenticated(true);
       navigate("/home");
     };
@@ -77,7 +76,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     initiateOAuthFlow();
   };
 
-  // Logs out the user from Spotify
+  // Logs out the user of Spotify and from local session
   const logout = useCallback(() => {
     setIsAuthenticated(false);
     // TODO: hit backend /logout endpoint
