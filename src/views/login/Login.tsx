@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -7,23 +6,15 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import SpotifyLogoIcon from "../../common/SpotifyLogoIcon";
-import UseSpotifyAuth from "../../hooks/useSpotifyAuth";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 
 const welcomeMessage =
-  "Hello!\nThe Spotify Mood Playlist Evaluator app will require access " +
+  "Hello!\nThe Playlist Mood Evaluator app will require access " +
   "to your Spotify playlists to view song titles. This requires you to " +
   "authenticate your Spotify account.\nPlease sign in to Spotify here:";
 
 export default function Login() {
-  const navigate = useNavigate();
-  const { accessToken, requestUserAuth } = UseSpotifyAuth();
-
-  useEffect(() => {
-    if (accessToken) {
-      navigate("/home");
-    }
-  }, [accessToken, navigate]);
+  const { login } = useAuth();
 
   return (
     <Grid
@@ -59,7 +50,7 @@ export default function Login() {
           </Typography>
         </CardContent>
         <CardActions sx={{ display: "flex" }}>
-          <Button size="small" onClick={() => requestUserAuth()}>
+          <Button size="small" onClick={() => login()}>
             <SpotifyLogoIcon />
           </Button>
         </CardActions>
