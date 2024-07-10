@@ -9,13 +9,14 @@ import {
   useState,
 } from "react";
 import { useNavigate } from "react-router-dom";
-import exchangeSpotifyAuthToken from "../api/auth/getSpotifyAuth";
+import exchangeSpotifyAuthToken from "../api/auth/loginUser";
 import {
   initiateOAuthFlow,
   logoutOfSpotify,
   getAuthCodeFromArgs,
   STATE_KEY,
 } from "../helpers/auth/authHelpers";
+import logoutUserSession from "../api/auth/logoutUser";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -77,10 +78,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   // Logs out the user of Spotify and from local session
-  const logout = useCallback(() => {
-    setIsAuthenticated(false);
-    // TODO: hit backend /logout endpoint
+  const logout = useCallback(async () => {
+    await logoutUserSession();
     logoutOfSpotify();
+    setIsAuthenticated(false);
     navigate("/login", { replace: true });
   }, [navigate]);
 

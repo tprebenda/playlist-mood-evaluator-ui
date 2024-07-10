@@ -14,7 +14,7 @@ import getUser from "../../api/user/getUser";
 import CircularProgress from "@mui/material/CircularProgress";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useAuth } from "../../hooks/useAuth";
-import getPlaylistTitles from "../../api/playlists/getPlaylistSongs";
+import getPlaylistMood from "../../api/playlists/getPlaylistMood";
 
 interface LogoTextfieldProps {
   text: string;
@@ -77,8 +77,8 @@ const Home = () => {
     setSelectedPlaylistId(playlist!.id);
   };
 
-  const getPlaylistMood = (playlistId: string) => {
-    getPlaylistTitles(playlistId);
+  const getMoodForPlaylist = (playlistId: string) => {
+    getPlaylistMood(playlistId);
     // TODO: display mood
   };
 
@@ -126,7 +126,7 @@ const Home = () => {
         variant="outlined"
         sx={{ color: "green" }}
         disabled={!selectedPlaylistId}
-        onClick={() => getPlaylistMood(selectedPlaylistId)}
+        onClick={() => getMoodForPlaylist(selectedPlaylistId)}
       >
         Generate Mood for Playlist!
       </Button>
