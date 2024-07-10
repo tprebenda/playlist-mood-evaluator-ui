@@ -50,7 +50,7 @@ export default function Login() {
           </Typography>
         </CardContent>
         <CardActions sx={{ display: "flex" }}>
-          <Button size="small" onClick={() => login()}>
+          <Button size="small" onClick={login}>
             <SpotifyLogoIcon />
           </Button>
         </CardActions>

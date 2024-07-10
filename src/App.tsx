@@ -5,6 +5,7 @@ import Home from "./views/home/Home";
 import { AuthProvider } from "./hooks/useAuth";
 
 // Allows us to wrap the browser router in AuthProvider
+// https://stackoverflow.com/a/74443785/11972470
 const AuthLayout = () => (
   <AuthProvider>
     <Outlet />
