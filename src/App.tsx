@@ -3,6 +3,7 @@ import "./App.css";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Home from "./views/home/Home";
 import { AuthProvider } from "./hooks/useAuth";
+import MoodDisplay from "./views/mood/MoodDisplay";
 
 // Allows us to wrap the browser router in AuthProvider
 // https://stackoverflow.com/a/74443785/11972470
@@ -34,6 +35,10 @@ function App() {
         {
           path: "/home",
           element: <Home />,
+        },
+        {
+          path: "/mood",
+          element: <MoodDisplay />,
         },
       ],
     },

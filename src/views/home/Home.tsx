@@ -43,7 +43,7 @@ const Home = () => {
   useEffect(() => {
     const setupHomePage = async () => {
       const { display_name } = await getUser();
-      // If User profile name is a string, use it. If it's just an ID, use `User ${ID}`
+      // If user display name is a string, use it. If it's just an ID, use `User ${ID}`
       const displayName =
         display_name && isNaN(+display_name)
           ? display_name
@@ -77,9 +77,9 @@ const Home = () => {
     setSelectedPlaylistId(playlist!.id);
   };
 
-  const getMoodForPlaylist = (playlistId: string) => {
-    getPlaylistMood(playlistId);
-    // TODO: display mood
+  const getMoodForPlaylist = async (playlistId: string) => {
+    const playlistMoodDetails = await getPlaylistMood(playlistId);
+    navigate("/mood", { state: playlistMoodDetails });
   };
 
   return isLoading === true ? (

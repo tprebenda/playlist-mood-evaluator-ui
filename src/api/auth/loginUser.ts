@@ -8,6 +8,10 @@ const exchangeSpotifyAuthToken = async (code: string): Promise<void> => {
   const response = await axiosInstance.post(
     "/spotify-auth?" + searchParams.toString(),
   );
+  // if (response.status == 401) {
+  //   call /refresh-token endpoint to reinitialize session on backend
+  //   call this function again (recursive)? Or should I automatically refresh on the backend?
+  // }
   if (response.status !== 204) {
     // TODO: return whole response object instead of response.data, handle errors in component instead?
     throw new Error("Login attempt failed, please try again...");
