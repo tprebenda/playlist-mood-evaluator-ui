@@ -9,7 +9,7 @@ import {
   PlaylistsResponse,
 } from "../../api/playlists/getPlaylists";
 import { useNavigate } from "react-router-dom";
-import { SyntheticEvent, useEffect, useState } from "react";
+import { SyntheticEvent, useEffect, useMemo, useState } from "react";
 import getUser from "../../api/user/getUser";
 import CircularProgress from "@mui/material/CircularProgress";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -37,8 +37,13 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [displayName, setDisplayName] = useState("");
   const [playlists, setPlaylists] = useState<UserPlaylist[]>([]);
-  const [playlistNames, setPlaylistNames] = useState<string[]>([]);
-  const [selectedPlaylistId, setSelectedPlaylistId] = useState<string>("");
+  const [selectedPlaylist, setSelectedPlaylist] = useState<UserPlaylist | null>(
+    null
+  );
+  const allPlaylistNames = useMemo(
+    () => playlists.map((playlist: UserPlaylist) => playlist.name),
+    [playlists]
+  );
 
   useEffect(() => {
     const setupHomePage = async () => {
@@ -52,9 +57,6 @@ const Home = () => {
 
       const playlists = await getPlaylists();
       setPlaylists(playlists);
-      setPlaylistNames(
-        playlists.map((playlist: UserPlaylist) => playlist.name)
-      );
       setIsLoading(false);
     };
     if (!isAuthenticated) {
@@ -68,18 +70,24 @@ const Home = () => {
     value: string | null
   ) => {
     if (!playlists || !value) {
-      setSelectedPlaylistId("");
+      setSelectedPlaylist(null);
       return;
     }
     const playlist = playlists.find(
       (playlist: UserPlaylist) => playlist.name === value
     );
-    setSelectedPlaylistId(playlist!.id);
+    setSelectedPlaylist(playlist!);
   };
 
-  const getMoodForPlaylist = async (playlistId: string) => {
-    const playlistMoodDetails = await getPlaylistMood(playlistId);
-    navigate("/mood", { state: playlistMoodDetails });
+  const getMoodForSelectedPlaylist = async () => {
+    if (!selectedPlaylist) {
+      console.warn("Must select a playlist from the dropdown menu first!");
+      return;
+    }
+    const playlistMoodDetails = await getPlaylistMood(selectedPlaylist.id);
+    navigate("/mood", {
+      state: { ...playlistMoodDetails, playlistName: selectedPlaylist.name },
+    });
   };
 
   return isLoading === true ? (
@@ -113,7 +121,7 @@ const Home = () => {
       <Grid item xs={12} m={3}>
         <Autocomplete
           id="playlist-select"
-          options={playlistNames}
+          options={allPlaylistNames}
           sx={{ width: 300 }}
           renderInput={(params) => (
             <TextField {...params} label="Playlist Name" />
@@ -125,8 +133,8 @@ const Home = () => {
         size="large"
         variant="outlined"
         sx={{ color: "green" }}
-        disabled={!selectedPlaylistId}
-        onClick={() => getMoodForPlaylist(selectedPlaylistId)}
+        disabled={!selectedPlaylist}
+        onClick={getMoodForSelectedPlaylist}
       >
         Generate Mood for Playlist!
       </Button>
