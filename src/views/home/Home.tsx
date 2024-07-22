@@ -1,6 +1,5 @@
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
-import "./Home.css";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -15,19 +14,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useAuth } from "../../hooks/useAuth";
 import getPlaylistMood from "../../api/playlists/getPlaylistMood";
-
-interface LogoTextfieldProps {
-  text: string;
-  color: string;
-}
-
-const LogoTextfield = ({ text, color }: LogoTextfieldProps) => {
-  return (
-    <Typography variant="h3" fontFamily="IBM Plex Sans Condensed" color={color}>
-      {text}
-    </Typography>
-  );
-};
+import AppBarWithLogout from "../../common/AppBar";
+import AppLogo from "../../common/AppLogo";
 
 type UserPlaylist = PlaylistsResponse;
 
@@ -91,7 +79,12 @@ const Home = () => {
   };
 
   return isLoading === true ? (
-    <Box sx={{ display: "flex" }}>
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      minHeight="100vh"
+    >
       <CircularProgress />
     </Box>
   ) : (
@@ -99,54 +92,53 @@ const Home = () => {
     // https://mui.com/material-ui/react-grid/#direction-column-column-reverse
     // OR: should I just wrap this whole thing in a div flexbox and customize that, with a
     // spash art background behind it (centered by MUI grid)?
-    <Grid
-      container
-      direction="column"
-      justifyContent="space-evenly"
-      alignItems="center"
-    >
-      <Grid item xs={4}></Grid>
-      <Grid item xs={4} m={4}>
-        <Box className="square pulse">
-          <LogoTextfield text="Playlist" color="green" />
-          <LogoTextfield text="Mood" color="black" />
-          <LogoTextfield text="Evaluator" color="green" />
-        </Box>
-      </Grid>
-      <Grid item xs={6} m={3}>
-        <Typography variant="h4" fontFamily="IBM Plex Sans Condensed">
-          Welcome, {displayName}!
-        </Typography>
-      </Grid>
-      <Grid item xs={12} m={3}>
-        <Autocomplete
-          id="playlist-select"
-          options={allPlaylistNames}
-          sx={{ width: 300 }}
-          renderInput={(params) => (
-            <TextField {...params} label="Playlist Name" />
-          )}
-          onChange={onSelectedPlaylistChange}
-        />
-      </Grid>
-      <Button
-        size="large"
-        variant="outlined"
-        sx={{ color: "green" }}
-        disabled={!selectedPlaylist}
-        onClick={getMoodForSelectedPlaylist}
+    <>
+      <AppBarWithLogout />
+      <Grid
+        container
+        direction="column"
+        justifyContent="space-evenly"
+        alignItems="center"
       >
-        Generate Mood for Playlist!
-      </Button>
-      <Button
-        size="large"
-        variant="outlined"
-        sx={{ color: "blue" }}
-        onClick={logout}
-      >
-        (Log out)
-      </Button>
-    </Grid>
+        <Grid item xs={4}></Grid>
+        <Grid item xs={4} m={4}>
+          <AppLogo />
+        </Grid>
+        <Grid item xs={6} m={3}>
+          <Typography variant="h4" fontFamily="IBM Plex Sans Condensed">
+            Welcome, {displayName}!
+          </Typography>
+        </Grid>
+        <Grid item xs={12} m={3}>
+          <Autocomplete
+            id="playlist-select"
+            options={allPlaylistNames}
+            sx={{ width: 300 }}
+            renderInput={(params) => (
+              <TextField {...params} label="Playlist Name" />
+            )}
+            onChange={onSelectedPlaylistChange}
+          />
+        </Grid>
+        <Button
+          size="large"
+          variant="outlined"
+          sx={{ color: "green" }}
+          disabled={!selectedPlaylist}
+          onClick={getMoodForSelectedPlaylist}
+        >
+          Generate Mood for Playlist!
+        </Button>
+        <Button
+          size="large"
+          variant="outlined"
+          sx={{ color: "blue" }}
+          onClick={logout}
+        >
+          (Log out)
+        </Button>
+      </Grid>
+    </>
   );
 };
 

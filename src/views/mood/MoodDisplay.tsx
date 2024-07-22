@@ -9,7 +9,7 @@ import {
   DataGrid,
   GridCellParams,
   GridColDef,
-  GridRowParams,
+  // GridRowParams,
   GridSortDirection,
 } from "@mui/x-data-grid";
 

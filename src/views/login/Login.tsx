@@ -4,29 +4,26 @@ import CardContent from "@mui/material/CardContent";
 import { green } from "@mui/material/colors";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
 import SpotifyLogoIcon from "../../common/SpotifyLogoIcon";
 import { useAuth } from "../../hooks/useAuth";
+import Box from "@mui/material/Box";
 
 const welcomeMessage =
   "Hello!\nThe Playlist Mood Evaluator app will require access " +
   "to your Spotify playlists to view song titles. This requires you to " +
-  "authenticate your Spotify account.\nPlease sign in to Spotify here:";
+  "authenticate your Spotify account.\nPlease sign in to Spotify by clicking the icon below:";
 
 export default function Login() {
   const { login } = useAuth();
 
   return (
-    <Grid
-      container
-      spacing={0}
-      direction="column"
-      alignItems="center"
+    <Box
+      display="flex"
       justifyContent="center"
-      alignContent="center"
+      alignItems="center"
       minHeight="100vh"
     >
-      <Card sx={{ maxWidth: 400 }}>
+      <Card sx={{ maxWidth: 500 }}>
         <CardContent
           sx={{
             marginBottom: "-15px",
@@ -55,6 +52,6 @@ export default function Login() {
           </Button>
         </CardActions>
       </Card>
-    </Grid>
+    </Box>
   );
 }
