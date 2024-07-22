@@ -21,9 +21,9 @@ type UserPlaylist = PlaylistsResponse;
 
 const Home = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [displayName, setDisplayName] = useState("");
+  const [displayName, setDisplayName] = useState<string>("");
   const [playlists, setPlaylists] = useState<UserPlaylist[]>([]);
   const [selectedPlaylist, setSelectedPlaylist] = useState<UserPlaylist | null>(
     null
@@ -72,6 +72,7 @@ const Home = () => {
       console.warn("Must select a playlist from the dropdown menu first!");
       return;
     }
+    setIsLoading(true);
     const playlistMoodDetails = await getPlaylistMood(selectedPlaylist.id);
     navigate("/mood", {
       state: { ...playlistMoodDetails, playlistName: selectedPlaylist.name },
@@ -81,11 +82,13 @@ const Home = () => {
   return isLoading === true ? (
     <Box
       display="flex"
+      flexDirection="column"
       justifyContent="center"
       alignItems="center"
       minHeight="100vh"
     >
       <CircularProgress />
+      <span style={{ marginTop: "8px" }}>Loading data from Spotify...</span>
     </Box>
   ) : (
     // TODO: use standard <div> since MUI grid doesn't support col widths for direction="column"?
@@ -128,14 +131,6 @@ const Home = () => {
           onClick={getMoodForSelectedPlaylist}
         >
           Generate Mood for Playlist!
-        </Button>
-        <Button
-          size="large"
-          variant="outlined"
-          sx={{ color: "blue" }}
-          onClick={logout}
-        >
-          (Log out)
         </Button>
       </Grid>
     </>

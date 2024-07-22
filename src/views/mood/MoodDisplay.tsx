@@ -12,6 +12,8 @@ import {
   GridSortDirection,
 } from "@mui/x-data-grid";
 import AppBarWithLogout from "../../common/appBar/AppBar";
+import { useState } from "react";
+import InfoDialog from "./InfoDialog";
 
 const DARK_BROWN_HEX = "#5C4033";
 const SIGNIFICANT_CELL_BACKGROUND_HEX = "#e6ffc2"; // #e6ffc2
@@ -56,6 +58,15 @@ const MoodDisplay = () => {
   // Pull mood details that were passed as state in navigate()
   const { state } = useLocation();
   const { mood, top_features, top_tracks, playlistName } = state;
+  const [infoDialogIsOpen, setInfoDialogIsOpen] = useState<boolean>(false);
+
+  const handleDialogOpen = () => {
+    setInfoDialogIsOpen(true);
+  };
+  const handleDialogClose = () => {
+    setInfoDialogIsOpen(false);
+  };
+
   return (
     <>
       <AppBarWithLogout />
@@ -85,15 +96,27 @@ const MoodDisplay = () => {
               </Typography>
               <Typography variant="body2">{top_features.join(", ")}</Typography>
             </CardContent>
-            <CardActions style={{ justifyContent: "center", marginBottom: 5 }}>
-              {/* TODO: ADD ONCLICK */}
+            {/* <CardActions style={{ justifyContent: "center", marginBottom: 5 }}>
               <Button size="medium">View a more detailed breakdown</Button>
-            </CardActions>
+            </CardActions> */}
           </Card>
         </Box>
-        <Typography variant="h6" color={DARK_BROWN_HEX} mt={4} mb={2}>
+        <Typography variant="h6" color={DARK_BROWN_HEX} mt={4}>
           Top Songs That Contributed to this Overall Mood:
         </Typography>
+        <Button
+          variant="text"
+          onClick={handleDialogOpen}
+          sx={{
+            textTransform: "none", // Disables standard MUI styling
+            textDecoration: "underline",
+            fontStyle: "italic",
+            color: "gray",
+            marginBottom: "8px",
+          }}
+        >
+          Where did these values come from?
+        </Button>
         <Box
           sx={{
             height: "700px",
@@ -128,6 +151,7 @@ const MoodDisplay = () => {
           />
         </Box>
       </Box>
+      <InfoDialog open={infoDialogIsOpen} handleClose={handleDialogClose} />
     </>
   );
 };
