@@ -14,8 +14,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useAuth } from "../../hooks/useAuth";
 import getPlaylistMood from "../../api/playlists/getPlaylistMood";
-import AppBarWithLogout from "../../common/AppBar";
-import AppLogo from "../../common/AppLogo";
+import AppBarWithLogout from "../../common/appBar/AppBar";
+import AppLogo from "../../common/appLogo/AppLogo";
 
 type UserPlaylist = PlaylistsResponse;
 

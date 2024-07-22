@@ -11,7 +11,7 @@ import {
   GridColDef,
   GridSortDirection,
 } from "@mui/x-data-grid";
-import AppBarWithLogout from "../../common/AppBar";
+import AppBarWithLogout from "../../common/appBar/AppBar";
 
 const DARK_BROWN_HEX = "#5C4033";
 const SIGNIFICANT_CELL_BACKGROUND_HEX = "#e6ffc2"; // #e6ffc2

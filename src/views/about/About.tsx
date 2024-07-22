@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
-import AppLogo from "../../common/AppLogo";
-import AppBarWithLogout from "../../common/AppBar";
+import AppLogo from "../../common/appLogo/AppLogo";
+import AppBarWithLogout from "../../common/appBar/AppBar";
 
 const About = () => {
   return (
