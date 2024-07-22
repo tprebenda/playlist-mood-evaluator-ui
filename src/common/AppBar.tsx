@@ -5,11 +5,21 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useAuth } from "../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const AppBarWithLogout = () => {
   const { isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const navigateBack = () => {
+    if (location.pathname === "/home") {
+      navigate("/login");
+    } else {
+      navigate(-1);
+    }
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{ bgcolor: "#83c3f7", color: "black" }}>
@@ -20,9 +30,7 @@ const AppBarWithLogout = () => {
             color="inherit"
             aria-label="menu"
             sx={{ mr: 2 }}
-            onClick={() => {
-              navigate(-1);
-            }}
+            onClick={navigateBack}
           >
             <ArrowBackIcon />
           </IconButton>
