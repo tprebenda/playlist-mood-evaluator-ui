@@ -19,10 +19,31 @@ import AppLogo from "../../common/appLogo/AppLogo";
 
 type UserPlaylist = PlaylistsResponse;
 
+interface LoadingStatus {
+  isLoading: boolean;
+  loadingText: string;
+}
+
+const loadingUserData: LoadingStatus = {
+  isLoading: true,
+  loadingText: "Loading User Profile data from Spotify...",
+};
+
+const loadingPlaylistData = (playlistName: string): LoadingStatus => ({
+  isLoading: true,
+  loadingText: `Generating mood using the songs from your playlist: '${playlistName}'...`,
+});
+
+const notLoading: LoadingStatus = {
+  isLoading: false,
+  loadingText: "",
+};
+
 const Home = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [loadingStatus, setLoadingStatus] =
+    useState<LoadingStatus>(loadingUserData);
   const [displayName, setDisplayName] = useState<string>("");
   const [playlists, setPlaylists] = useState<UserPlaylist[]>([]);
   const [selectedPlaylist, setSelectedPlaylist] = useState<UserPlaylist | null>(
@@ -45,7 +66,7 @@ const Home = () => {
 
       const playlists = await getPlaylists();
       setPlaylists(playlists);
-      setIsLoading(false);
+      setLoadingStatus(notLoading);
     };
     if (!isAuthenticated) {
       navigate("/login");
@@ -72,14 +93,14 @@ const Home = () => {
       console.warn("Must select a playlist from the dropdown menu first!");
       return;
     }
-    setIsLoading(true);
+    setLoadingStatus(loadingPlaylistData(selectedPlaylist.name));
     const playlistMoodDetails = await getPlaylistMood(selectedPlaylist.id);
     navigate("/mood", {
       state: { ...playlistMoodDetails, playlistName: selectedPlaylist.name },
     });
   };
 
-  return isLoading === true ? (
+  return loadingStatus.isLoading === true ? (
     <Box
       display="flex"
       flexDirection="column"
@@ -88,7 +109,7 @@ const Home = () => {
       minHeight="100vh"
     >
       <CircularProgress />
-      <span style={{ marginTop: "8px" }}>Loading data from Spotify...</span>
+      <span style={{ marginTop: "8px" }}>{loadingStatus.loadingText}</span>
     </Box>
   ) : (
     // TODO: use standard <div> since MUI grid doesn't support col widths for direction="column"?
