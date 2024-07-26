@@ -9,8 +9,6 @@ const SpotifyLogoIcon = () => (
       sx={{
         height: 50,
         width: 125,
-        maxHeight: { xs: 50, md: 35 },
-        maxWidth: { xs: 125, md: 75 },
       }}
       alt="Spotify Logo"
       src={Spotify_Logo_RGB_Green}

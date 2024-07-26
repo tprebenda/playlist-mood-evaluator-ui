@@ -1,5 +1,4 @@
 import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -21,22 +20,22 @@ type UserPlaylist = PlaylistsResponse;
 
 interface LoadingStatus {
   isLoading: boolean;
-  loadingText: string;
+  text: string;
 }
 
 const loadingUserData: LoadingStatus = {
   isLoading: true,
-  loadingText: "Loading User Profile data from Spotify...",
+  text: "Loading User Profile data from Spotify...",
 };
 
 const loadingPlaylistData = (playlistName: string): LoadingStatus => ({
   isLoading: true,
-  loadingText: `Generating mood using the songs from your playlist: '${playlistName}'...`,
+  text: `Generating mood using the songs from your playlist: '${playlistName}'...`,
 });
 
 const notLoading: LoadingStatus = {
   isLoading: false,
-  loadingText: "",
+  text: "",
 };
 
 const Home = () => {
@@ -109,31 +108,17 @@ const Home = () => {
       minHeight="100vh"
     >
       <CircularProgress />
-      <span style={{ marginTop: "8px" }}>{loadingStatus.loadingText}</span>
+      <span style={{ marginTop: "8px" }}>{loadingStatus.text}</span>
     </Box>
   ) : (
-    // TODO: use standard <div> since MUI grid doesn't support col widths for direction="column"?
-    // https://mui.com/material-ui/react-grid/#direction-column-column-reverse
-    // OR: should I just wrap this whole thing in a div flexbox and customize that, with a
-    // spash art background behind it (centered by MUI grid)?
     <>
       <AppBarWithLogout />
-      <Grid
-        container
-        direction="column"
-        justifyContent="space-evenly"
-        alignItems="center"
-      >
-        <Grid item xs={4}></Grid>
-        <Grid item xs={4} m={4}>
-          <AppLogo />
-        </Grid>
-        <Grid item xs={6} m={3}>
-          <Typography variant="h4" fontFamily="IBM Plex Sans Condensed">
-            Welcome, {displayName}!
-          </Typography>
-        </Grid>
-        <Grid item xs={12} m={3}>
+      <Box display="flex" flexDirection="column" alignItems="center">
+        <AppLogo />
+        <Typography variant="h4" fontFamily="IBM Plex Sans Condensed">
+          Welcome, {displayName}!
+        </Typography>
+        <Box mt={4} mb={3}>
           <Autocomplete
             id="playlist-select"
             options={allPlaylistNames}
@@ -143,17 +128,17 @@ const Home = () => {
             )}
             onChange={onSelectedPlaylistChange}
           />
-        </Grid>
+        </Box>
         <Button
           size="large"
           variant="outlined"
-          sx={{ color: "green" }}
           disabled={!selectedPlaylist}
+          sx={{ color: selectedPlaylist ? "green" : "" }}
           onClick={getMoodForSelectedPlaylist}
         >
           Generate Mood for Playlist!
         </Button>
-      </Grid>
+      </Box>
     </>
   );
 };

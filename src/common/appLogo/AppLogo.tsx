@@ -17,7 +17,7 @@ const LogoTextfield = ({ text, color }: LogoTextfieldProps) => {
 
 const AppLogo = () => {
   return (
-    <Box className="square pulse">
+    <Box className="square pulse" mt={8} mb={5}>
       <LogoTextfield text="Playlist" color="green" />
       <LogoTextfield text="Mood" color="black" />
       <LogoTextfield text="Evaluator" color="green" />

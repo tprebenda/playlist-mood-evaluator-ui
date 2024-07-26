@@ -16,13 +16,9 @@ const About = () => {
         flexDirection="column"
         justifyContent="center"
         alignItems="center"
-        marginTop="32px"
       >
         <AppLogo />
-        <Paper
-          elevation={2}
-          sx={{ marginTop: "32px", maxWidth: "500px", whiteSpace: "pre-line" }}
-        >
+        <Paper elevation={2} sx={{ maxWidth: "500px", whiteSpace: "pre-line" }}>
           <Box padding={2}>{aboutText}</Box>
         </Paper>
       </Box>

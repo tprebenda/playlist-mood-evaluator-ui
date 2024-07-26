@@ -38,7 +38,7 @@ const InfoDialog = ({ open, handleClose }: InfoDialogProps) => {
       aria-labelledby="info-dialog"
       aria-describedby="describes Spotify Audio features"
     >
-      <DialogTitle id="alert-dialog-title" color="green">
+      <DialogTitle id="alert-dialog-title" color="lightgreen">
         Where do these values come from?
       </DialogTitle>
       <DialogContent>
