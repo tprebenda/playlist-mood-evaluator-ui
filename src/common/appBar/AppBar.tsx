@@ -34,6 +34,9 @@ const AppBarHeader = () => {
           >
             <ArrowBackIcon />
           </IconButton>
+          <Button color="inherit" onClick={() => navigate("/home")}>
+            Home
+          </Button>
           <Button color="inherit" onClick={() => navigate("/about")}>
             About
           </Button>
