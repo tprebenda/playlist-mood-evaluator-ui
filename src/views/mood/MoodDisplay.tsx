@@ -91,27 +91,32 @@ const MoodDisplay = () => {
         <Box sx={{ minWidth: 275, maxWidth: 500 }}>
           <Card variant="outlined">
             <CardContent>
-              <Box textAlign="center" mb={2}>
-                <Typography variant="h4" color={BROWN_HEX}>
+              <Box textAlign="center" display="flex" flexDirection="column">
+                <Typography
+                  variant="h2"
+                  color="green"
+                  fontFamily="IBM Plex Sans Condensed"
+                  sx={{ marginBottom: "16px" }}
+                >
                   "{playlistName}"
                 </Typography>
+                <Typography variant="h5" color="green" gutterBottom>
+                  Playlist Mood:
+                </Typography>
+                <Typography variant="h6" component="div" mb={2}>
+                  {mood}
+                </Typography>
+                <Typography variant="h6" color="green" gutterBottom>
+                  Top Audio Feature Categories:
+                </Typography>
+                <Typography variant="body1">{topFeaturesUppercase}</Typography>
               </Box>
-              <Typography variant="h5" color="green" gutterBottom>
-                Playlist Mood:
-              </Typography>
-              <Typography variant="h6" component="div" mb={2}>
-                {mood}
-              </Typography>
-              <Typography variant="h6" color="green" gutterBottom>
-                Top Audio Feature Categories:
-              </Typography>
-              <Typography variant="body1">{topFeaturesUppercase}</Typography>
             </CardContent>
             <CardActions
               style={{
                 justifyContent: "center",
                 marginBottom: 5,
-                marginTop: -12,
+                marginTop: -14,
               }}
             >
               <Button
@@ -130,7 +135,7 @@ const MoodDisplay = () => {
             </CardActions>
           </Card>
         </Box>
-        <Typography variant="h6" color={BROWN_HEX} mt={4} mb={2}>
+        <Typography variant="h6" color="green" mt={4} mb={2}>
           Top Songs That Contributed to this Overall Mood:
         </Typography>
         <Box
