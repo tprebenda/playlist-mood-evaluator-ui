@@ -15,12 +15,15 @@ import {
   VALENCE,
 } from "./descriptions";
 
+const SPOTIFY_AUDIO_FEATURES_DOCS_URL =
+  "https://developer.spotify.com/documentation/web-api/reference/get-audio-features";
+
 interface CategoryTextProps {
   feature: string;
 }
 
 const AudioFeatureTitle = ({ feature }: CategoryTextProps) => (
-  <Typography variant="body1" sx={{ marginTop: "8px", fontWeight: "bold" }}>
+  <Typography variant="body1" sx={{ marginTop: "10px", fontWeight: "bold" }}>
     {feature}
   </Typography>
 );
@@ -29,6 +32,12 @@ interface InfoDialogProps {
   open: boolean;
   handleClose: () => void;
 }
+
+// https://stackoverflow.com/a/63627688/11972470
+const openInNewTab = (url: string): void => {
+  const newWindow = window.open(url, "_blank", "noopener,noreferrer");
+  if (newWindow) newWindow.opener = null;
+};
 
 const InfoDialog = ({ open, handleClose }: InfoDialogProps) => {
   return (
@@ -48,11 +57,11 @@ const InfoDialog = ({ open, handleClose }: InfoDialogProps) => {
           Features', as they are referred to by Spotify.
           <br />
           Taken directly from the{" "}
-          <Link href="https://developer.spotify.com/documentation/web-api/reference/get-audio-features">
+          <Link onClick={() => openInNewTab(SPOTIFY_AUDIO_FEATURES_DOCS_URL)}>
             Spotify Documentation,
           </Link>{" "}
-          here is the explanation for each of the audio features used by my app:
-          <br />
+          here is a description for each of the audio features used by my app:
+          {/* <br /> */}
           <br />
           <AudioFeatureTitle feature="Danceability" />
           {DANCEABILITY}
@@ -71,6 +80,11 @@ const InfoDialog = ({ open, handleClose }: InfoDialogProps) => {
           <br />
           <AudioFeatureTitle feature="Valence" />
           {VALENCE}
+          <br />
+          <br />
+          View the grid below to see which songs carried the most weight in your
+          playlist's mood evaluation! You can sort columns by clicking on the
+          column headers.
         </DialogContentText>
       </DialogContent>
       <DialogActions>

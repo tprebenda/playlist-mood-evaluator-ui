@@ -1,7 +1,6 @@
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import { green } from "@mui/material/colors";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import SpotifyLogoIcon from "../../common/SpotifyLogoIcon";
@@ -18,14 +17,9 @@ export default function Login() {
   const { login } = useAuth();
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-    >
+    <Box display="flex" flexDirection="column" alignItems="center">
       <AppLogo />
-      <Card sx={{ maxWidth: 500 }}>
+      <Card sx={{ maxWidth: 500, marginTop: "8px" }}>
         <CardContent
           sx={{
             marginBottom: "-15px",
@@ -40,7 +34,7 @@ export default function Login() {
             <Typography
               gutterBottom
               variant="h5"
-              color={green[800]}
+              color="green"
               fontFamily={"sans-serif"}
             >
               Authenticate with Spotify

@@ -125,7 +125,7 @@ const MoodDisplay = () => {
                   fontSize: "15px",
                 }}
               >
-                Where do these values come from?
+                What does this mean?
               </Button>
             </CardActions>
           </Card>
