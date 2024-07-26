@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import AppLogo from "../../common/appLogo/AppLogo";
-import AppBarWithLogout from "../../common/appBar/AppBar";
+import AppBarHeader from "../../common/appBar/AppBar";
 import Paper from "@mui/material/Paper";
 
 const aboutText = `The Playlist Mood Evaluator is a React web application developed by me, \
@@ -10,7 +10,7 @@ and to highlight the songs that share similar audio features.`;
 const About = () => {
   return (
     <>
-      <AppBarWithLogout />
+      <AppBarHeader />
       <Box
         display="flex"
         flexDirection="column"

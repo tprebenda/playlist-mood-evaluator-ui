@@ -13,7 +13,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useAuth } from "../../hooks/useAuth";
 import getPlaylistMood from "../../api/playlists/getPlaylistMood";
-import AppBarWithLogout from "../../common/appBar/AppBar";
+import AppBarHeader from "../../common/appBar/AppBar";
 import AppLogo from "../../common/appLogo/AppLogo";
 
 type UserPlaylist = PlaylistsResponse;
@@ -112,7 +112,7 @@ const Home = () => {
     </Box>
   ) : (
     <>
-      <AppBarWithLogout />
+      <AppBarHeader />
       <Box display="flex" flexDirection="column" alignItems="center">
         <AppLogo />
         <Typography variant="h4" fontFamily="IBM Plex Sans Condensed">

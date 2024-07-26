@@ -11,7 +11,7 @@ import {
   GridColDef,
   GridSortDirection,
 } from "@mui/x-data-grid";
-import AppBarWithLogout from "../../common/appBar/AppBar";
+import AppBarHeader from "../../common/appBar/AppBar";
 import { useMemo, useState } from "react";
 import InfoDialog from "./InfoDialog";
 
@@ -80,7 +80,7 @@ const MoodDisplay = () => {
 
   return (
     <>
-      <AppBarWithLogout />
+      <AppBarHeader />
       <Box
         display="flex"
         flexDirection="column"

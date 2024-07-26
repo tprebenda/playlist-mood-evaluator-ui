@@ -7,7 +7,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const AppBarWithLogout = () => {
+const AppBarHeader = () => {
   const { isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -47,4 +47,4 @@ const AppBarWithLogout = () => {
   );
 };
 
-export default AppBarWithLogout;
+export default AppBarHeader;

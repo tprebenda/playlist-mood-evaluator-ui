@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import SpotifyLogoIcon from "../../common/SpotifyLogoIcon";
 import { useAuth } from "../../hooks/useAuth";
 import Box from "@mui/material/Box";
+import AppLogo from "../../common/appLogo/AppLogo";
 
 const welcomeMessage =
   "Hello!\nThe Playlist Mood Evaluator app will require access " +
@@ -19,34 +20,41 @@ export default function Login() {
   return (
     <Box
       display="flex"
+      flexDirection="column"
       justifyContent="center"
       alignItems="center"
-      minHeight="100vh"
     >
+      <AppLogo />
       <Card sx={{ maxWidth: 500 }}>
         <CardContent
           sx={{
             marginBottom: "-15px",
           }}
         >
-          <Typography
-            gutterBottom
-            variant="h5"
-            component="div"
-            color={green[800]}
-            fontFamily={"sans-serif"}
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            mb={0.5}
           >
-            Authenticate with Spotify
-          </Typography>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{ whiteSpace: "pre-line" }}
-          >
-            {welcomeMessage}
-          </Typography>
+            <Typography
+              gutterBottom
+              variant="h5"
+              color={green[800]}
+              fontFamily={"sans-serif"}
+            >
+              Authenticate with Spotify
+            </Typography>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ whiteSpace: "pre-line" }}
+            >
+              {welcomeMessage}
+            </Typography>
+          </Box>
         </CardContent>
-        <CardActions sx={{ display: "flex" }}>
+        <CardActions sx={{ display: "flex", justifyContent: "center" }}>
           <Button size="small" onClick={login}>
             <SpotifyLogoIcon />
           </Button>
