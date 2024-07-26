@@ -156,7 +156,7 @@ const MoodDisplay = () => {
                 },
               },
             }}
-            pageSizeOptions={[10]}
+            pageSizeOptions={[10, 20, 60]}
             sx={{
               ".significantCell": {
                 color: "green",
