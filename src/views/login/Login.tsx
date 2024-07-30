@@ -8,6 +8,7 @@ import { useAuth } from "../../hooks/useAuth";
 import Box from "@mui/material/Box";
 import AppLogo from "../../common/appLogo/AppLogo";
 import nightCityWallpaper from "../../assets/nightCityWallpaper.jpg";
+import BackgroundImage from "../../common/backgroundImage/BackgroundImage";
 
 const welcomeMessage = `Hello!\nThe Playlist Mood Evaluator app will require access to your \
 Spotify account info (to retrieve your profile name) and your playlists (to view song titles). \
@@ -17,15 +18,7 @@ export default function Login() {
   const { login } = useAuth();
 
   return (
-    <Box
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      height="100vh"
-      sx={{
-        backgroundImage: `url(${nightCityWallpaper})`,
-      }}
-    >
+    <BackgroundImage imageUrl={nightCityWallpaper}>
       <Box
         display="flex"
         flexDirection="column"
@@ -77,6 +70,6 @@ export default function Login() {
           </CardActions>
         </Card>
       </Box>
-    </Box>
+    </BackgroundImage>
   );
 }

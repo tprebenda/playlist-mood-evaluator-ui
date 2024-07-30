@@ -16,6 +16,7 @@ import getPlaylistMood from "../../api/playlists/getPlaylistMood";
 import AppBarHeader from "../../common/appBar/AppBar";
 import AppLogo from "../../common/appLogo/AppLogo";
 import pinkSunWallpaper from "../../assets/pinkSunWallpaper.jpg";
+import BackgroundImage from "../../common/backgroundImage/BackgroundImage";
 
 type UserPlaylist = PlaylistsResponse;
 
@@ -114,15 +115,7 @@ const Home = () => {
   ) : (
     <>
       <AppBarHeader />
-      <Box
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        height="100vh"
-        sx={{
-          backgroundImage: `url(${pinkSunWallpaper})`,
-        }}
-      >
+      <BackgroundImage imageUrl={pinkSunWallpaper}>
         <Box
           display="flex"
           flexDirection="column"
@@ -170,7 +163,7 @@ const Home = () => {
             (A more detailed explanation will be available on the next page.)
           </Box>
         </Box>
-      </Box>
+      </BackgroundImage>
     </>
   );
 };

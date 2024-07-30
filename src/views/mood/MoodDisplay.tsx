@@ -12,10 +12,16 @@ import {
   GridSortDirection,
 } from "@mui/x-data-grid";
 import AppBarHeader from "../../common/appBar/AppBar";
-import { useMemo, useState } from "react";
+import { RefObject, useMemo, useRef, useState } from "react";
 import InfoDialog from "./InfoDialog";
+import BackgroundImage from "../../common/backgroundImage/BackgroundImage";
+import planetSpaceWallpaper from "../../assets/planetSpaceWallpaper.jpg";
+import pinkGridWallpaper from "../../assets/pinkGridWallpaper.jpg";
+import AppLogo from "../../common/appLogo/AppLogo";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import IconButton from "@mui/material/IconButton";
 
-const BROWN_HEX = "#B87333";
 const SIGNIFICANT_CELL_BACKGROUND_COLOR = "black";
 const DATA_COLUMNS = [
   "danceability",
@@ -63,6 +69,13 @@ const MoodDisplay = () => {
   const { mood, top_features, top_tracks, playlistName } = state;
   const [infoDialogIsOpen, setInfoDialogIsOpen] = useState<boolean>(false);
 
+  const displaySection = useRef<HTMLInputElement>(null);
+  const gridSection = useRef<HTMLInputElement>(null);
+
+  const scrollTo = (section: RefObject<HTMLInputElement>) => {
+    section.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   const topFeaturesUppercase = useMemo(
     () =>
       top_features
@@ -79,105 +92,158 @@ const MoodDisplay = () => {
   };
 
   return (
-    <>
-      <AppBarHeader />
-      <Box
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="100vh"
-      >
-        <Box sx={{ minWidth: 275, maxWidth: 500 }}>
-          <Card variant="outlined">
-            <CardContent>
-              <Box textAlign="center" display="flex" flexDirection="column">
-                <Typography
-                  variant="h2"
-                  color="brown"
-                  fontFamily="IBM Plex Sans Condensed"
-                  sx={{ marginBottom: "16px" }}
+    <Box
+      position="relative"
+      height="100vh"
+      width="100%"
+      sx={{
+        overflowY: "scroll",
+        scrollSnapType: "y mandatory",
+        scrollBehavior: "smooth",
+      }}
+    >
+      <Box ref={displaySection} sx={{ scrollSnapAlign: "start" }}>
+        <AppBarHeader />
+        <BackgroundImage imageUrl={planetSpaceWallpaper}>
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            paddingBottom={8.5}
+            width="30%"
+            sx={{
+              background: "black",
+              borderRadius: "10%",
+              border: "solid 1px",
+            }}
+          >
+            <AppLogo />
+            <Box sx={{ minWidth: 275, maxWidth: 500 }}>
+              <Card variant="outlined">
+                <CardContent>
+                  <Box textAlign="center" display="flex" flexDirection="column">
+                    <Typography
+                      variant="h2"
+                      color="green"
+                      fontFamily="IBM Plex Sans Condensed"
+                      sx={{ marginBottom: "16px" }}
+                    >
+                      "{playlistName}"
+                    </Typography>
+                    <Typography variant="h5" color="brown" gutterBottom>
+                      Playlist Mood:
+                    </Typography>
+                    <Typography variant="h6" component="div" mb={2}>
+                      {mood}
+                    </Typography>
+                    <Typography variant="h6" color="brown" gutterBottom>
+                      Top Audio Feature Categories:
+                    </Typography>
+                    <Typography variant="body1">
+                      {topFeaturesUppercase}
+                    </Typography>
+                  </Box>
+                </CardContent>
+                <CardActions
+                  style={{
+                    justifyContent: "center",
+                    marginBottom: 5,
+                    marginTop: -14,
+                  }}
                 >
-                  "{playlistName}"
-                </Typography>
-                <Typography variant="h5" color="brown" gutterBottom>
-                  Playlist Mood:
-                </Typography>
-                <Typography variant="h6" component="div" mb={2}>
-                  {mood}
-                </Typography>
-                <Typography variant="h6" color="brown" gutterBottom>
-                  Top Audio Feature Categories:
-                </Typography>
-                <Typography variant="body1">{topFeaturesUppercase}</Typography>
-              </Box>
-            </CardContent>
-            <CardActions
-              style={{
-                justifyContent: "center",
-                marginBottom: 5,
-                marginTop: -14,
+                  <Button
+                    variant="text"
+                    onClick={handleDialogOpen}
+                    sx={{
+                      textTransform: "none", // Disables standard MUI styling
+                      textDecoration: "underline",
+                      fontStyle: "italic",
+                      color: "lightgray",
+                      fontSize: "15px",
+                    }}
+                  >
+                    What does this mean?
+                  </Button>
+                </CardActions>
+              </Card>
+            </Box>
+          </Box>
+          <Box zIndex={2} position="absolute" bottom="3%">
+            <IconButton onClick={() => scrollTo(gridSection)}>
+              <KeyboardArrowDownIcon sx={{ fontSize: 90, color: "green" }} />
+            </IconButton>
+          </Box>
+        </BackgroundImage>
+      </Box>
+      {/* DATA GRID: */}
+      <Box position="relative" ref={gridSection}>
+        <BackgroundImage imageUrl={pinkGridWallpaper}>
+          <Box zIndex={2} position="absolute" top="6%">
+            <IconButton onClick={() => scrollTo(displaySection)}>
+              <KeyboardArrowUpIcon sx={{ fontSize: 90, color: "green" }} />
+            </IconButton>
+          </Box>
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            width="70%"
+            height="70%"
+            sx={{
+              background: "black",
+              borderRadius: "3%",
+              border: "solid 1px",
+            }}
+          >
+            {/* <AppLogo /> */}
+            <Typography variant="h5" color="green" mt={4} mb={3}>
+              Top Songs That Contributed to this Overall Mood:
+            </Typography>
+            <Box
+              sx={{
+                height: "700px",
+                width: "90%",
               }}
             >
-              <Button
-                variant="text"
-                onClick={handleDialogOpen}
+              <DataGrid
+                rows={top_tracks}
+                columns={columns}
+                sortingOrder={sortingOrder}
+                getCellClassName={(params) => getCellStyling(params)}
+                initialState={{
+                  columns: {
+                    columnVisibilityModel: {
+                      id: false,
+                    },
+                  },
+                  pagination: {
+                    paginationModel: {
+                      pageSize: 20,
+                    },
+                  },
+                }}
+                pageSizeOptions={[10, 20, 60]}
                 sx={{
-                  textTransform: "none", // Disables standard MUI styling
-                  textDecoration: "underline",
-                  fontStyle: "italic",
-                  color: "lightgray",
+                  ".significantCell": {
+                    color: "green",
+                    fontWeight: "bold",
+                    bgcolor: SIGNIFICANT_CELL_BACKGROUND_COLOR,
+                  },
+                  ".trackNameCell": {
+                    color: "lightgreen",
+                  },
                   fontSize: "15px",
                 }}
-              >
-                What does this mean?
-              </Button>
-            </CardActions>
-          </Card>
-        </Box>
-        <Typography variant="h6" color="green" mt={8} mb={2}>
-          Top Songs That Contributed to this Overall Mood:
-        </Typography>
-        <Box
-          sx={{
-            height: "700px",
-            width: "60%",
-          }}
-        >
-          <DataGrid
-            rows={top_tracks}
-            columns={columns}
-            sortingOrder={sortingOrder}
-            getCellClassName={(params) => getCellStyling(params)}
-            initialState={{
-              columns: {
-                columnVisibilityModel: {
-                  id: false,
-                },
-              },
-              pagination: {
-                paginationModel: {
-                  pageSize: 20,
-                },
-              },
-            }}
-            pageSizeOptions={[10, 20, 60]}
-            sx={{
-              ".significantCell": {
-                color: "green",
-                fontWeight: "bold",
-                bgcolor: SIGNIFICANT_CELL_BACKGROUND_COLOR,
-              },
-              ".trackNameCell": {
-                color: "lightgreen",
-              },
-              fontSize: "15px",
-            }}
-          />
-        </Box>
+              />
+            </Box>
+            <Typography variant="body1" color="green" mt={3}>
+              (You can sort columns by clicking on the column header.)
+            </Typography>
+          </Box>
+        </BackgroundImage>
+        <InfoDialog open={infoDialogIsOpen} handleClose={handleDialogClose} />
       </Box>
-      <InfoDialog open={infoDialogIsOpen} handleClose={handleDialogClose} />
-    </>
+    </Box>
   );
 };
 
