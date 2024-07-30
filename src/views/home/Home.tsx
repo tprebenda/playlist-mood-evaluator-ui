@@ -15,6 +15,7 @@ import { useAuth } from "../../hooks/useAuth";
 import getPlaylistMood from "../../api/playlists/getPlaylistMood";
 import AppBarHeader from "../../common/appBar/AppBar";
 import AppLogo from "../../common/appLogo/AppLogo";
+import pinkSunWallpaper from "../../assets/pinkSunWallpaper.jpg";
 
 type UserPlaylist = PlaylistsResponse;
 
@@ -113,31 +114,62 @@ const Home = () => {
   ) : (
     <>
       <AppBarHeader />
-      <Box display="flex" flexDirection="column" alignItems="center">
-        <AppLogo />
-        <Typography variant="h4" fontFamily="IBM Plex Sans Condensed">
-          Welcome, {displayName}!
-        </Typography>
-        <Box mt={4} mb={3}>
-          <Autocomplete
-            id="playlist-select"
-            options={allPlaylistNames}
-            sx={{ width: 300 }}
-            renderInput={(params) => (
-              <TextField {...params} label="Playlist Name" />
-            )}
-            onChange={onSelectedPlaylistChange}
-          />
-        </Box>
-        <Button
-          size="large"
-          variant="outlined"
-          disabled={!selectedPlaylist}
-          sx={{ color: selectedPlaylist ? "green" : "" }}
-          onClick={getMoodForSelectedPlaylist}
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        height="100vh"
+        sx={{
+          backgroundImage: `url(${pinkSunWallpaper})`,
+        }}
+      >
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          paddingBottom={8.5}
+          height="70%"
+          width="30%"
+          sx={{
+            background: "black",
+            borderRadius: "10%",
+            border: "solid 1px",
+          }}
         >
-          Generate Mood for Playlist!
-        </Button>
+          <AppLogo />
+          <Typography variant="h4" fontFamily="IBM Plex Sans Condensed">
+            Welcome, {displayName}!
+          </Typography>
+          <Box mt={4} mb={3}>
+            <Autocomplete
+              id="playlist-select"
+              options={allPlaylistNames}
+              onChange={onSelectedPlaylistChange}
+              sx={{ width: 300 }}
+              renderInput={(params) => (
+                <TextField {...params} label="Playlist Name" />
+              )}
+            />
+          </Box>
+          <Button
+            size="large"
+            variant="outlined"
+            disabled={!selectedPlaylist}
+            sx={{ color: selectedPlaylist ? "green" : "" }}
+            onClick={getMoodForSelectedPlaylist}
+          >
+            Generate Mood for Playlist!
+          </Button>
+          <Box maxWidth="70%" textAlign="center" mt={9}>
+            After you have selected a playlist, click the button above to
+            generate the mood. The app will pull all the songs from your
+            provided playlist and use special 'Audio Feature' values provided by
+            Spotify, to determine the overall mood.
+            <br />
+            <br />
+            (A more detailed explanation will be available on the next page.)
+          </Box>
+        </Box>
       </Box>
     </>
   );

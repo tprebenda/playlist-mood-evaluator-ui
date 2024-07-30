@@ -12,6 +12,10 @@ const darkTheme = createTheme({
   palette: {
     mode: "dark",
   },
+  typography: {
+    fontFamily: `"IBM Plex Sans Condensed", "Arial"`,
+    fontSize: 15,
+  },
 });
 
 // Allows us to wrap the browser router in AuthProvider

@@ -94,19 +94,19 @@ const MoodDisplay = () => {
               <Box textAlign="center" display="flex" flexDirection="column">
                 <Typography
                   variant="h2"
-                  color="green"
+                  color="brown"
                   fontFamily="IBM Plex Sans Condensed"
                   sx={{ marginBottom: "16px" }}
                 >
                   "{playlistName}"
                 </Typography>
-                <Typography variant="h5" color="green" gutterBottom>
+                <Typography variant="h5" color="brown" gutterBottom>
                   Playlist Mood:
                 </Typography>
                 <Typography variant="h6" component="div" mb={2}>
                   {mood}
                 </Typography>
-                <Typography variant="h6" color="green" gutterBottom>
+                <Typography variant="h6" color="brown" gutterBottom>
                   Top Audio Feature Categories:
                 </Typography>
                 <Typography variant="body1">{topFeaturesUppercase}</Typography>
@@ -135,7 +135,7 @@ const MoodDisplay = () => {
             </CardActions>
           </Card>
         </Box>
-        <Typography variant="h6" color="green" mt={4} mb={2}>
+        <Typography variant="h6" color="green" mt={8} mb={2}>
           Top Songs That Contributed to this Overall Mood:
         </Typography>
         <Box

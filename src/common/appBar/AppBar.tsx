@@ -22,7 +22,7 @@ const AppBarHeader = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{ bgcolor: "#83c3f7", color: "black" }}>
+      <AppBar position="fixed" sx={{ bgcolor: "#83c3f7", color: "black" }}>
         <Toolbar>
           <IconButton
             size="large"
