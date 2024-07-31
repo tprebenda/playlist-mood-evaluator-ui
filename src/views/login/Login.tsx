@@ -7,7 +7,7 @@ import SpotifyLogoIcon from "../../common/SpotifyLogoIcon";
 import { useAuth } from "../../hooks/useAuth";
 import Box from "@mui/material/Box";
 import AppLogo from "../../common/appLogo/AppLogo";
-import nightCityWallpaper from "../../assets/nightCityWallpaper.jpg";
+import nightCityWallpaper from "../../assets/wallpapers/nightCityWallpaper.jpg";
 import BackgroundImage from "../../common/backgroundImage/BackgroundImage";
 
 const welcomeMessage = `Hello!\nThe Playlist Mood Evaluator app will require access to your \
@@ -33,17 +33,13 @@ export default function Login() {
       >
         <AppLogo />
         <Card sx={{ maxWidth: 500, marginTop: "8px" }}>
-          <CardContent
-            sx={{
-              marginBottom: "-15px",
-            }}
-          >
+          <CardContent>
             <Box
               display="flex"
               flexDirection="column"
               alignItems="center"
               mb={0.5}
-              sx={{ borderRadius: "20%" }}
+              sx={{ borderRadius: "20%", marginBottom: "-15px" }}
             >
               <Typography
                 gutterBottom
@@ -63,7 +59,13 @@ export default function Login() {
               </Typography>
             </Box>
           </CardContent>
-          <CardActions sx={{ display: "flex", justifyContent: "center" }}>
+          <CardActions
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              marginBottom: "8px",
+            }}
+          >
             <Button size="small" onClick={login}>
               <SpotifyLogoIcon />
             </Button>

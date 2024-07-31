@@ -15,8 +15,8 @@ import AppBarHeader from "../../common/appBar/AppBar";
 import { RefObject, useMemo, useRef, useState } from "react";
 import InfoDialog from "./InfoDialog";
 import BackgroundImage from "../../common/backgroundImage/BackgroundImage";
-import planetSpaceWallpaper from "../../assets/planetSpaceWallpaper.jpg";
-import pinkGridWallpaper from "../../assets/pinkGridWallpaper.jpg";
+import synthWaveWallpaper from "../../assets/wallpapers/synthWaveWallpaper.jpg";
+import synthMountainWallpaper from "../../assets/wallpapers/synthMountainWallpaper.jpg";
 import AppLogo from "../../common/appLogo/AppLogo";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -104,7 +104,7 @@ const MoodDisplay = () => {
     >
       <Box ref={displaySection} sx={{ scrollSnapAlign: "start" }}>
         <AppBarHeader />
-        <BackgroundImage imageUrl={planetSpaceWallpaper}>
+        <BackgroundImage imageUrl={synthWaveWallpaper}>
           <Box
             display="flex"
             flexDirection="column"
@@ -168,7 +168,21 @@ const MoodDisplay = () => {
               </Card>
             </Box>
           </Box>
-          <Box zIndex={2} position="absolute" bottom="3%">
+          <Box
+            zIndex={2}
+            position="absolute"
+            bottom="3%"
+            display="flex"
+            flexDirection="column"
+            alignContent="center"
+          >
+            <Typography
+              variant="h6"
+              color="gray"
+              sx={{ marginLeft: "10px", marginBottom: "-12px" }}
+            >
+              (Track Details)
+            </Typography>
             <IconButton onClick={() => scrollTo(gridSection)}>
               <KeyboardArrowDownIcon sx={{ fontSize: 90, color: "green" }} />
             </IconButton>
@@ -176,8 +190,12 @@ const MoodDisplay = () => {
         </BackgroundImage>
       </Box>
       {/* DATA GRID: */}
-      <Box position="relative" ref={gridSection}>
-        <BackgroundImage imageUrl={pinkGridWallpaper}>
+      <Box
+        position="relative"
+        ref={gridSection}
+        sx={{ scrollSnapAlign: "end" }}
+      >
+        <BackgroundImage imageUrl={synthMountainWallpaper}>
           <Box zIndex={2} position="absolute" top="6%">
             <IconButton onClick={() => scrollTo(displaySection)}>
               <KeyboardArrowUpIcon sx={{ fontSize: 90, color: "green" }} />
@@ -201,7 +219,7 @@ const MoodDisplay = () => {
             </Typography>
             <Box
               sx={{
-                height: "700px",
+                height: "70%",
                 width: "90%",
               }}
             >

@@ -15,7 +15,7 @@ import { useAuth } from "../../hooks/useAuth";
 import getPlaylistMood from "../../api/playlists/getPlaylistMood";
 import AppBarHeader from "../../common/appBar/AppBar";
 import AppLogo from "../../common/appLogo/AppLogo";
-import pinkSunWallpaper from "../../assets/pinkSunWallpaper.jpg";
+import pinkSunWallpaper from "../../assets/wallpapers/pinkSunWallpaper.jpg";
 import BackgroundImage from "../../common/backgroundImage/BackgroundImage";
 
 type UserPlaylist = PlaylistsResponse;
@@ -130,7 +130,11 @@ const Home = () => {
           }}
         >
           <AppLogo />
-          <Typography variant="h4" fontFamily="IBM Plex Sans Condensed">
+          <Typography
+            variant="h4"
+            fontFamily="IBM Plex Sans Condensed"
+            color="green"
+          >
             Welcome, {displayName}!
           </Typography>
           <Box mt={4} mb={3}>

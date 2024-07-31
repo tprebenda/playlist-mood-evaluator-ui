@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import AppLogo from "../../common/appLogo/AppLogo";
 import AppBarHeader from "../../common/appBar/AppBar";
 import Paper from "@mui/material/Paper";
-import synthWaveWallpaper from "../../assets/synthWaveWallpaper.jpg";
+import redEclipseWallpaper from "../../assets/wallpapers/redEclipseWallpaper.jpg";
 import BackgroundImage from "../../common/backgroundImage/BackgroundImage";
 
 const aboutText = `The Playlist Mood Evaluator is a React web application developed by me, \
@@ -13,7 +13,7 @@ const About = () => {
   return (
     <>
       <AppBarHeader />
-      <BackgroundImage imageUrl={synthWaveWallpaper}>
+      <BackgroundImage imageUrl={redEclipseWallpaper}>
         <Box
           display="flex"
           flexDirection="column"
