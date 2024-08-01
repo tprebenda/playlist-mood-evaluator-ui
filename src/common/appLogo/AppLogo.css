@@ -1,8 +1,6 @@
 .square {
   display: flex;
   flex-direction: column;
-  height: 285px;
-  width: 285px;
   background-color: #83c3f7;
   border-radius: 15%;
   justify-content: center;

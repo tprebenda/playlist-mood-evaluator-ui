@@ -8,7 +8,7 @@ import About from "./views/about/About";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
-const darkTheme = createTheme({
+const theme = createTheme({
   palette: {
     mode: "dark",
   },
@@ -17,6 +17,8 @@ const darkTheme = createTheme({
     fontSize: 15,
   },
 });
+// https://mui.com/material-ui/customization/typography/#responsive-font-sizes
+// theme = responsiveFontSizes(theme);
 
 // Allows us to wrap the browser router in AuthProvider
 // https://stackoverflow.com/a/74443785/11972470
@@ -62,7 +64,7 @@ function App() {
   ]);
   return (
     <>
-      <ThemeProvider theme={darkTheme}>
+      <ThemeProvider theme={theme}>
         <CssBaseline />
         <RouterProvider router={router} />
       </ThemeProvider>

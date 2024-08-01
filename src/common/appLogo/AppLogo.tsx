@@ -9,7 +9,11 @@ interface LogoTextfieldProps {
 
 const LogoTextfield = ({ text, color }: LogoTextfieldProps) => {
   return (
-    <Typography variant="h3" fontFamily="IBM Plex Sans Condensed" color={color}>
+    <Typography
+      sx={{ typography: { xl: "h3", lg: "h4" } }}
+      fontFamily="IBM Plex Sans Condensed"
+      color={color}
+    >
       {text}
     </Typography>
   );
@@ -17,7 +21,15 @@ const LogoTextfield = ({ text, color }: LogoTextfieldProps) => {
 
 const AppLogo = () => {
   return (
-    <Box className="square pulse" mt={8} mb={5}>
+    <Box
+      className="square pulse"
+      sx={{
+        mt: { xl: 8, lg: 4 },
+        mb: { xl: 5, lg: 2 },
+        width: { xl: 285, lg: 200 },
+        height: { xl: 285, lg: 200 },
+      }}
+    >
       <LogoTextfield text="Playlist" color="green" />
       <LogoTextfield text="Mood" color="black" />
       <LogoTextfield text="Evaluator" color="green" />

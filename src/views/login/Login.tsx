@@ -23,37 +23,44 @@ export default function Login() {
         display="flex"
         flexDirection="column"
         alignItems="center"
-        paddingBottom={8.5}
         width="30%"
         sx={{
           background: "black",
           borderRadius: "10%",
           border: "solid 1px",
+          pb: { xl: 8.5, lg: 4 },
         }}
       >
         <AppLogo />
-        <Card sx={{ maxWidth: 500, marginTop: "8px" }}>
+        <Card
+          sx={{
+            maxWidth: { xl: 500, lg: 330 },
+            marginTop: "8px",
+            borderRadius: "5%",
+          }}
+        >
           <CardContent>
             <Box
               display="flex"
               flexDirection="column"
               alignItems="center"
-              mb={0.5}
-              sx={{ borderRadius: "20%", marginBottom: "-15px" }}
+              mb="-15px"
             >
               <Typography
                 gutterBottom
-                variant="h5"
+                sx={{ typography: { xl: "h4", lg: "h6" } }}
                 color="green"
                 fontFamily={"sans-serif"}
               >
                 Authenticate with Spotify
               </Typography>
               <Typography
-                variant="body1"
+                sx={{
+                  typography: { xl: "body1", lg: "body2" },
+                  whiteSpace: "pre-line",
+                }}
                 color="text.secondary"
                 textAlign="center"
-                sx={{ whiteSpace: "pre-line" }}
               >
                 {welcomeMessage}
               </Typography>
