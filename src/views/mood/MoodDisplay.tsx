@@ -15,8 +15,10 @@ import AppBarHeader from "../../common/appBar/AppBar";
 import { RefObject, useMemo, useRef, useState } from "react";
 import InfoDialog from "./InfoDialog";
 import BackgroundImage from "../../common/backgroundImage/BackgroundImage";
-import synthWaveWallpaper from "../../assets/wallpapers/synthWaveWallpaper.jpg";
-import synthMountainWallpaper from "../../assets/wallpapers/synthMountainWallpaper.jpg";
+import {
+  synthMountainWallpaper,
+  MOOD_WALLPAPERS,
+} from "../../assets/wallpapers";
 import AppLogo from "../../common/appLogo/AppLogo";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -84,6 +86,11 @@ const MoodDisplay = () => {
     [top_features]
   );
 
+  const randomMoodWallpaper = useMemo(() => {
+    const randomIdx = Math.floor(Math.random() * MOOD_WALLPAPERS.length);
+    return MOOD_WALLPAPERS[randomIdx];
+  }, []);
+
   const handleDialogOpen = () => {
     setInfoDialogIsOpen(true);
   };
@@ -104,42 +111,57 @@ const MoodDisplay = () => {
     >
       <Box ref={displaySection} sx={{ scrollSnapAlign: "start" }}>
         <AppBarHeader />
-        <BackgroundImage imageUrl={synthWaveWallpaper}>
+        <BackgroundImage imageUrl={randomMoodWallpaper}>
           <Box
             display="flex"
             flexDirection="column"
             alignItems="center"
-            paddingBottom={8.5}
             width="30%"
             sx={{
               background: "black",
               borderRadius: "10%",
               border: "solid 1px",
+              paddingBottom: { xl: 8.5, lg: 3 },
             }}
           >
             <AppLogo />
-            <Box sx={{ minWidth: 275, maxWidth: 500 }}>
+            <Box sx={{ maxWidth: { xl: "80%", lg: "70%" } }}>
               <Card variant="outlined">
                 <CardContent>
                   <Box textAlign="center" display="flex" flexDirection="column">
                     <Typography
-                      variant="h2"
+                      variant="h3"
                       color="green"
                       fontFamily="IBM Plex Sans Condensed"
-                      sx={{ marginBottom: "16px" }}
+                      sx={{
+                        marginBottom: { xl: 2, lg: 1 },
+                        typography: { xl: "h3", lg: "h5" },
+                      }}
                     >
                       "{playlistName}"
                     </Typography>
-                    <Typography variant="h5" color="brown" gutterBottom>
+                    <Typography
+                      color="brown"
+                      gutterBottom
+                      sx={{ typography: { xl: "h6", lg: "body1" } }}
+                    >
                       Playlist Mood:
                     </Typography>
-                    <Typography variant="h6" component="div" mb={2}>
+                    <Typography
+                      component="div"
+                      sx={{ typography: { xl: "h6", lg: "body1" } }}
+                      mb={2}
+                    >
                       {mood}
                     </Typography>
-                    <Typography variant="h6" color="brown" gutterBottom>
+                    <Typography
+                      color="brown"
+                      gutterBottom
+                      sx={{ typography: { xl: "body1", lg: "body2" } }}
+                    >
                       Top Audio Feature Categories:
                     </Typography>
-                    <Typography variant="body1">
+                    <Typography variant="body2">
                       {topFeaturesUppercase}
                     </Typography>
                   </Box>
@@ -147,7 +169,6 @@ const MoodDisplay = () => {
                 <CardActions
                   style={{
                     justifyContent: "center",
-                    marginBottom: 5,
                     marginTop: -14,
                   }}
                 >
@@ -171,20 +192,26 @@ const MoodDisplay = () => {
           <Box
             zIndex={2}
             position="absolute"
-            bottom="3%"
             display="flex"
             flexDirection="column"
             alignContent="center"
+            sx={{
+              bottom: { xl: "3%", lg: "0%" },
+            }}
           >
             <Typography
-              variant="h6"
-              color="gray"
-              sx={{ marginLeft: "10px", marginBottom: "-12px" }}
+              color="lightgray"
+              sx={{
+                typography: { xl: "h6", lg: "body2" },
+                marginBottom: { xl: -2, lg: 0 },
+              }}
             >
               (Track Details)
             </Typography>
             <IconButton onClick={() => scrollTo(gridSection)}>
-              <KeyboardArrowDownIcon sx={{ fontSize: 90, color: "green" }} />
+              <KeyboardArrowDownIcon
+                sx={{ fontSize: { xl: 90, lg: 45 }, color: "green" }}
+              />
             </IconButton>
           </Box>
         </BackgroundImage>
@@ -196,9 +223,16 @@ const MoodDisplay = () => {
         sx={{ scrollSnapAlign: "end" }}
       >
         <BackgroundImage imageUrl={synthMountainWallpaper}>
-          <Box zIndex={2} position="absolute" top="6%">
+          <Box
+            zIndex={2}
+            position="absolute"
+            top="6%"
+            sx={{ top: { xl: "6%", lg: "9%" } }}
+          >
             <IconButton onClick={() => scrollTo(displaySection)}>
-              <KeyboardArrowUpIcon sx={{ fontSize: 90, color: "green" }} />
+              <KeyboardArrowUpIcon
+                sx={{ fontSize: { xl: 90, lg: 45 }, color: "green" }}
+              />
             </IconButton>
           </Box>
           <Box
@@ -206,7 +240,7 @@ const MoodDisplay = () => {
             flexDirection="column"
             alignItems="center"
             width="70%"
-            height="70%"
+            height="65%"
             sx={{
               background: "black",
               borderRadius: "3%",
@@ -214,7 +248,12 @@ const MoodDisplay = () => {
             }}
           >
             {/* <AppLogo /> */}
-            <Typography variant="h5" color="green" mt={4} mb={3}>
+            <Typography
+              color="green"
+              mt={4}
+              mb={3}
+              sx={{ typography: { xl: "h5", lg: "h6" } }}
+            >
               Top Songs That Contributed to this Overall Mood:
             </Typography>
             <Box
@@ -254,7 +293,13 @@ const MoodDisplay = () => {
                 }}
               />
             </Box>
-            <Typography variant="body1" color="green" mt={3}>
+            <Typography
+              color="green"
+              sx={{
+                typography: { xl: "body1", lg: "body2" },
+                mt: { xl: 4, lg: 2 },
+              }}
+            >
               (You can sort columns by clicking on the column header.)
             </Typography>
           </Box>

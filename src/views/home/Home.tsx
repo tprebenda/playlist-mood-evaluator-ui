@@ -15,7 +15,7 @@ import { useAuth } from "../../hooks/useAuth";
 import getPlaylistMood from "../../api/playlists/getPlaylistMood";
 import AppBarHeader from "../../common/appBar/AppBar";
 import AppLogo from "../../common/appLogo/AppLogo";
-import pinkSunWallpaper from "../../assets/wallpapers/pinkSunWallpaper.jpg";
+import { pinkSunWallpaper } from "../../assets/wallpapers";
 import BackgroundImage from "../../common/backgroundImage/BackgroundImage";
 
 type UserPlaylist = PlaylistsResponse;

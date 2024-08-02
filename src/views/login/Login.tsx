@@ -7,7 +7,7 @@ import SpotifyLogoIcon from "../../common/SpotifyLogoIcon";
 import { useAuth } from "../../hooks/useAuth";
 import Box from "@mui/material/Box";
 import AppLogo from "../../common/appLogo/AppLogo";
-import nightCityWallpaper from "../../assets/wallpapers/nightCityWallpaper.jpg";
+import { nightCityWallpaper } from "../../assets/wallpapers";
 import BackgroundImage from "../../common/backgroundImage/BackgroundImage";
 
 const welcomeMessage = `Hello!\nThe Playlist Mood Evaluator app will require access to your \
