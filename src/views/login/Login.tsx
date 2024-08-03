@@ -23,18 +23,19 @@ export default function Login() {
         display="flex"
         flexDirection="column"
         alignItems="center"
+        textAlign="center"
         width="30%"
         sx={{
           background: "black",
           borderRadius: "10%",
           border: "solid 1px",
-          pb: { xl: 8.5, lg: 4 },
+          pb: { xl: 8.5, lg: 4, sm: 3 },
         }}
       >
         <AppLogo />
         <Card
           sx={{
-            maxWidth: { xl: 500, lg: 330 },
+            maxWidth: "70%",
             marginTop: "8px",
             borderRadius: "5%",
           }}
@@ -48,7 +49,7 @@ export default function Login() {
             >
               <Typography
                 gutterBottom
-                sx={{ typography: { xl: "h4", lg: "h6" } }}
+                sx={{ typography: { xl: "h4", lg: "h5", sm: "h6" } }}
                 color="green"
                 fontFamily={"sans-serif"}
               >
@@ -56,11 +57,14 @@ export default function Login() {
               </Typography>
               <Typography
                 sx={{
-                  typography: { xl: "body1", lg: "body2" },
+                  typography: {
+                    xl: "body1",
+                    lg: "body2",
+                    sm: "caption",
+                  },
                   whiteSpace: "pre-line",
                 }}
                 color="text.secondary"
-                textAlign="center"
               >
                 {welcomeMessage}
               </Typography>

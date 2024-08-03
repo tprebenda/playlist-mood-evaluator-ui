@@ -41,7 +41,7 @@ const AppLogo = () => {
       <Box
         className="square pulse"
         sx={{
-          mt: { xxl: 8, xl: 4, lg: 3, md: 3, sm: 3 },
+          mt: { xxl: 7, xl: 4, lg: 3, md: 3, sm: 3 },
           mb: { xxl: 5, xl: 2, lg: 2, md: 2, sm: 1 },
           width: { xxl: 285, xl: 200, lg: 125, md: 90, sm: 80 },
           height: { xxl: 285, xl: 200, lg: 125, md: 90, sm: 80 },

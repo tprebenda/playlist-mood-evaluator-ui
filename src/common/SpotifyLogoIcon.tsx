@@ -15,8 +15,8 @@ const SpotifyLogoIcon = () => (
     <Box
       component="img"
       sx={{
-        height: { xl: 45, lg: 30 },
-        width: { xl: 125, lg: 100 },
+        height: { xl: 45, lg: 30, md: 30, sm: 20 },
+        width: { xl: 125, lg: 100, md: 100, sm: 75 },
       }}
       alt="Spotify Logo"
       src={Spotify_Logo_RGB_Green}

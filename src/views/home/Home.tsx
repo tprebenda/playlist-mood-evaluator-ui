@@ -120,19 +120,21 @@ const Home = () => {
           display="flex"
           flexDirection="column"
           alignItems="center"
+          textAlign="center"
+          width="30%"
           sx={{
-            height: { xl: "70%", lg: "80%", md: "65%" },
-            width: { xl: "30%", lg: "40%", md: "60%" },
             background: "black",
             borderRadius: "10%",
             border: "solid 1px",
+            pb: { xxl: 7, xl: 4, lg: 3, md: 3, sm: 3 },
           }}
         >
           <AppLogo />
           <Typography
-            fontFamily="IBM Plex Sans Condensed"
             color="green"
-            sx={{ typography: { xl: "h4", lg: "h5" } }}
+            sx={{
+              typography: { xxl: "h4", xl: "h5", lg: "h6", md: "body1" },
+            }}
           >
             Welcome, {displayName}!
           </Typography>
@@ -142,9 +144,9 @@ const Home = () => {
               options={allPlaylistNames}
               onChange={onSelectedPlaylistChange}
               sx={{
-                width: { xl: 325, lg: 285, md: 200 },
-                mt: { xl: 3, lg: 2, md: 0.5 },
-                mb: { xl: 2, lg: 1, md: 0.5 },
+                width: { xxl: 325, xl: 285, lg: 200, sm: 150 },
+                mt: { xxl: 3, xl: 2, lg: 1, sm: 0.5 },
+                mb: { xxl: 2, xl: 2, lg: 1, sm: 0.5 },
               }}
               renderInput={(params) => (
                 <TextField {...params} label="Playlist Name" />
@@ -161,14 +163,13 @@ const Home = () => {
             Generate Mood for Playlist!
           </Button>
           <Box
-            textAlign="center"
+            width="70%"
             sx={{
-              maxWidth: { xl: "70%", lg: "85%", md: "90%" },
-              mt: { xl: 4, lg: 2, md: 1 },
+              mt: { xxl: 4, xl: 2.5, md: 2, sm: 1 },
             }}
           >
             <Typography
-              sx={{ typography: { xl: "body1", lg: "body2", md: "caption" } }}
+              sx={{ typography: { xxl: "body1", lg: "body2", sm: "caption" } }}
             >
               After you have selected a playlist, click the button above to
               generate the mood. The app will pull all the songs from your
