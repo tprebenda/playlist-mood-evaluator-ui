@@ -21,3 +21,10 @@
     box-shadow: 0 0 0 20px black;
   }
 }
+
+@font-face {
+  font-family: "Control Freak";
+  src:
+    local("Control Freak"),
+    url(../../assets/fonts/control-freak.regular.ttf) format("truetype");
+}

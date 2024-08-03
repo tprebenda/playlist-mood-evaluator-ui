@@ -5,20 +5,7 @@ import Home from "./views/home/Home";
 import { AuthProvider } from "./hooks/useAuth";
 import MoodDisplay from "./views/mood/MoodDisplay";
 import About from "./views/about/About";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-
-const theme = createTheme({
-  palette: {
-    mode: "dark",
-  },
-  typography: {
-    fontFamily: `"IBM Plex Sans Condensed", "Arial"`,
-    fontSize: 15,
-  },
-});
-// https://mui.com/material-ui/customization/typography/#responsive-font-sizes
-// theme = responsiveFontSizes(theme);
+import ThemeWrapper from "./ThemeWrapper";
 
 // Allows us to wrap the browser router in AuthProvider
 // https://stackoverflow.com/a/74443785/11972470
@@ -63,12 +50,9 @@ function App() {
     },
   ]);
   return (
-    <>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <RouterProvider router={router} />
-      </ThemeProvider>
-    </>
+    <ThemeWrapper>
+      <RouterProvider router={router} />
+    </ThemeWrapper>
   );
 }
 
