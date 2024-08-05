@@ -11,7 +11,7 @@ import { nightCityWallpaper } from "../../assets/wallpapers";
 import BackgroundImage from "../../common/backgroundImage/BackgroundImage";
 
 const welcomeMessage = `Hello!\nThe Playlist Mood Evaluator app will require access to your \
-Spotify account info (to retrieve your profile name) and your playlists (to view song titles). \
+Spotify account info (to retrieve your profile name), and your playlists (to view song titles). \
 Please sign in to Spotify by clicking the icon below to authorize the app:`;
 
 export default function Login() {
@@ -29,7 +29,7 @@ export default function Login() {
           background: "black",
           borderRadius: "10%",
           border: "solid 1px",
-          pb: { xl: 8.5, lg: 4, sm: 3 },
+          pb: { xxl: 7, lg: 4, xs: 3 },
         }}
       >
         <AppLogo />
@@ -49,7 +49,7 @@ export default function Login() {
             >
               <Typography
                 gutterBottom
-                sx={{ typography: { xl: "h4", lg: "h5", sm: "h6" } }}
+                sx={{ typography: { xl: "h4", lg: "h5", xs: "h6" } }}
                 color="green"
                 fontFamily={"sans-serif"}
               >
@@ -60,7 +60,7 @@ export default function Login() {
                   typography: {
                     xl: "body1",
                     lg: "body2",
-                    sm: "caption",
+                    xs: "caption",
                   },
                   whiteSpace: "pre-line",
                 }}

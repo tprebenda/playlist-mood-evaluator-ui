@@ -17,10 +17,10 @@ const aboutText = `The Playlist Mood Evaluator is a React web application develo
 Troy Prebenda.\nIt is designed to give users some insight into the makeup of their playlists, \
 and to highlight the songs that share similar audio features.\n\nMusic has always been \
 a very meaningful part of my life - I played many instruments growing up, and I continue to \
-rely on music for inspiration while working, exercising, gaming, etc.\nI saw this project \
+rely on music for inspiration while working, exercising, gaming, etc. I saw this project \
 as an opportunity to look deeper into the songs of my playlists, and to better understand my \
-taste in music and my overall 'style'.\nI hope you can use this tool to do the same for your \
-playlists!`;
+taste in music and my overall 'style'.\n\nI hope you can use this tool to do the same for you \
+and your playlists!`;
 
 const About = () => {
   return (
