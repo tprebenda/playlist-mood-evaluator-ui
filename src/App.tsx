@@ -6,6 +6,7 @@ import { AuthProvider } from "./hooks/useAuth";
 import MoodDisplay from "./views/mood/MoodDisplay";
 import About from "./views/about/About";
 import ThemeWrapper from "./ThemeWrapper";
+import NotFound from "./views/error/NotFound";
 
 // Allows us to wrap the browser router in AuthProvider
 // https://stackoverflow.com/a/74443785/11972470
@@ -45,6 +46,10 @@ function App() {
         {
           path: "/about",
           element: <About />,
+        },
+        {
+          path: "*",
+          element: <NotFound />,
         },
       ],
     },
