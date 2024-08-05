@@ -116,52 +116,63 @@ const MoodDisplay = () => {
             display="flex"
             flexDirection="column"
             alignItems="center"
-            width="30%"
+            width="25%"
             sx={{
               background: "black",
               borderRadius: "10%",
               border: "solid 1px",
-              paddingBottom: { xl: 8.5, lg: 3 },
+              paddingBottom: { xl: 4, lg: 2, xs: 1 },
             }}
           >
             <AppLogo />
-            <Box sx={{ maxWidth: { xl: "80%", lg: "70%" } }}>
+            <Box sx={{ maxWidth: { xl: "80%", xs: "70%" } }}>
               <Card variant="outlined">
                 <CardContent>
-                  <Box textAlign="center" display="flex" flexDirection="column">
+                  <Box
+                    textAlign="center"
+                    display="flex"
+                    flexDirection="column"
+                    alignContent="space-around"
+                    sx={{
+                      gap: { xl: 1, md: 0.5, xs: 0 },
+                    }}
+                  >
                     <Typography
-                      variant="h3"
                       color="green"
-                      fontFamily="IBM Plex Sans Condensed"
                       sx={{
-                        marginBottom: { xl: 2, lg: 1 },
-                        typography: { xl: "h3", lg: "h5" },
+                        typography: { xxl: "h5", xs: "h5" },
                       }}
+                    >
+                      Playlist Name:
+                    </Typography>
+                    <Typography
+                      sx={{
+                        typography: { xxl: "h6", xs: "body1" },
+                      }}
+                      gutterBottom
                     >
                       "{playlistName}"
                     </Typography>
                     <Typography
-                      color="brown"
-                      gutterBottom
-                      sx={{ typography: { xl: "h6", lg: "body1" } }}
+                      color="green"
+                      sx={{ typography: { xxl: "h5", xs: "h6" } }}
                     >
                       Playlist Mood:
                     </Typography>
                     <Typography
                       component="div"
-                      sx={{ typography: { xl: "h6", lg: "body1" } }}
-                      mb={2}
+                      sx={{ typography: { xxl: "h6", xs: "body1" } }}
+                      gutterBottom
                     >
                       {mood}
                     </Typography>
                     <Typography
-                      color="brown"
-                      gutterBottom
-                      sx={{ typography: { xl: "body1", lg: "body2" } }}
+                      color="green"
+                      sx={{ typography: { xxl: "h5", xs: "h6" } }}
                     >
                       Top Audio Feature Categories:
                     </Typography>
-                    <Typography variant="body2">
+                    <Typography sx={{ typography: { xxl: "h6", xs: "body1" } }}>
                       {topFeaturesUppercase}
                     </Typography>
                   </Box>
@@ -195,22 +206,20 @@ const MoodDisplay = () => {
             display="flex"
             flexDirection="column"
             alignContent="center"
-            sx={{
-              bottom: { xl: "3%", lg: "0%" },
-            }}
+            bottom="0%"
           >
             <Typography
               color="lightgray"
               sx={{
-                typography: { xl: "h6", lg: "body2" },
-                marginBottom: { xl: -2, lg: 0 },
+                typography: { xxl: "h6", xl: "body1" },
+                marginBottom: { xxl: -2, xs: -0.5 },
               }}
             >
               (Track Details)
             </Typography>
             <IconButton onClick={() => scrollTo(gridSection)}>
               <KeyboardArrowDownIcon
-                sx={{ fontSize: { xl: 90, lg: 45 }, color: "green" }}
+                sx={{ fontSize: { xxl: 70, xs: 45 }, color: "green" }}
               />
             </IconButton>
           </Box>
@@ -226,12 +235,11 @@ const MoodDisplay = () => {
           <Box
             zIndex={2}
             position="absolute"
-            top="6%"
-            sx={{ top: { xl: "6%", lg: "9%" } }}
+            sx={{ top: { xl: "8%", xs: "9%" } }}
           >
             <IconButton onClick={() => scrollTo(displaySection)}>
               <KeyboardArrowUpIcon
-                sx={{ fontSize: { xl: 90, lg: 45 }, color: "green" }}
+                sx={{ fontSize: { xl: 70, xs: 45 }, color: "green" }}
               />
             </IconButton>
           </Box>
@@ -247,12 +255,11 @@ const MoodDisplay = () => {
               border: "solid 1px",
             }}
           >
-            {/* <AppLogo /> */}
             <Typography
               color="green"
               mt={4}
               mb={3}
-              sx={{ typography: { xl: "h5", lg: "h6" } }}
+              sx={{ typography: { xl: "h5", xs: "h6" } }}
             >
               Top Songs That Contributed to this Overall Mood:
             </Typography>
@@ -296,8 +303,12 @@ const MoodDisplay = () => {
             <Typography
               color="green"
               sx={{
-                typography: { xl: "body1", lg: "body2" },
-                mt: { xl: 4, lg: 2 },
+                typography: {
+                  xxl: "h6",
+                  md: "body1",
+                  xs: "body2",
+                },
+                mt: { xxl: 4, xs: 2 },
               }}
             >
               (You can sort columns by clicking on the column header.)

@@ -27,7 +27,9 @@ interface LogoTextfieldProps {
 const LogoTextfield = ({ text, color }: LogoTextfieldProps) => {
   return (
     <Typography
-      sx={{ typography: { xxl: "h2", xl: "h3", lg: "h5", md: "h6" } }}
+      sx={{
+        typography: { xxl: "h2", xl: "h3", lg: "h5", sm: "h6", xs: "body1" },
+      }}
       color={color}
     >
       {text}
@@ -41,10 +43,10 @@ const AppLogo = () => {
       <Box
         className="square pulse"
         sx={{
-          mt: { xxl: 7, xl: 4, lg: 3, md: 3, sm: 3 },
-          mb: { xxl: 5, xl: 2, lg: 2, md: 2, sm: 1 },
-          width: { xxl: 285, xl: 200, lg: 125, md: 90, sm: 80 },
-          height: { xxl: 285, xl: 200, lg: 125, md: 90, sm: 80 },
+          mt: { xxl: 7, xl: 4, xs: 3 },
+          mb: { xxl: 5, md: 2, xs: 1 },
+          width: { xxl: 285, xl: 200, lg: 125, md: 90, xs: 80 },
+          height: { xxl: 285, xl: 200, lg: 125, md: 90, xs: 80 },
         }}
       >
         <LogoTextfield text="Playlist" color="green" />

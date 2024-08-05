@@ -126,14 +126,14 @@ const Home = () => {
             background: "black",
             borderRadius: "10%",
             border: "solid 1px",
-            pb: { xxl: 7, xl: 4, lg: 3, md: 3, sm: 3 },
+            pb: { xxl: 7, xl: 4, xs: 3 },
           }}
         >
           <AppLogo />
           <Typography
             color="green"
             sx={{
-              typography: { xxl: "h4", xl: "h5", lg: "h6", md: "body1" },
+              typography: { xxl: "h4", xl: "h5", lg: "h6", xs: "body1" },
             }}
           >
             Welcome, {displayName}!
@@ -165,11 +165,17 @@ const Home = () => {
           <Box
             width="70%"
             sx={{
-              mt: { xxl: 4, xl: 2.5, md: 2, sm: 1 },
+              mt: { xxl: 4, xl: 2.5, md: 2, xs: 1 },
             }}
           >
             <Typography
-              sx={{ typography: { xxl: "body1", lg: "body2", sm: "caption" } }}
+              sx={{
+                typography: {
+                  xxl: "body1",
+                  md: "body2",
+                  xs: "caption",
+                },
+              }}
             >
               After you have selected a playlist, click the button above to
               generate the mood. The app will pull all the songs from your
