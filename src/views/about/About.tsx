@@ -9,7 +9,6 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 let aboutTheme = createTheme({
   typography: {
     fontFamily: `"IBM Plex Sans Condensed", "Arial", "Good Times"`,
-    fontSize: 16,
   },
 });
 
@@ -41,7 +40,9 @@ const About = () => {
           <AppLogo />
           <ThemeProvider theme={aboutTheme}>
             <Box width="70%" whiteSpace="pre-wrap" textAlign="center" mb={5}>
-              <Typography>{aboutText}</Typography>
+              <Typography sx={{ fontSize: { xxl: 17, xl: 16, xs: 14 } }}>
+                {aboutText}
+              </Typography>
             </Box>
           </ThemeProvider>
         </Box>

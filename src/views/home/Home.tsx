@@ -17,6 +17,7 @@ import AppBarHeader from "../../common/appBar/AppBar";
 import AppLogo from "../../common/appLogo/AppLogo";
 import { pinkSunWallpaper } from "../../assets/wallpapers";
 import BackgroundImage from "../../common/backgroundImage/BackgroundImage";
+import { useErrorBoundary } from "react-error-boundary";
 
 type UserPlaylist = PlaylistsResponse;
 
@@ -54,26 +55,32 @@ const Home = () => {
     () => playlists.map((playlist: UserPlaylist) => playlist.name),
     [playlists]
   );
+  const { showBoundary } = useErrorBoundary();
 
   useEffect(() => {
     const setupHomePage = async () => {
-      const { display_name } = await getUser();
-      // If user display name is a string, use it. If it's just an ID, use `User ${ID}`
-      const displayName =
-        display_name && isNaN(+display_name)
-          ? display_name
-          : `User ${display_name}`;
-      setDisplayName(displayName);
+      try {
+        const { display_name } = await getUser();
+        // If user display name is a string, use it. If it's just an ID, use `User ${ID}`
+        const displayName =
+          display_name && isNaN(+display_name)
+            ? display_name
+            : `User ${display_name}`;
+        setDisplayName(displayName);
 
-      const playlists = await getPlaylists();
-      setPlaylists(playlists);
-      setLoadingStatus(notLoading);
+        const playlists = await getPlaylists();
+        setPlaylists(playlists);
+        setLoadingStatus(notLoading);
+
+        if (!isAuthenticated) {
+          navigate("/login");
+        }
+      } catch (error) {
+        showBoundary(error);
+      }
     };
-    if (!isAuthenticated) {
-      navigate("/login");
-    }
     setupHomePage();
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate, showBoundary]);
 
   const onSelectedPlaylistChange = (
     e: SyntheticEvent<Element, Event>,
@@ -94,11 +101,15 @@ const Home = () => {
       console.warn("Must select a playlist from the dropdown menu first!");
       return;
     }
-    setLoadingStatus(loadingPlaylistData(selectedPlaylist.name));
-    const playlistMoodDetails = await getPlaylistMood(selectedPlaylist.id);
-    navigate("/mood", {
-      state: { ...playlistMoodDetails, playlistName: selectedPlaylist.name },
-    });
+    try {
+      setLoadingStatus(loadingPlaylistData(selectedPlaylist.name));
+      const playlistMoodDetails = await getPlaylistMood(selectedPlaylist.id);
+      navigate("/mood", {
+        state: { ...playlistMoodDetails, playlistName: selectedPlaylist.name },
+      });
+    } catch (error) {
+      showBoundary(error);
+    }
   };
 
   return loadingStatus.isLoading === true ? (
