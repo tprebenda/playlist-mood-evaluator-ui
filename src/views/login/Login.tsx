@@ -3,7 +3,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import SpotifyLogoIcon from "../../common/SpotifyLogoIcon";
+import SpotifyLogo from "../../common/spotify/SpotifyLogo";
 import { useAuth } from "../../hooks/useAuth";
 import Box from "@mui/material/Box";
 import AppLogo from "../../common/appLogo/AppLogo";
@@ -11,8 +11,8 @@ import { nightCityWallpaper } from "../../assets/wallpapers";
 import BackgroundImage from "../../common/backgroundImage/BackgroundImage";
 
 const welcomeMessage = `Hello!\nThe Playlist Mood Evaluator app will require access to your \
-Spotify account info (to retrieve your profile name), and your playlists (to view song titles). \
-Please sign in to Spotify by clicking the icon below to authorize the app:`;
+Spotify account info (to retrieve your profile name), and your playlists (to view song titles).\
+\n\nPlease sign in to Spotify by clicking the icon below to authorize the app:`;
 
 export default function Login() {
   const { login } = useAuth();
@@ -78,7 +78,7 @@ export default function Login() {
             }}
           >
             <Button size="small" onClick={login}>
-              <SpotifyLogoIcon />
+              <SpotifyLogo />
             </Button>
           </CardActions>
         </Card>

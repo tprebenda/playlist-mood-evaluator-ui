@@ -14,6 +14,7 @@ import {
   INSTRUMENTALNESS,
   VALENCE,
 } from "./descriptions";
+import { openInNewTab } from "../../helpers/link/linkHelpers";
 
 const SPOTIFY_AUDIO_FEATURES_DOCS_URL =
   "https://developer.spotify.com/documentation/web-api/reference/get-audio-features";
@@ -32,12 +33,6 @@ interface InfoDialogProps {
   open: boolean;
   handleClose: () => void;
 }
-
-// https://stackoverflow.com/a/63627688/11972470
-const openInNewTab = (url: string): void => {
-  const newWindow = window.open(url, "_blank", "noopener,noreferrer");
-  if (newWindow) newWindow.opener = null;
-};
 
 const InfoDialog = ({ open, handleClose }: InfoDialogProps) => {
   return (

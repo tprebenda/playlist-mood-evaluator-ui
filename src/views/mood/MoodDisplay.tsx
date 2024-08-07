@@ -4,6 +4,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
 import { useLocation } from "react-router-dom";
 import {
   DataGrid,
@@ -23,6 +24,8 @@ import AppLogo from "../../common/appLogo/AppLogo";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import IconButton from "@mui/material/IconButton";
+import { openInNewTab } from "../../helpers/link/linkHelpers";
+import SpotifyIcon from "../../common/spotify/SpotifyIcon";
 
 const SIGNIFICANT_CELL_BACKGROUND_COLOR = "black";
 const DATA_COLUMNS = [
@@ -34,11 +37,8 @@ const DATA_COLUMNS = [
   "valence",
 ];
 
-// Adds green colored cell text if cell value is >= 0.65
+// Adds 'significantCell' class styling if field is a data column, and value is >= 0.65
 const getCellStyling = (params: GridCellParams<any, any, number>) => {
-  if (params.field === "name") {
-    return "trackNameCell";
-  }
   if (!DATA_COLUMNS.includes(params.field) || !params.value) {
     return "";
   }
@@ -52,6 +52,14 @@ const columns: GridColDef[] = [
     headerName: "Track Name",
     width: 225,
     headerClassName: "trackNameCell",
+    renderCell: (params: GridCellParams<any, string>) => (
+      <Link
+        onClick={() => openInNewTab(params.row.url)}
+        sx={{ color: "lightgreen", cursor: "pointer" }}
+      >
+        {params.value}
+      </Link>
+    ),
   },
   { field: "album", headerName: "Album", width: 225 },
   { field: "artists", headerName: "Artist(s)", width: 225 },
@@ -125,7 +133,7 @@ const MoodDisplay = () => {
             }}
           >
             <AppLogo />
-            <Box sx={{ maxWidth: { xl: "80%", xs: "70%" } }}>
+            <Box maxWidth="70%">
               <Card variant="outlined">
                 <CardContent>
                   <Box
@@ -212,12 +220,14 @@ const MoodDisplay = () => {
               color="lightgray"
               sx={{
                 typography: { xxl: "h6", xl: "body1" },
-                marginBottom: { xxl: -2, xs: -0.5 },
               }}
             >
               (Track Details)
             </Typography>
-            <IconButton onClick={() => scrollTo(gridSection)}>
+            <IconButton
+              onClick={() => scrollTo(gridSection)}
+              sx={{ borderRadius: 5 }}
+            >
               <KeyboardArrowDownIcon
                 sx={{ fontSize: { xxl: 70, xs: 45 }, color: "green" }}
               />
@@ -237,7 +247,10 @@ const MoodDisplay = () => {
             position="absolute"
             sx={{ top: { xl: "8%", xs: "9%" } }}
           >
-            <IconButton onClick={() => scrollTo(displaySection)}>
+            <IconButton
+              onClick={() => scrollTo(displaySection)}
+              sx={{ borderRadius: 5 }}
+            >
               <KeyboardArrowUpIcon
                 sx={{ fontSize: { xl: 70, xs: 45 }, color: "green" }}
               />
@@ -255,14 +268,25 @@ const MoodDisplay = () => {
               border: "solid 1px",
             }}
           >
-            <Typography
-              color="green"
+            <Box
+              display="flex"
+              flexDirection="row"
+              alignItems="center"
               mt={4}
               mb={3}
-              sx={{ typography: { xl: "h5", xs: "h6" } }}
+              gap={1.5}
             >
-              Top Songs That Contributed to this Overall Mood:
-            </Typography>
+              <SpotifyIcon />
+              <Typography
+                color="green"
+                sx={{
+                  typography: { xl: "h5", md: "h6", sm: "body1", xs: "body2" },
+                }}
+              >
+                Top Songs That Contributed to this Overall Mood
+              </Typography>
+              <SpotifyIcon />
+            </Box>
             <Box
               sx={{
                 height: "70%",
