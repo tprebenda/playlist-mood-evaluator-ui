@@ -6,7 +6,8 @@ const CLIENT_ID = "5b9ee404632b45f6a6d6cc35824554a6";
 // playlist-read-private playlist-read-collaborative: required to view playlists
 const SCOPE =
   "playlist-read-private playlist-read-collaborative user-read-private user-read-email";
-const REDIRECT_URI = "http://127.0.0.1:3000/callback";
+// const REDIRECT_URI = "http://127.0.0.1:3000/callback"; // LOCAL DEV
+const REDIRECT_URI = "https://playlist-mood-evaluator-ui.fly.dev/callback";
 const OAUTH_AUTHORIZE_URL = "https://accounts.spotify.com/authorize";
 const STATE_LENGTH = 16;
 export const STATE_KEY = "auth-request-state";
