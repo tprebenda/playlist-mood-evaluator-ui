@@ -79,10 +79,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   // Logs out the user of Spotify and from local session
   const logout = useCallback(async () => {
-    await logoutUserSession();
-    logoutOfSpotify();
-    setIsAuthenticated(false);
-    navigate("/login", { replace: true });
+    try {
+      await logoutUserSession();
+    } catch (error) {
+      console.error(`Logout attempt failed due to err: ${error}`);
+    } finally {
+      logoutOfSpotify();
+      setIsAuthenticated(false);
+      navigate("/login", { replace: true });
+    }
   }, [navigate]);
 
   const value = useMemo(

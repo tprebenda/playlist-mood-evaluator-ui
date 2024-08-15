@@ -5,8 +5,6 @@ export interface PlaylistsResponse {
   id: string;
 }
 
-// TODO:
-// add error handling for failed requests (401 unauthorized) - call refresh token and retry
 export const getPlaylists = async (): Promise<PlaylistsResponse[]> => {
   const response = await axiosInstance.get("/playlists");
   return response.data;

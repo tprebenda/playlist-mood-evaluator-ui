@@ -236,6 +236,7 @@ const MoodDisplay = () => {
         </BackgroundImage>
       </Box>
       {/* DATA GRID: */}
+      {/* TODO: extract to independent component */}
       <Box
         position="relative"
         ref={gridSection}
