@@ -1,6 +1,4 @@
 import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
-import "./Home.css";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -9,136 +7,199 @@ import {
   PlaylistsResponse,
 } from "../../api/playlists/getPlaylists";
 import { useNavigate } from "react-router-dom";
-import { SyntheticEvent, useEffect, useState } from "react";
+import { SyntheticEvent, useEffect, useMemo, useState } from "react";
 import getUser from "../../api/user/getUser";
 import CircularProgress from "@mui/material/CircularProgress";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useAuth } from "../../hooks/useAuth";
-import getPlaylistTitles from "../../api/playlists/getPlaylistSongs";
-
-interface LogoTextfieldProps {
-  text: string;
-  color: string;
-}
-
-const LogoTextfield = ({ text, color }: LogoTextfieldProps) => {
-  return (
-    <Typography variant="h3" fontFamily="IBM Plex Sans Condensed" color={color}>
-      {text}
-    </Typography>
-  );
-};
+import getPlaylistMood from "../../api/playlists/getPlaylistMood";
+import AppBarHeader from "../../common/appBar/AppBar";
+import AppLogo from "../../common/appLogo/AppLogo";
+import { pinkSunWallpaper } from "../../assets/wallpapers";
+import BackgroundImage from "../../common/backgroundImage/BackgroundImage";
+import { useErrorBoundary } from "react-error-boundary";
 
 type UserPlaylist = PlaylistsResponse;
 
+interface LoadingStatus {
+  isLoading: boolean;
+  text: string;
+}
+
+const loadingUserData: LoadingStatus = {
+  isLoading: true,
+  text: "Loading User Profile data from Spotify...",
+};
+
+const loadingPlaylistData = (playlistName: string): LoadingStatus => ({
+  isLoading: true,
+  text: `Generating mood using the songs from your playlist: '${playlistName}'...`,
+});
+
+const notLoading: LoadingStatus = {
+  isLoading: false,
+  text: "",
+};
+
 const Home = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, logout } = useAuth();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [displayName, setDisplayName] = useState("");
+  const { isAuthenticated } = useAuth();
+  const [loadingStatus, setLoadingStatus] =
+    useState<LoadingStatus>(loadingUserData);
+  const [displayName, setDisplayName] = useState<string>("");
   const [playlists, setPlaylists] = useState<UserPlaylist[]>([]);
-  const [playlistNames, setPlaylistNames] = useState<string[]>([]);
-  const [selectedPlaylistId, setSelectedPlaylistId] = useState<string>("");
+  const [selectedPlaylist, setSelectedPlaylist] = useState<UserPlaylist | null>(
+    null
+  );
+  const allPlaylistNames = useMemo(
+    () => playlists.map((playlist: UserPlaylist) => playlist.name),
+    [playlists]
+  );
+  const { showBoundary } = useErrorBoundary();
 
   useEffect(() => {
     const setupHomePage = async () => {
-      const { display_name } = await getUser();
-      // If User profile name is a string, use it. If it's just an ID, use `User ${ID}`
-      const displayName =
-        display_name && isNaN(+display_name)
-          ? display_name
-          : `User ${display_name}`;
-      setDisplayName(displayName);
+      try {
+        const { display_name } = await getUser();
+        // If user display name is a string, use it. If it's just an ID, use `User ${ID}`
+        const displayName =
+          display_name && isNaN(+display_name)
+            ? display_name
+            : `User ${display_name}`;
+        setDisplayName(displayName);
 
-      const playlists = await getPlaylists();
-      setPlaylists(playlists);
-      setPlaylistNames(
-        playlists.map((playlist: UserPlaylist) => playlist.name)
-      );
-      setIsLoading(false);
+        const playlists = await getPlaylists();
+        setPlaylists(playlists);
+        setLoadingStatus(notLoading);
+
+        if (!isAuthenticated) {
+          navigate("/login");
+        }
+      } catch (error) {
+        showBoundary(error);
+      }
     };
-    if (!isAuthenticated) {
-      navigate("/login");
-    }
     setupHomePage();
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate, showBoundary]);
 
   const onSelectedPlaylistChange = (
     e: SyntheticEvent<Element, Event>,
     value: string | null
   ) => {
     if (!playlists || !value) {
-      setSelectedPlaylistId("");
+      setSelectedPlaylist(null);
       return;
     }
     const playlist = playlists.find(
       (playlist: UserPlaylist) => playlist.name === value
     );
-    setSelectedPlaylistId(playlist!.id);
+    setSelectedPlaylist(playlist!);
   };
 
-  const getPlaylistMood = (playlistId: string) => {
-    getPlaylistTitles(playlistId);
-    // TODO: display mood
+  const getMoodForSelectedPlaylist = async () => {
+    if (!selectedPlaylist) {
+      console.warn("Must select a playlist from the dropdown menu first!");
+      return;
+    }
+    try {
+      setLoadingStatus(loadingPlaylistData(selectedPlaylist.name));
+      const playlistMoodDetails = await getPlaylistMood(selectedPlaylist.id);
+      navigate("/mood", {
+        state: { ...playlistMoodDetails, playlistName: selectedPlaylist.name },
+      });
+    } catch (error) {
+      showBoundary(error);
+    }
   };
 
-  return isLoading === true ? (
-    <Box sx={{ display: "flex" }}>
+  return loadingStatus.isLoading === true ? (
+    <Box
+      display="flex"
+      flexDirection="column"
+      justifyContent="center"
+      alignItems="center"
+      minHeight="100vh"
+    >
       <CircularProgress />
+      <span style={{ marginTop: "8px" }}>{loadingStatus.text}</span>
     </Box>
   ) : (
-    // TODO: use standard <div> since MUI grid doesn't support col widths for direction="column"?
-    // https://mui.com/material-ui/react-grid/#direction-column-column-reverse
-    // OR: should I just wrap this whole thing in a div flexbox and customize that, with a
-    // spash art background behind it (centered by MUI grid)?
-    <Grid
-      container
-      direction="column"
-      justifyContent="space-evenly"
-      alignItems="center"
-    >
-      <Grid item xs={4}></Grid>
-      <Grid item xs={4} m={4}>
-        <Box className="square pulse">
-          <LogoTextfield text="Playlist" color="green" />
-          <LogoTextfield text="Mood" color="black" />
-          <LogoTextfield text="Evaluator" color="green" />
+    <>
+      <AppBarHeader />
+      <BackgroundImage imageUrl={pinkSunWallpaper}>
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          textAlign="center"
+          width="30%"
+          sx={{
+            background: "black",
+            borderRadius: "10%",
+            border: "solid 1px",
+            pb: { xxl: 7, xl: 4, xs: 3 },
+          }}
+        >
+          <AppLogo />
+          <Typography
+            color="green"
+            sx={{
+              typography: { xxl: "h4", xl: "h5", lg: "h6", xs: "body1" },
+            }}
+          >
+            Welcome, {displayName}!
+          </Typography>
+          <Box>
+            <Autocomplete
+              id="playlist-select"
+              options={allPlaylistNames}
+              onChange={onSelectedPlaylistChange}
+              sx={{
+                width: { xxl: 325, xl: 285, lg: 200, sm: 150 },
+                mt: { xxl: 3, xl: 2, lg: 1, sm: 0.5 },
+                mb: { xxl: 2, xl: 2, lg: 1, sm: 0.5 },
+              }}
+              renderInput={(params) => (
+                <TextField {...params} label="Playlist Name" />
+              )}
+            />
+          </Box>
+          <Button
+            size="medium"
+            variant="outlined"
+            disabled={!selectedPlaylist}
+            sx={{ color: selectedPlaylist ? "green" : "" }}
+            onClick={getMoodForSelectedPlaylist}
+          >
+            Generate Mood for Playlist!
+          </Button>
+          <Box
+            width="70%"
+            sx={{
+              mt: { xxl: 4, xl: 2.5, md: 2, xs: 1 },
+            }}
+          >
+            <Typography
+              sx={{
+                typography: {
+                  xxl: "body1",
+                  md: "body2",
+                  xs: "caption",
+                },
+              }}
+            >
+              After you have selected a playlist, click the button above to
+              generate the mood. The app will pull all the songs from your
+              provided playlist and use special 'Audio Feature' values provided
+              by Spotify, to determine the overall mood.
+              <br />
+              <br />
+              (A more detailed explanation will be available on the next page.)
+            </Typography>
+          </Box>
         </Box>
-      </Grid>
-      <Grid item xs={6} m={3}>
-        <Typography variant="h4" fontFamily="IBM Plex Sans Condensed">
-          Welcome, {displayName}!
-        </Typography>
-      </Grid>
-      <Grid item xs={12} m={3}>
-        <Autocomplete
-          id="playlist-select"
-          options={playlistNames}
-          sx={{ width: 300 }}
-          renderInput={(params) => (
-            <TextField {...params} label="Playlist Name" />
-          )}
-          onChange={onSelectedPlaylistChange}
-        />
-      </Grid>
-      <Button
-        size="large"
-        variant="outlined"
-        sx={{ color: "green" }}
-        disabled={!selectedPlaylistId}
-        onClick={() => getPlaylistMood(selectedPlaylistId)}
-      >
-        Generate Mood for Playlist!
-      </Button>
-      <Button
-        size="large"
-        variant="outlined"
-        sx={{ color: "blue" }}
-        onClick={logout}
-      >
-        (Log out)
-      </Button>
-    </Grid>
+      </BackgroundImage>
+    </>
   );
 };
 

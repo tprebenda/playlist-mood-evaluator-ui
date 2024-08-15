@@ -6,11 +6,11 @@ const CLIENT_ID = "5b9ee404632b45f6a6d6cc35824554a6";
 // playlist-read-private playlist-read-collaborative: required to view playlists
 const SCOPE =
   "playlist-read-private playlist-read-collaborative user-read-private user-read-email";
-const REDIRECT_URI = "http://127.0.0.1:3000/callback";
+// const REDIRECT_URI = "http://127.0.0.1:3000/callback"; // LOCAL DEV
+const REDIRECT_URI = "https://playlistmoodevaluator.com/callback";
 const OAUTH_AUTHORIZE_URL = "https://accounts.spotify.com/authorize";
 const STATE_LENGTH = 16;
 export const STATE_KEY = "auth-request-state";
-// const CODE_VERIFIER_LENGTH = 64;
 
 // Sends user to Spotify Auth endpoint to initiate Spotify OAuth2.0 authorization code flow
 // Generates code challenge and sends to backend for official token exchange. This avoids
@@ -26,6 +26,7 @@ export const initiateOAuthFlow = () => {
     scope: SCOPE,
     redirect_uri: REDIRECT_URI,
     state: state,
+    show_dialog: "true",
   };
 
   const spotifyUserAuthUrl = new URL(OAUTH_AUTHORIZE_URL);
@@ -42,6 +43,7 @@ const generateRandomString = (length: number = STATE_LENGTH) => {
   return values.reduce((acc, x) => acc + possible[x % possible.length], "");
 };
 
+// Opens popup to manually logout of Spotify
 // https://stackoverflow.com/a/50738483/11972470
 export const logoutOfSpotify = () => {
   // Opens popup to show user was logged out
