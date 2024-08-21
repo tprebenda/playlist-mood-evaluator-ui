@@ -52,8 +52,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@flydotio/dockerfile": "^0.5.8"
   }
 }

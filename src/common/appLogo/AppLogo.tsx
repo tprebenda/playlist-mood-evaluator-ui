@@ -2,6 +2,7 @@ import "./AppLogo.css";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useLocation, useNavigate } from "react-router-dom";
 
 let logoTheme = createTheme({
   typography: {
@@ -38,10 +39,20 @@ const LogoTextfield = ({ text, color }: LogoTextfieldProps) => {
 };
 
 const AppLogo = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const onLogoClick = () => {
+    if (location.pathname === "/mood" || location.pathname === "/about") {
+      navigate("/home");
+    }
+  };
+
   return (
     <ThemeProvider theme={logoTheme}>
       <Box
         className="square pulse"
+        onClick={onLogoClick}
         sx={{
           mt: { xxl: 7, xl: 4, xs: 3 },
           mb: { xxl: 5, md: 2, xs: 1 },
