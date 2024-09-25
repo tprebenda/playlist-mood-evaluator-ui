@@ -8,6 +8,14 @@ import { useNavigate, useRouteError } from "react-router-dom";
 import { AxiosError, isAxiosError } from "axios";
 import { useEffect, useState } from "react";
 
+const UNREGISTERED_USER_ERROR = JSON.stringify({
+  detail: "User not registered",
+});
+const UNREGISTERED_USER_MESSAGE =
+  "[09/25/2024]: The app is still awaiting approval from Spotify for a quota extension, so users must be \
+manually registered at this time. Please email 'tprebenda@gmail.com' with your Spotify account \
+email and I will add you so you can test my app!";
+
 const ErrorPage = () => {
   const navigate = useNavigate();
   const error = useRouteError();
@@ -24,11 +32,17 @@ const ErrorPage = () => {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx
       console.error(axiosError.response);
-      const message =
-        axiosError.response.status === 401
-          ? "Spotify access token expired."
-          : `${axiosError.response.status}: ${axiosError.response.statusText}}`;
-      setErrorMessage(message);
+      if (
+        JSON.stringify(axiosError.response.data) === UNREGISTERED_USER_ERROR
+      ) {
+        setErrorMessage(UNREGISTERED_USER_MESSAGE);
+      } else if (axiosError.response.status === 401) {
+        setErrorMessage("Spotify access token expired, please login again.");
+      } else {
+        setErrorMessage(
+          `${axiosError.response.status}: ${axiosError.response.statusText}`
+        );
+      }
     } else if (axiosError.request) {
       // The request was made but no response was received
       // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
@@ -61,7 +75,9 @@ const ErrorPage = () => {
           <Typography gutterBottom>
             Sorry! The app crashed due to the following error:
           </Typography>
-          <Typography gutterBottom>"{errorMessage}"</Typography>
+          <Typography gutterBottom color="green">
+            "{errorMessage}"
+          </Typography>
           <Typography gutterBottom mb={2}>
             Please log in again by clicking the button below:
           </Typography>
