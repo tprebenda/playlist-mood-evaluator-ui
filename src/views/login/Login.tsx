@@ -10,9 +10,14 @@ import AppLogo from "../../common/appLogo/AppLogo";
 import { nightCityWallpaper } from "../../assets/wallpapers";
 import BackgroundImage from "../../common/backgroundImage/BackgroundImage";
 
-const welcomeMessage = `Hello!\nThe Playlist Mood Evaluator app will require access to your \
-Spotify account info (to retrieve your profile name), and your playlists (to view song titles).\
-\n\nPlease sign in to Spotify by clicking the icon below to authorize the app:`;
+// TODO: RE-ADD AFTER SCOPE EXTENSION REQUEST IS APPROVED:
+// const welcomeMessage = `Hello!\nThe Playlist Mood Evaluator app will require access to your \
+// Spotify account info (to retrieve your profile name), and your playlists (to view song titles).\
+// \n\nPlease sign in to Spotify by clicking the icon below to authorize the app:`;
+
+const welcomeMessage = `Hello! The Playlist Mood Evaluator app will require access to your \
+Spotify account details, to view playlist names and song titles.\
+\nPlease sign in to Spotify by clicking the icon below to authorize the app:`;
 
 export default function Login() {
   const { login } = useAuth();
@@ -53,7 +58,7 @@ export default function Login() {
                 color="green"
                 fontFamily={"sans-serif"}
               >
-                Authenticate with Spotify
+                Authenticate with Spotify:
               </Typography>
               <Typography
                 sx={{

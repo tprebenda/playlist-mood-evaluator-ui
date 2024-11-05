@@ -7,7 +7,7 @@ const SpotifyLogo = () => (
     sx={{
       display: "flex",
       height: { xl: 45, md: 30, xs: 20 },
-      width: { xl: 125, md: 100, xs: 75 },
+      width: { xl: 150, md: 100, xs: 75 },
       bgcolor: "white",
       borderRadius: "10%",
     }}

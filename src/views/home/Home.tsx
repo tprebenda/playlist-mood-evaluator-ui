@@ -60,13 +60,14 @@ const Home = () => {
   useEffect(() => {
     const setupHomePage = async () => {
       try {
-        const { display_name } = await getUser();
+        // TODO: RE-ADD AFTER SCOPE EXTENSION REQUEST IS APPROVED
+        // const { display_name } = await getUser();
         // If user display name is a string, use it. If it's just an ID, use `User ${ID}`
-        const displayName =
-          display_name && isNaN(+display_name)
-            ? display_name
-            : `User ${display_name}`;
-        setDisplayName(displayName);
+        // const displayName =
+        //   display_name && isNaN(+display_name)
+        //     ? display_name
+        //     : `User ${display_name}`;
+        // setDisplayName(displayName);
 
         const playlists = await getPlaylists();
         setPlaylists(playlists);
@@ -141,13 +142,15 @@ const Home = () => {
           }}
         >
           <AppLogo />
+          {/* TODO: RE-ADD "{displayName}" AFTER SCOPE EXTENSION REQUEST IS APPROVED */}
+          {/* typography: { xxl: "h4", xl: "h5", lg: "h6", xs: "body1" }, */}
           <Typography
             color="green"
             sx={{
-              typography: { xxl: "h4", xl: "h5", lg: "h6", xs: "body1" },
+              typography: { xxl: "h5", xl: "h6", lg: "h7", xs: "body2" },
             }}
           >
-            Welcome, {displayName}!
+            Welcome! Please select a playlist below:
           </Typography>
           <Box>
             <Autocomplete

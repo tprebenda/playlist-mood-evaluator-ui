@@ -2,10 +2,12 @@
 // https://developer.spotify.com/documentation/web-api/tutorials/code-flow
 const CLIENT_ID = "5b9ee404632b45f6a6d6cc35824554a6";
 
+// TODO: RE-ADD "user-read-private user-read-email" AFTER SCOPE EXTENSION REQUEST IS APPROVED:
+// const SCOPE = "playlist-read-private playlist-read-collaborative user-read-private user-read-email";
+
 // user-read-private user-read-email: required to get userId
 // playlist-read-private playlist-read-collaborative: required to view playlists
-const SCOPE =
-  "playlist-read-private playlist-read-collaborative user-read-private user-read-email";
+const SCOPE = "playlist-read-private playlist-read-collaborative";
 const REDIRECT_URI =
   window.location.hostname === "127.0.0.1"
     ? "http://127.0.0.1:3000/callback"
