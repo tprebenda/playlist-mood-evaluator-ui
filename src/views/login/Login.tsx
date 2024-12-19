@@ -9,6 +9,7 @@ import Box from "@mui/material/Box";
 import AppLogo from "../../common/appLogo/AppLogo";
 import { nightCityWallpaper } from "../../assets/wallpapers";
 import BackgroundImage from "../../common/backgroundImage/BackgroundImage";
+import AppBarHeader from "../../common/appBar/AppBar";
 
 // TODO: RE-ADD AFTER SCOPE EXTENSION REQUEST IS APPROVED:
 // const welcomeMessage = `Hello!\nThe Playlist Mood Evaluator app will require access to your \
@@ -23,71 +24,74 @@ export default function Login() {
   const { login } = useAuth();
 
   return (
-    <BackgroundImage imageUrl={nightCityWallpaper}>
-      <Box
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        textAlign="center"
-        width="30%"
-        sx={{
-          background: "black",
-          borderRadius: "10%",
-          border: "solid 1px",
-          pb: { xxl: 7, lg: 4, xs: 3 },
-        }}
-      >
-        <AppLogo />
-        <Card
+    <>
+      <AppBarHeader />
+      <BackgroundImage imageUrl={nightCityWallpaper}>
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          textAlign="center"
+          width="30%"
           sx={{
-            maxWidth: "70%",
-            marginTop: "8px",
-            borderRadius: "5%",
+            background: "black",
+            borderRadius: "10%",
+            border: "solid 1px",
+            pb: { xxl: 7, lg: 4, xs: 3 },
           }}
         >
-          <CardContent>
-            <Box
-              display="flex"
-              flexDirection="column"
-              alignItems="center"
-              mb="-15px"
-            >
-              <Typography
-                gutterBottom
-                sx={{ typography: { xl: "h4", lg: "h5", xs: "h6" } }}
-                color="green"
-                fontFamily={"sans-serif"}
-              >
-                Authenticate with Spotify:
-              </Typography>
-              <Typography
-                sx={{
-                  typography: {
-                    xl: "body1",
-                    lg: "body2",
-                    xs: "caption",
-                  },
-                  whiteSpace: "pre-line",
-                }}
-                color="text.secondary"
-              >
-                {welcomeMessage}
-              </Typography>
-            </Box>
-          </CardContent>
-          <CardActions
+          <AppLogo />
+          <Card
             sx={{
-              display: "flex",
-              justifyContent: "center",
-              marginBottom: "8px",
+              maxWidth: "70%",
+              marginTop: "8px",
+              borderRadius: "5%",
             }}
           >
-            <Button size="small" onClick={login}>
-              <SpotifyLogo />
-            </Button>
-          </CardActions>
-        </Card>
-      </Box>
-    </BackgroundImage>
+            <CardContent>
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                mb="-10px"
+              >
+                <Typography
+                  gutterBottom
+                  sx={{ typography: { xl: "h4", lg: "h5", xs: "h6" } }}
+                  color="green"
+                  fontFamily={"sans-serif"}
+                >
+                  Authenticate with Spotify:
+                </Typography>
+                <Typography
+                  sx={{
+                    typography: {
+                      xl: "body1",
+                      lg: "body2",
+                      xs: "caption",
+                    },
+                    whiteSpace: "pre-line",
+                  }}
+                  color="text.secondary"
+                >
+                  {welcomeMessage}
+                </Typography>
+              </Box>
+            </CardContent>
+            <CardActions
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                marginBottom: "8px",
+              }}
+            >
+              <Button size="small" onClick={login}>
+                <SpotifyLogo />
+              </Button>
+            </CardActions>
+          </Card>
+        </Box>
+      </BackgroundImage>
+    </>
   );
 }

@@ -9,7 +9,6 @@ import {
 import { useNavigate } from "react-router-dom";
 import { SyntheticEvent, useEffect, useMemo, useState } from "react";
 import getUser from "../../api/user/getUser";
-import CircularProgress from "@mui/material/CircularProgress";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useAuth } from "../../hooks/useAuth";
 import getPlaylistMood from "../../api/playlists/getPlaylistMood";
@@ -18,6 +17,7 @@ import AppLogo from "../../common/appLogo/AppLogo";
 import { pinkSunWallpaper } from "../../assets/wallpapers";
 import BackgroundImage from "../../common/backgroundImage/BackgroundImage";
 import { useErrorBoundary } from "react-error-boundary";
+import CircularProgressBar from "../../common/circularProgressBar/CircularProgressBar";
 
 type UserPlaylist = PlaylistsResponse;
 
@@ -114,16 +114,7 @@ const Home = () => {
   };
 
   return loadingStatus.isLoading === true ? (
-    <Box
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-      minHeight="100vh"
-    >
-      <CircularProgress />
-      <span style={{ marginTop: "8px" }}>{loadingStatus.text}</span>
-    </Box>
+    <CircularProgressBar text={loadingStatus.text} />
   ) : (
     <>
       <AppBarHeader />

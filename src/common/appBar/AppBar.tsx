@@ -13,6 +13,9 @@ const AppBarHeader = () => {
   const location = useLocation();
 
   const navigateBack = () => {
+    if (location.pathname === "/login") {
+      return;
+    }
     if (location.pathname === "/home") {
       navigate("/login");
     } else {
@@ -34,7 +37,11 @@ const AppBarHeader = () => {
           >
             <ArrowBackIcon />
           </IconButton>
-          <Button color="inherit" onClick={() => navigate("/home")}>
+          <Button
+            color="inherit"
+            onClick={() => navigate("/home")}
+            disabled={!isAuthenticated}
+          >
             Home
           </Button>
           <Button color="inherit" onClick={() => navigate("/about")}>
