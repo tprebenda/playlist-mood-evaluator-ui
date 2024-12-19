@@ -5,6 +5,7 @@ import { lineRiderSynthWallpaper } from "../../assets/wallpapers";
 import BackgroundImage from "../../common/backgroundImage/BackgroundImage";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import PersonalLinks from "../../common/personalLink/PersonalLinks";
 
 let aboutTheme = createTheme({
   typography: {
@@ -21,6 +22,7 @@ as an opportunity to look deeper into the songs of my playlists, and to better u
 taste in music and my overall 'style'.\n\nI hope you can use this tool to do the same for you \
 and your playlists!`;
 
+// Component for displaying info about the application itself and me, the author/developer
 const About = () => {
   return (
     <>
@@ -45,6 +47,7 @@ const About = () => {
               </Typography>
             </Box>
           </ThemeProvider>
+          <PersonalLinks />
         </Box>
       </BackgroundImage>
     </>
