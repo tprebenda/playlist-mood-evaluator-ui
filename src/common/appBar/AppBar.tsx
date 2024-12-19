@@ -8,7 +8,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const AppBarHeader = () => {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, endUserSession, logoutOfSpotify } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -18,6 +18,7 @@ const AppBarHeader = () => {
     }
     if (location.pathname === "/home") {
       navigate("/login");
+      endUserSession();
     } else {
       navigate(-1);
     }
@@ -48,7 +49,11 @@ const AppBarHeader = () => {
             About
           </Button>
           <div style={{ flexGrow: 1 }}></div>
-          <Button color="inherit" disabled={!isAuthenticated} onClick={logout}>
+          <Button
+            color="inherit"
+            disabled={!isAuthenticated}
+            onClick={logoutOfSpotify}
+          >
             Logout
           </Button>
         </Toolbar>

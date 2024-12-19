@@ -19,8 +19,8 @@ import AppBarHeader from "../../common/appBar/AppBar";
 // Spotify account info (to retrieve your profile name), and your playlists (to view song titles).\
 // \n\nPlease sign in to Spotify by clicking the icon below to authorize the app:`;
 
-const welcomeMessage = `Hello! The Playlist Mood Evaluator app will require access to your \
-Spotify account details, to view playlist names and song titles.\
+const welcomeMessage = `Hello! To generate a mood for your playlists, you must first authorize my app to \
+view the names of your playlists.
 \nPlease sign in to Spotify by clicking the icon below to authorize the app:`;
 
 export default function Login() {
@@ -48,7 +48,7 @@ export default function Login() {
             background: "black",
             borderRadius: "10%",
             border: "solid 1px",
-            pb: { xxl: 7, lg: 4, xs: 3 },
+            pb: { xxl: 6.5, lg: 4, xs: 3 },
           }}
         >
           <AppLogo />

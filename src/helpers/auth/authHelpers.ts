@@ -49,7 +49,7 @@ const generateRandomString = (length: number = STATE_LENGTH) => {
 
 // Opens popup to manually logout of Spotify
 // https://stackoverflow.com/a/50738483/11972470
-export const logoutOfSpotify = () => {
+export const triggerSpotifyLogout = () => {
   // Opens popup to show user was logged out
   const spotifyLogoutUrl = "https://accounts.spotify.com/en/logout";
   const spotifyLogoutWindow = window.open(

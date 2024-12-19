@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import exchangeSpotifyAuthToken from "../api/auth/loginUser";
 import {
   initiateOAuthFlow,
-  logoutOfSpotify,
+  triggerSpotifyLogout,
   getAuthCodeFromArgs,
   STATE_KEY,
 } from "../helpers/auth/authHelpers";
@@ -21,7 +21,8 @@ import logoutUserSession from "../api/auth/logoutUser";
 interface AuthContextType {
   isAuthenticated: boolean;
   login: () => void;
-  logout: () => void;
+  endUserSession: () => void;
+  logoutOfSpotify: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -77,14 +78,25 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     initiateOAuthFlow();
   };
 
-  // Logs out the user of Spotify and from local session
-  const logout = useCallback(async () => {
+  // Ends the user's current auth session and returns to /login
+  const endUserSession = useCallback(async () => {
     try {
       await logoutUserSession();
     } catch (error) {
-      console.error(`Logout attempt failed due to err: ${error}`);
+      console.error(`Failed to end user session due to err: ${error}`);
     } finally {
-      logoutOfSpotify();
+      setIsAuthenticated(false);
+      navigate("/login", { replace: true });
+    }
+  }, [navigate]);
+
+  // Triggers log out of user's Spotify account and returns to /login
+  const logoutOfSpotify = useCallback(async () => {
+    try {
+      triggerSpotifyLogout();
+    } catch (error) {
+      console.error(`Failed to log out of Spotify due to err: ${error}`);
+    } finally {
       setIsAuthenticated(false);
       navigate("/login", { replace: true });
     }
@@ -94,9 +106,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     () => ({
       isAuthenticated,
       login,
-      logout,
+      endUserSession,
+      logoutOfSpotify,
     }),
-    [isAuthenticated, logout]
+    [isAuthenticated, endUserSession, logoutOfSpotify]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
