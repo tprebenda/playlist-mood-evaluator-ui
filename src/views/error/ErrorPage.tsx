@@ -24,7 +24,11 @@ const ErrorPage = () => {
   useEffect(() => {
     if (!isAxiosError(error)) {
       console.error(error);
-      setErrorMessage(`Error from unknown origin: ${error}`);
+      if (error instanceof Error && error.message === "access_denied") {
+        setErrorMessage(`Auth request cancelled by user.`);
+      } else {
+        setErrorMessage(`Error from unknown origin: ${error}`);
+      }
       return;
     }
     const axiosError = error as AxiosError;
@@ -53,7 +57,7 @@ const ErrorPage = () => {
     } else {
       // Something happened in setting up the request that triggered an Error
       console.error("Error", axiosError.message);
-      setErrorMessage(`Error from unknown origin: ${error}`);
+      setErrorMessage(`Error while generating Auth request: ${error}`);
     }
   }, [error]);
 
@@ -73,7 +77,7 @@ const ErrorPage = () => {
         <AppLogo />
         <Box width="70%" whiteSpace="pre-wrap" textAlign="center" mb={5}>
           <Typography gutterBottom>
-            Sorry! The app crashed due to the following error:
+            Sorry! The app shut down due to the following error:
           </Typography>
           <Typography gutterBottom color="green">
             "{errorMessage}"

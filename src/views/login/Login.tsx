@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -9,6 +11,7 @@ import Box from "@mui/material/Box";
 import AppLogo from "../../common/appLogo/AppLogo";
 import { nightCityWallpaper } from "../../assets/wallpapers";
 import BackgroundImage from "../../common/backgroundImage/BackgroundImage";
+import CircularProgressBar from "../../common/circularProgressBar/CircularProgressBar";
 import AppBarHeader from "../../common/appBar/AppBar";
 
 // TODO: RE-ADD AFTER SCOPE EXTENSION REQUEST IS APPROVED:
@@ -22,8 +25,16 @@ Spotify account details, to view playlist names and song titles.\
 
 export default function Login() {
   const { login } = useAuth();
+  const [authButtonClicked, setAuthButtonClicked] = useState<boolean>(false);
 
-  return (
+  const onAuthClick = () => {
+    setAuthButtonClicked(true);
+    login();
+  };
+
+  return authButtonClicked ? (
+    <CircularProgressBar text="Authenticating..." />
+  ) : (
     <>
       <AppBarHeader />
       <BackgroundImage imageUrl={nightCityWallpaper}>
@@ -85,7 +96,7 @@ export default function Login() {
                 marginBottom: "8px",
               }}
             >
-              <Button size="small" onClick={login}>
+              <Button size="small" onClick={onAuthClick}>
                 <SpotifyLogo />
               </Button>
             </CardActions>
