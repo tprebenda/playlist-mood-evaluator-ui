@@ -76,6 +76,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   // (above) will catch the callback and complete the login
   const login = () => {
     initiateOAuthFlow();
+    localStorage.setItem("authInProgress", "false");
   };
 
   // Ends the user's current auth session and returns to /login

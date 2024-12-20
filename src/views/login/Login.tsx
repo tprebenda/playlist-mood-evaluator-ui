@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -25,14 +23,22 @@ view the names of your playlists.
 
 export default function Login() {
   const { login } = useAuth();
-  const [authButtonClicked, setAuthButtonClicked] = useState<boolean>(false);
+
+  let authInProgress: boolean = JSON.parse(
+    localStorage.getItem("authInProgress") || "false"
+  );
+  // Make sure the local storage item is a boolean, since JSON parse could yield anything
+  if (typeof authInProgress != "boolean") {
+    console.error(`Unexpected type for authInProgress var: ${authInProgress}`);
+    authInProgress = false;
+  }
 
   const onAuthClick = () => {
-    setAuthButtonClicked(true);
+    localStorage.setItem("authInProgress", "true");
     login();
   };
 
-  return authButtonClicked ? (
+  return authInProgress ? (
     <CircularProgressBar text="Authenticating..." />
   ) : (
     <>

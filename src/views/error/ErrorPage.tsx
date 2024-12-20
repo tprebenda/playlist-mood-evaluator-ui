@@ -8,13 +8,13 @@ import { useNavigate, useRouteError } from "react-router-dom";
 import { AxiosError, isAxiosError } from "axios";
 import { useEffect, useState } from "react";
 
+// Todo: should be good to remove?
 const UNREGISTERED_USER_ERROR = JSON.stringify({
   detail: "User not registered",
 });
-const UNREGISTERED_USER_MESSAGE =
-  "[09/25/2024]: The app is still awaiting approval from Spotify for a quota extension, so users must be \
-manually registered at this time. Please email 'tprebenda@gmail.com' with your Spotify account \
-email and I will add you so you can test my app!";
+const UNREGISTERED_USER_MESSAGE = `[09/25/2024]: The app is still awaiting approval from Spotify for \
+a quota extension, so users must be manually registered at this time. Please email 'tprebenda@gmail.com' \
+with your Spotify account email and I will add you so you can test my app!`;
 
 const ErrorPage = () => {
   const navigate = useNavigate();
