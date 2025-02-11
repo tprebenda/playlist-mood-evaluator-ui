@@ -28,3 +28,5 @@ export const getLoadingStatusForPlaylist = (
 export type UserPlaylist = PlaylistsResponse;
 
 export type PlaylistMoodDetails = MoodResponse;
+
+export const GAP_TO_BORDER = { xxl: 7, xl: 4, xs: 3 };

@@ -13,7 +13,7 @@ let aboutTheme = createTheme({
   },
 });
 
-const aboutText = `The Playlist Mood Evaluator is a React web application developed by me, \
+const aboutText = `The "Playlist Mood Evaluator" is a React web application developed by me, \
 Troy Prebenda.\nIt is designed to give users some insight into the makeup of their playlists, \
 and to highlight the songs that share similar audio features.\n\nMusic has always been \
 a very meaningful part of my life - I played many instruments growing up, and I continue to \
@@ -41,7 +41,7 @@ const About = () => {
         >
           <AppLogo />
           <ThemeProvider theme={aboutTheme}>
-            <Box width="70%" whiteSpace="pre-wrap" textAlign="center" mb={5}>
+            <Box width="80%" whiteSpace="pre-wrap" textAlign="center" mb={5}>
               <Typography sx={{ fontSize: { xxl: 17, xl: 16, xs: 14 } }}>
                 {aboutText}
               </Typography>

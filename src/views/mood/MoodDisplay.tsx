@@ -23,6 +23,7 @@ import {
   notLoading,
   PlaylistMoodDetails,
   getLoadingStatusForPlaylist,
+  GAP_TO_BORDER,
 } from "../../common";
 import CircularProgressBar from "../../common/circularProgressBar/CircularProgressBar";
 import { getPlaylistMood } from "../../api/playlists/getPlaylistMood";
@@ -129,11 +130,10 @@ const MoodDisplay = () => {
               background: "black",
               borderRadius: "10%",
               border: "solid 1px",
-              paddingBottom: { xl: 4, lg: 2, xs: 1 },
             }}
           >
             <AppLogo />
-            <Box maxWidth="70%">
+            <Box maxWidth="70%" sx={{ paddingBottom: GAP_TO_BORDER }}>
               <Card variant="outlined">
                 <CardContent>
                   <Box

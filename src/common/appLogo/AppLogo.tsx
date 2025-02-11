@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useLocation, useNavigate } from "react-router-dom";
+import { GAP_TO_BORDER } from "..";
 
 let logoTheme = createTheme({
   typography: {
@@ -54,7 +55,7 @@ const AppLogo = () => {
         className="square pulse"
         onClick={onLogoClick}
         sx={{
-          mt: { xxl: 7, xl: 4, xs: 3 },
+          mt: GAP_TO_BORDER,
           mb: { xxl: 5, md: 2, xs: 1 },
           width: { xxl: 285, xl: 200, lg: 125, md: 90, xs: 80 },
           height: { xxl: 285, xl: 200, lg: 125, md: 90, xs: 80 },

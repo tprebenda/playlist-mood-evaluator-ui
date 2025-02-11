@@ -4,6 +4,7 @@ import LinkedInLogoWhite from "../../assets/linkedin/In_White_72.svg";
 import GithubLogoInvertoCat from "../../assets/github/github_mark_white.svg";
 import PersonalLinkLogo from "./PersonalLinkLogo";
 import { openInNewTab } from "../../helpers/link/linkHelpers";
+import { GAP_TO_BORDER } from "..";
 
 const LINKEDIN_PROFILE_URL = "https://www.linkedin.com/in/troy-prebenda/";
 const GITHUB_PROFILE_URL = "https://github.com/tprebenda";
@@ -16,7 +17,7 @@ const PersonalLinks = () => {
       flexDirection="column"
       sx={{
         width: { xxl: "26%" },
-        mb: { xxl: 7, xl: 4, xs: 3 },
+        mb: GAP_TO_BORDER,
       }}
     >
       <Box display="flex" marginBottom={0.5}>

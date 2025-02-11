@@ -17,6 +17,7 @@ import CircularProgressBar from "../../common/circularProgressBar/CircularProgre
 import {
   LoadingStatus,
   loadingUserData,
+  GAP_TO_BORDER,
   notLoading,
   UserPlaylist,
 } from "../../common";
@@ -103,7 +104,7 @@ const Home = () => {
             background: "black",
             borderRadius: "10%",
             border: "solid 1px",
-            pb: { xxl: 7, xl: 4, xs: 3 },
+            pb: GAP_TO_BORDER,
           }}
         >
           <AppLogo />
