@@ -1,6 +1,6 @@
 import { axiosInstance } from "../axiosInstance";
 
-interface Track {
+export interface Track {
   id: string;
   name: string;
   album: string;
@@ -13,15 +13,15 @@ interface Track {
   valence: number;
 }
 
-interface MoodResponse {
+export interface MoodResponse {
   mood: string;
   top_features: Array<string>;
   top_tracks: Array<Track>;
 }
 
-const getPlaylistMood = async (playlistId: string): Promise<MoodResponse> => {
+export const getPlaylistMood = async (
+  playlistId: string,
+): Promise<MoodResponse> => {
   const response = await axiosInstance.get(`/mood/${playlistId}`);
   return response.data;
 };
-
-export default getPlaylistMood;

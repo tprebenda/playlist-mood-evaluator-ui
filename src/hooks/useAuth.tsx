@@ -76,6 +76,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   // (above) will catch the callback and complete the login
   const login = () => {
     initiateOAuthFlow();
+    // TODO: still not working
     localStorage.setItem("authInProgress", "false");
   };
 
@@ -86,6 +87,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     } catch (error) {
       console.error(`Failed to end user session due to err: ${error}`);
     } finally {
+      sessionStorage.clear();
       setIsAuthenticated(false);
       navigate("/login", { replace: true });
     }
@@ -98,6 +100,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     } catch (error) {
       console.error(`Failed to log out of Spotify due to err: ${error}`);
     } finally {
+      sessionStorage.clear();
       setIsAuthenticated(false);
       navigate("/login", { replace: true });
     }

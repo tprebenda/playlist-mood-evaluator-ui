@@ -24,6 +24,7 @@ view the names of your playlists.
 export default function Login() {
   const { login } = useAuth();
 
+  // TODO: still not working
   let authInProgress: boolean = JSON.parse(
     localStorage.getItem("authInProgress") || "false"
   );
@@ -33,6 +34,7 @@ export default function Login() {
     authInProgress = false;
   }
 
+  // TODO: still not working
   const onAuthClick = () => {
     localStorage.setItem("authInProgress", "true");
     login();

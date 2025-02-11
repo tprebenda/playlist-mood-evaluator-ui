@@ -2,75 +2,47 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import {
-  getPlaylists,
-  PlaylistsResponse,
-} from "../../api/playlists/getPlaylists";
+import { getPlaylists } from "../../api/playlists/getPlaylists";
 import { useNavigate } from "react-router-dom";
 import { SyntheticEvent, useEffect, useMemo, useState } from "react";
-import getUser from "../../api/user/getUser";
+// import getUser from "../../api/user/getUser";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useAuth } from "../../hooks/useAuth";
-import getPlaylistMood from "../../api/playlists/getPlaylistMood";
 import AppBarHeader from "../../common/appBar/AppBar";
 import AppLogo from "../../common/appLogo/AppLogo";
 import { pinkSunWallpaper } from "../../assets/wallpapers";
 import BackgroundImage from "../../common/backgroundImage/BackgroundImage";
 import { useErrorBoundary } from "react-error-boundary";
 import CircularProgressBar from "../../common/circularProgressBar/CircularProgressBar";
-
-type UserPlaylist = PlaylistsResponse;
-
-interface LoadingStatus {
-  isLoading: boolean;
-  text: string;
-}
-
-const loadingUserData: LoadingStatus = {
-  isLoading: true,
-  text: "Loading User Profile data from Spotify...",
-};
-
-const loadingPlaylistData = (playlistName: string): LoadingStatus => ({
-  isLoading: true,
-  text: `Generating mood using the songs from your playlist: '${playlistName}'...`,
-});
-
-const notLoading: LoadingStatus = {
-  isLoading: false,
-  text: "",
-};
+import {
+  LoadingStatus,
+  loadingUserData,
+  notLoading,
+  UserPlaylist,
+} from "../../common";
 
 const Home = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const [loadingStatus, setLoadingStatus] =
     useState<LoadingStatus>(loadingUserData);
-  const [displayName, setDisplayName] = useState<string>("");
   const [playlists, setPlaylists] = useState<UserPlaylist[]>([]);
   const [selectedPlaylist, setSelectedPlaylist] = useState<UserPlaylist | null>(
     null
-  );
-  const allPlaylistNames = useMemo(
-    () => playlists.map((playlist: UserPlaylist) => playlist.name),
-    [playlists]
   );
   const { showBoundary } = useErrorBoundary();
 
   useEffect(() => {
     const setupHomePage = async () => {
       try {
-        // TODO: RE-ADD AFTER SCOPE EXTENSION REQUEST IS APPROVED
-        // const { display_name } = await getUser();
-        // If user display name is a string, use it. If it's just an ID, use `User ${ID}`
-        // const displayName =
-        //   display_name && isNaN(+display_name)
-        //     ? display_name
-        //     : `User ${display_name}`;
-        // setDisplayName(displayName);
-
-        const playlists = await getPlaylists();
-        setPlaylists(playlists);
+        const sessionPlaylists = sessionStorage.getItem("userPlaylists");
+        if (sessionPlaylists) {
+          setPlaylists(JSON.parse(sessionPlaylists));
+        } else {
+          const playlists = await getPlaylists();
+          sessionStorage.setItem("userPlaylists", JSON.stringify(playlists));
+          setPlaylists(playlists);
+        }
         setLoadingStatus(notLoading);
 
         if (!isAuthenticated) {
@@ -82,6 +54,11 @@ const Home = () => {
     };
     setupHomePage();
   }, [isAuthenticated, navigate, showBoundary]);
+
+  const allPlaylistNames = useMemo(
+    () => playlists.map((playlist: UserPlaylist) => playlist.name),
+    [playlists]
+  );
 
   const onSelectedPlaylistChange = (
     e: SyntheticEvent<Element, Event>,
@@ -102,15 +79,12 @@ const Home = () => {
       console.warn("Must select a playlist from the dropdown menu first!");
       return;
     }
-    try {
-      setLoadingStatus(loadingPlaylistData(selectedPlaylist.name));
-      const playlistMoodDetails = await getPlaylistMood(selectedPlaylist.id);
-      navigate("/mood", {
-        state: { ...playlistMoodDetails, playlistName: selectedPlaylist.name },
-      });
-    } catch (error) {
-      showBoundary(error);
-    }
+    navigate("/mood", {
+      state: {
+        playlistId: selectedPlaylist.id,
+        playlistName: selectedPlaylist.name,
+      },
+    });
   };
 
   return loadingStatus.isLoading === true ? (
@@ -133,8 +107,6 @@ const Home = () => {
           }}
         >
           <AppLogo />
-          {/* TODO: RE-ADD "{displayName}" AFTER SCOPE EXTENSION REQUEST IS APPROVED */}
-          {/* typography: { xxl: "h4", xl: "h5", lg: "h6", xs: "body1" }, */}
           <Typography
             color="green"
             sx={{
@@ -151,7 +123,7 @@ const Home = () => {
               sx={{
                 width: { xxl: 325, xl: 285, lg: 200, sm: 150 },
                 mt: { xxl: 3, xl: 2, lg: 1, sm: 0.5 },
-                mb: { xxl: 2, xl: 2, lg: 1, sm: 0.5 },
+                mb: { xl: 1.5, lg: 1, sm: 0.5 },
               }}
               renderInput={(params) => (
                 <TextField {...params} label="Playlist Name" />

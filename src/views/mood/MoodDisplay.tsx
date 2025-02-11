@@ -4,16 +4,9 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
 import { useLocation } from "react-router-dom";
-import {
-  DataGrid,
-  GridCellParams,
-  GridColDef,
-  GridSortDirection,
-} from "@mui/x-data-grid";
 import AppBarHeader from "../../common/appBar/AppBar";
-import { RefObject, useMemo, useRef, useState } from "react";
+import { RefObject, useEffect, useMemo, useRef, useState } from "react";
 import InfoDialog from "./InfoDialog";
 import BackgroundImage from "../../common/backgroundImage/BackgroundImage";
 import {
@@ -24,75 +17,79 @@ import AppLogo from "../../common/appLogo/AppLogo";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import IconButton from "@mui/material/IconButton";
-import { openInNewTab } from "../../helpers/link/linkHelpers";
 import SpotifyIcon from "../../common/spotify/SpotifyIcon";
-
-const SIGNIFICANT_CELL_BACKGROUND_COLOR = "black";
-const DATA_COLUMNS = [
-  "danceability",
-  "energy",
-  "speechiness",
-  "acousticness",
-  "instrumentalness",
-  "valence",
-];
-
-// Adds 'significantCell' class styling if field is a data column, and value is >= 0.65
-const getCellStyling = (params: GridCellParams<any, any, number>) => {
-  if (!DATA_COLUMNS.includes(params.field) || !params.value) {
-    return "";
-  }
-  return params.value >= 0.65 ? "significantCell" : "";
-};
-
-const columns: GridColDef[] = [
-  { field: "id", headerName: "ID", width: 50 },
-  {
-    field: "name",
-    headerName: "Track Name",
-    width: 225,
-    headerClassName: "trackNameCell",
-    renderCell: (params: GridCellParams<any, string>) => (
-      <Link
-        onClick={() => openInNewTab(params.row.url)}
-        sx={{ color: "lightgreen", cursor: "pointer" }}
-      >
-        {params.value}
-      </Link>
-    ),
-  },
-  { field: "album", headerName: "Album", width: 225 },
-  { field: "artists", headerName: "Artist(s)", width: 225 },
-  { field: "danceability", headerName: "Danceability", width: 150 },
-  { field: "energy", headerName: "Energy", width: 100 },
-  { field: "speechiness", headerName: "Speechiness", width: 100 },
-  { field: "acousticness", headerName: "Acousticness", width: 100 },
-  { field: "instrumentalness", headerName: "Instrumentalness", width: 150 },
-  { field: "valence", headerName: "Valence", width: 100 },
-];
-
-const sortingOrder: GridSortDirection[] = ["desc", "asc", null];
+import {
+  LoadingStatus,
+  notLoading,
+  PlaylistMoodDetails,
+  getLoadingStatusForPlaylist,
+} from "../../common";
+import CircularProgressBar from "../../common/circularProgressBar/CircularProgressBar";
+import { getPlaylistMood } from "../../api/playlists/getPlaylistMood";
+import { useErrorBoundary } from "react-error-boundary";
+import MoodGrid from "./MoodGrid";
 
 const MoodDisplay = () => {
-  // Pull mood details that were passed as state in navigate()
+  // Pull playlist identifiers that were passed as state in navigate()
   const { state } = useLocation();
-  const { mood, top_features, top_tracks, playlistName } = state;
+  const { playlistName, playlistId } = state;
+  const [loadingStatus, setLoadingStatus] = useState<LoadingStatus>(() =>
+    getLoadingStatusForPlaylist(playlistName)
+  );
+  const [playlistDetails, setPlaylistDetails] =
+    useState<PlaylistMoodDetails | null>(null);
   const [infoDialogIsOpen, setInfoDialogIsOpen] = useState<boolean>(false);
 
-  const displaySection = useRef<HTMLInputElement>(null);
-  const gridSection = useRef<HTMLInputElement>(null);
+  const { showBoundary } = useErrorBoundary();
 
-  const scrollTo = (section: RefObject<HTMLInputElement>) => {
-    section.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  // Pull playlist mood details from SessionStorage, if present
+  useEffect(() => {
+    const setupMoodPage = async () => {
+      try {
+        const sessionPlaylistDetails = sessionStorage.getItem(
+          `playlistDetails-${playlistId}`
+        );
+        if (sessionPlaylistDetails) {
+          setPlaylistDetails(JSON.parse(sessionPlaylistDetails));
+        } else {
+          const playlistMoodDetails = await getPlaylistMood(playlistId);
+          // remove session storage for other playlist mood details
+          Object.keys(sessionStorage)
+            .filter((k) => {
+              return /playlistDetails-.*/.test(k);
+            })
+            .forEach((k) => {
+              sessionStorage.removeItem(k);
+            });
+          // add new playlist to session storage
+          sessionStorage.setItem(
+            `playlistDetails-${playlistId}`,
+            JSON.stringify({ ...playlistMoodDetails })
+          );
+          setPlaylistDetails(playlistMoodDetails);
+        }
+        setLoadingStatus(notLoading);
+      } catch (error) {
+        showBoundary(error);
+      }
+    };
+    setupMoodPage();
+  }, [playlistId, showBoundary]);
 
   const topFeaturesUppercase = useMemo(
     () =>
-      top_features
+      playlistDetails?.top_features
         .map((feature: string) => feature[0].toUpperCase() + feature.slice(1))
         .join(", "),
-    [top_features]
+    [playlistDetails?.top_features]
   );
+
+  // used for snap scrolling
+  const displaySection = useRef<HTMLInputElement>(null);
+  const gridSection = useRef<HTMLInputElement>(null);
+  const scrollTo = (section: RefObject<HTMLInputElement>) => {
+    section.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   const randomMoodWallpaper = useMemo(() => {
     const randomIdx = Math.floor(Math.random() * MOOD_WALLPAPERS.length);
@@ -106,7 +103,10 @@ const MoodDisplay = () => {
     setInfoDialogIsOpen(false);
   };
 
-  return (
+  return loadingStatus.isLoading === true ? (
+    <CircularProgressBar text={loadingStatus.text} />
+  ) : (
+    // MOOD DISPLAY (FIRST PAGE)
     <Box
       position="relative"
       height="100vh"
@@ -172,7 +172,7 @@ const MoodDisplay = () => {
                       sx={{ typography: { xxl: "h6", xs: "body1" } }}
                       gutterBottom
                     >
-                      {mood}
+                      {playlistDetails?.mood}
                     </Typography>
                     <Typography
                       color="green"
@@ -234,9 +234,9 @@ const MoodDisplay = () => {
             </IconButton>
           </Box>
         </BackgroundImage>
+        <InfoDialog open={infoDialogIsOpen} handleClose={handleDialogClose} />
       </Box>
-      {/* DATA GRID: */}
-      {/* TODO: extract to independent component */}
+      {/* GRID DISPLAY (SECOND PAGE) */}
       <Box
         position="relative"
         ref={gridSection}
@@ -288,42 +288,8 @@ const MoodDisplay = () => {
               </Typography>
               <SpotifyIcon />
             </Box>
-            <Box
-              sx={{
-                height: "70%",
-                width: "90%",
-              }}
-            >
-              <DataGrid
-                rows={top_tracks}
-                columns={columns}
-                sortingOrder={sortingOrder}
-                getCellClassName={(params) => getCellStyling(params)}
-                initialState={{
-                  columns: {
-                    columnVisibilityModel: {
-                      id: false,
-                    },
-                  },
-                  pagination: {
-                    paginationModel: {
-                      pageSize: 20,
-                    },
-                  },
-                }}
-                pageSizeOptions={[10, 20, 60]}
-                sx={{
-                  ".significantCell": {
-                    color: "green",
-                    fontWeight: "bold",
-                    bgcolor: SIGNIFICANT_CELL_BACKGROUND_COLOR,
-                  },
-                  ".trackNameCell": {
-                    color: "lightgreen",
-                  },
-                  fontSize: "15px",
-                }}
-              />
+            <Box height="75%" width="90%">
+              <MoodGrid topTracks={playlistDetails?.top_tracks || []} />
             </Box>
             <Typography
               color="green"
@@ -340,7 +306,6 @@ const MoodDisplay = () => {
             </Typography>
           </Box>
         </BackgroundImage>
-        <InfoDialog open={infoDialogIsOpen} handleClose={handleDialogClose} />
       </Box>
     </Box>
   );
