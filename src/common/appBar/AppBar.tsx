@@ -7,12 +7,15 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate, useLocation } from "react-router-dom";
 
+type NavigatePaths = "/login" | "/home" | "/about" | "/mood";
+
 const AppBarHeader = () => {
   const { isAuthenticated, endUserSession, logoutOfSpotify } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
   const navigateBack = () => {
+    // Don't try to navigate back from /login, to avoid auth issues
     if (location.pathname === "/login") {
       return;
     }
@@ -21,6 +24,13 @@ const AppBarHeader = () => {
       endUserSession();
     } else {
       navigate(-1);
+    }
+  };
+
+  // Avoid cluttering navigation history when clicking the same path repeatedly
+  const handleNavigationClick = (target: NavigatePaths) => {
+    if (location.pathname !== target) {
+      navigate(target);
     }
   };
 
@@ -40,12 +50,15 @@ const AppBarHeader = () => {
           </IconButton>
           <Button
             color="inherit"
-            onClick={() => navigate("/home")}
+            onClick={() => handleNavigationClick("/home")}
             disabled={!isAuthenticated}
           >
             Home
           </Button>
-          <Button color="inherit" onClick={() => navigate("/about")}>
+          <Button
+            color="inherit"
+            onClick={() => handleNavigationClick("/about")}
+          >
             About
           </Button>
           <div style={{ flexGrow: 1 }}></div>
