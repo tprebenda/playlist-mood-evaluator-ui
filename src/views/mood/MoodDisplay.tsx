@@ -219,14 +219,14 @@ const MoodDisplay = () => {
             <Typography
               color="lightgray"
               sx={{
-                typography: { xxl: "h6", xl: "body1" },
+                typography: { xxl: "h6", xl: "body1", lg: "body2" },
               }}
             >
               (Track Details)
             </Typography>
             <IconButton
               onClick={() => scrollTo(gridSection)}
-              sx={{ borderRadius: 5 }}
+              sx={{ borderRadius: 2 }}
             >
               <KeyboardArrowDownIcon
                 sx={{ fontSize: { xxl: 70, xs: 45 }, color: "green" }}

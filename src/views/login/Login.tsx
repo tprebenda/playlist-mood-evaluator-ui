@@ -4,13 +4,15 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import SpotifyLogo from "../../common/spotify/SpotifyLogo";
-import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "../../auth/hooks/useAuth";
 import Box from "@mui/material/Box";
 import AppLogo from "../../common/appLogo/AppLogo";
 import { nightCityWallpaper } from "../../assets/wallpapers";
 import BackgroundImage from "../../common/backgroundImage/BackgroundImage";
 import CircularProgressBar from "../../common/circularProgressBar/CircularProgressBar";
 import AppBarHeader from "../../common/appBar/AppBar";
+import { useState } from "react";
+import { useErrorBoundary } from "react-error-boundary";
 
 // TODO: RE-ADD AFTER SCOPE EXTENSION REQUEST IS APPROVED:
 // const welcomeMessage = `Hello!\nThe Playlist Mood Evaluator app will require access to your \
@@ -23,21 +25,20 @@ view the names of your playlists.
 
 export default function Login() {
   const { login } = useAuth();
+  const [authInProgress, setAuthInProgress] = useState(false);
 
-  // TODO: still not working
-  let authInProgress: boolean = JSON.parse(
-    localStorage.getItem("authInProgress") || "false"
-  );
-  // Make sure the local storage item is a boolean, since JSON parse could yield anything
-  if (typeof authInProgress != "boolean") {
-    console.error(`Unexpected type for authInProgress var: ${authInProgress}`);
-    authInProgress = false;
-  }
+  const { showBoundary } = useErrorBoundary();
 
-  // TODO: still not working
-  const onAuthClick = () => {
-    localStorage.setItem("authInProgress", "true");
-    login();
+  const onAuthClick = async () => {
+    setAuthInProgress(true);
+    try {
+      await login();
+    } catch (err) {
+      console.error(err);
+      showBoundary(err);
+    } finally {
+      setAuthInProgress(false);
+    }
   };
 
   return authInProgress ? (

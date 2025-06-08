@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { SyntheticEvent, useEffect, useMemo, useState } from "react";
 // import getUser from "../../api/user/getUser";
 import Autocomplete from "@mui/material/Autocomplete";
-import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "../../auth/hooks/useAuth";
 import AppBarHeader from "../../common/appBar/AppBar";
 import AppLogo from "../../common/appLogo/AppLogo";
 import { pinkSunWallpaper } from "../../assets/wallpapers";

@@ -55,12 +55,3 @@ export const triggerSpotifyLogout = () => {
   );
   setTimeout(() => spotifyLogoutWindow?.close(), 2000);
 };
-
-// Throws error if Spotify Auth endpoint returns one, otherwise returns "code" argument
-export const getAuthCodeFromArgs = (args: URLSearchParams) => {
-  const error = args.get("error");
-  if (error) {
-    throw new Error(error);
-  }
-  return args.get("code");
-};

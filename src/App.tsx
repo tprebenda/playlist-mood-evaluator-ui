@@ -4,13 +4,14 @@ import Login from "./views/login/Login";
 import "./App.css";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Home from "./views/home/Home";
-import { AuthProvider } from "./hooks/useAuth";
+import { AuthProvider } from "./auth/hooks/useAuth";
 import MoodDisplay from "./views/mood/MoodDisplay";
 import About from "./views/about/About";
 import ThemeWrapper from "./ThemeWrapper";
 import NotFound from "./views/error/NotFound";
 import ErrorPage from "./views/error/ErrorPage";
 import { ErrorBoundary } from "react-error-boundary";
+import { OAuthCallback } from "./auth/callback/OAuthCallback";
 
 // Allows us to wrap the browser router in AuthProvider
 // https://stackoverflow.com/a/74443785/11972470
@@ -39,7 +40,7 @@ function App() {
         {
           // This is used as the redirect path for for Spotify OAuth2.0 Authorization Code Flow
           path: "/callback",
-          element: <Login />,
+          element: <OAuthCallback />,
         },
         {
           path: "/home",
