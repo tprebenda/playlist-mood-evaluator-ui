@@ -8,7 +8,7 @@ import { useNavigate, useRouteError } from "react-router-dom";
 import { AxiosError, isAxiosError } from "axios";
 import { useEffect, useState } from "react";
 
-// Todo: should be good to remove?
+// Todo: REMOVE??
 const UNREGISTERED_USER_ERROR = JSON.stringify({
   detail: "User not registered",
 });
@@ -36,6 +36,7 @@ const ErrorPage = () => {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx
       console.error(axiosError.response);
+
       if (
         JSON.stringify(axiosError.response.data) === UNREGISTERED_USER_ERROR
       ) {

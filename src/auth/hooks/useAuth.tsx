@@ -6,18 +6,18 @@ import {
   useCallback,
 } from "react";
 import { useNavigate } from "react-router-dom";
-import logoutUserSession from "../../api/auth/logoutUser";
 import {
   initiateOAuthFlow,
   triggerSpotifyLogout,
 } from "../../helpers/auth/authHelpers";
+import { useLogout } from "../../api/hooks/useLogout";
 
 interface AuthContextType {
   isAuthenticated: boolean;
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   login: () => void;
   endUserSession: () => Promise<void>;
-  logoutOfSpotify: () => Promise<void>;
+  logoutOfSpotify: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -26,20 +26,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
+  const { mutateAsync: logout } = useLogout();
+
   const login = () => {
-    initiateOAuthFlow(); // kicks off the Spotify OAuth redirect
+    // kicks off the Spotify OAuth redirect
+    initiateOAuthFlow();
   };
 
   const endUserSession = useCallback(async () => {
-    await logoutUserSession();
-    sessionStorage.clear();
+    await logout();
     setIsAuthenticated(false);
     navigate("/login", { replace: true });
-  }, [navigate]);
+  }, [navigate, logout]);
 
-  const logoutOfSpotify = useCallback(async () => {
+  const logoutOfSpotify = useCallback(() => {
     triggerSpotifyLogout();
-    sessionStorage.clear();
     setIsAuthenticated(false);
     navigate("/login", { replace: true });
   }, [navigate]);

@@ -1,32 +1,33 @@
-import { MoodResponse, Track } from "../api/playlists/getPlaylistMood";
-import { PlaylistsResponse } from "../api/playlists/getPlaylists";
-
-export type TrackDetails = Track;
-
-export interface LoadingStatus {
-  isLoading: boolean;
-  text: string;
+export interface TrackDetails {
+  id: string;
+  name: string;
+  album: string;
+  artists: string;
+  danceability: number;
+  energy: number;
+  speechiness: number;
+  acousticness: number;
+  instrumentalness: number;
+  valence: number;
 }
 
-export const notLoading: LoadingStatus = {
-  isLoading: false,
-  text: "",
-};
+export interface MoodResponse {
+  mood: string;
+  top_features: string[];
+  top_tracks: TrackDetails[];
+}
 
-export const loadingUserData: LoadingStatus = {
-  isLoading: true,
-  text: "Retrieving user playlist data from Spotify...",
-};
+export const getLoadingStatusForPlaylist = (playlistName: string): string =>
+  `Generating mood using the songs from your playlist: '${playlistName}'...`;
 
-export const getLoadingStatusForPlaylist = (
-  playlistName: string,
-): LoadingStatus => ({
-  isLoading: true,
-  text: `Generating mood using the songs from your playlist: '${playlistName}'...`,
-});
-
-export type UserPlaylist = PlaylistsResponse;
-
-export type PlaylistMoodDetails = MoodResponse;
+export const LOADING_USER_DATA =
+  "Retrieving user playlist data from Spotify...";
 
 export const GAP_TO_BORDER = { xxl: 7, xl: 4, xs: 3 };
+
+export interface PlaylistsResponse {
+  name: string;
+  id: string;
+}
+
+export type UserPlaylist = PlaylistsResponse;

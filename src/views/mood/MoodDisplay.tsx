@@ -18,72 +18,41 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import IconButton from "@mui/material/IconButton";
 import SpotifyIcon from "../../common/spotify/SpotifyIcon";
-import {
-  LoadingStatus,
-  notLoading,
-  PlaylistMoodDetails,
-  getLoadingStatusForPlaylist,
-  GAP_TO_BORDER,
-} from "../../common";
+import { getLoadingStatusForPlaylist, GAP_TO_BORDER } from "../../common";
 import CircularProgressBar from "../../common/circularProgressBar/CircularProgressBar";
-import { getPlaylistMood } from "../../api/playlists/getPlaylistMood";
 import { useErrorBoundary } from "react-error-boundary";
 import MoodGrid from "./MoodGrid";
+import useGetPlaylistMood from "../../api/hooks/useGetPlaylistMood";
 
 const MoodDisplay = () => {
   // Pull playlist identifiers that were passed as state in navigate()
   const { state } = useLocation();
   const { playlistName, playlistId } = state;
-  const [loadingStatus, setLoadingStatus] = useState<LoadingStatus>(() =>
-    getLoadingStatusForPlaylist(playlistName)
-  );
-  const [playlistDetails, setPlaylistDetails] =
-    useState<PlaylistMoodDetails | null>(null);
+
   const [infoDialogIsOpen, setInfoDialogIsOpen] = useState<boolean>(false);
+  const {
+    data: playlistMoodDetails,
+    isLoading,
+    isError,
+    error,
+  } = useGetPlaylistMood(playlistId);
 
   const { showBoundary } = useErrorBoundary();
 
-  // Pull playlist mood details from SessionStorage, if present
   useEffect(() => {
-    const setupMoodPage = async () => {
-      try {
-        const sessionPlaylistDetails = sessionStorage.getItem(
-          `playlistDetails-${playlistId}`
-        );
-        if (sessionPlaylistDetails) {
-          setPlaylistDetails(JSON.parse(sessionPlaylistDetails));
-        } else {
-          const playlistMoodDetails = await getPlaylistMood(playlistId);
-          // remove session storage for other playlist mood details
-          Object.keys(sessionStorage)
-            .filter((k) => {
-              return /playlistDetails-.*/.test(k);
-            })
-            .forEach((k) => {
-              sessionStorage.removeItem(k);
-            });
-          // add new playlist to session storage
-          sessionStorage.setItem(
-            `playlistDetails-${playlistId}`,
-            JSON.stringify({ ...playlistMoodDetails })
-          );
-          setPlaylistDetails(playlistMoodDetails);
-        }
-        setLoadingStatus(notLoading);
-      } catch (error) {
-        showBoundary(error);
-      }
-    };
-    setupMoodPage();
-  }, [playlistId, showBoundary]);
+    if (isError && error) {
+      setInfoDialogIsOpen(false);
+      showBoundary(error);
+      return;
+    }
+  }, [isError, error, showBoundary]);
 
-  const topFeaturesUppercase = useMemo(
-    () =>
-      playlistDetails?.top_features
-        .map((feature: string) => feature[0].toUpperCase() + feature.slice(1))
-        .join(", "),
-    [playlistDetails?.top_features]
-  );
+  const topFeaturesUppercase = useMemo(() => {
+    if (!playlistMoodDetails) return "";
+    return playlistMoodDetails.top_features
+      .map((feature: string) => feature[0].toUpperCase() + feature.slice(1))
+      .join(", ");
+  }, [playlistMoodDetails]);
 
   // used for snap scrolling
   const displaySection = useRef<HTMLInputElement>(null);
@@ -104,9 +73,12 @@ const MoodDisplay = () => {
     setInfoDialogIsOpen(false);
   };
 
-  return loadingStatus.isLoading === true ? (
-    <CircularProgressBar text={loadingStatus.text} />
-  ) : (
+  if (isLoading) {
+    return (
+      <CircularProgressBar text={getLoadingStatusForPlaylist(playlistName)} />
+    );
+  }
+  return (
     // MOOD DISPLAY (FIRST PAGE)
     <Box
       position="relative"
@@ -172,7 +144,7 @@ const MoodDisplay = () => {
                       sx={{ typography: { xxl: "h6", xs: "body1" } }}
                       gutterBottom
                     >
-                      {playlistDetails?.mood}
+                      {playlistMoodDetails?.mood}
                     </Typography>
                     <Typography
                       color="green"
@@ -289,7 +261,7 @@ const MoodDisplay = () => {
               <SpotifyIcon />
             </Box>
             <Box height="75%" width="90%">
-              <MoodGrid topTracks={playlistDetails?.top_tracks || []} />
+              <MoodGrid topTracks={playlistMoodDetails?.top_tracks || []} />
             </Box>
             <Typography
               color="green"

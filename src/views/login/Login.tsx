@@ -9,15 +9,7 @@ import Box from "@mui/material/Box";
 import AppLogo from "../../common/appLogo/AppLogo";
 import { nightCityWallpaper } from "../../assets/wallpapers";
 import BackgroundImage from "../../common/backgroundImage/BackgroundImage";
-import CircularProgressBar from "../../common/circularProgressBar/CircularProgressBar";
 import AppBarHeader from "../../common/appBar/AppBar";
-import { useState } from "react";
-import { useErrorBoundary } from "react-error-boundary";
-
-// TODO: RE-ADD AFTER SCOPE EXTENSION REQUEST IS APPROVED:
-// const welcomeMessage = `Hello!\nThe Playlist Mood Evaluator app will require access to your \
-// Spotify account info (to retrieve your profile name), and your playlists (to view song titles).\
-// \n\nPlease sign in to Spotify by clicking the icon below to authorize the app:`;
 
 const welcomeMessage = `Hello! To generate a mood for your playlists, you must first authorize my app to \
 view the names of your playlists.
@@ -25,25 +17,8 @@ view the names of your playlists.
 
 export default function Login() {
   const { login } = useAuth();
-  const [authInProgress, setAuthInProgress] = useState(false);
 
-  const { showBoundary } = useErrorBoundary();
-
-  const onAuthClick = async () => {
-    setAuthInProgress(true);
-    try {
-      await login();
-    } catch (err) {
-      console.error(err);
-      showBoundary(err);
-    } finally {
-      setAuthInProgress(false);
-    }
-  };
-
-  return authInProgress ? (
-    <CircularProgressBar text="Authenticating..." />
-  ) : (
+  return (
     <>
       <AppBarHeader />
       <BackgroundImage imageUrl={nightCityWallpaper}>
@@ -105,7 +80,7 @@ export default function Login() {
                 marginBottom: "8px",
               }}
             >
-              <Button size="small" onClick={onAuthClick}>
+              <Button size="small" onClick={login}>
                 <SpotifyLogo />
               </Button>
             </CardActions>

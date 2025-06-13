@@ -2,9 +2,8 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import { getPlaylists } from "../../api/playlists/getPlaylists";
 import { useNavigate } from "react-router-dom";
-import { SyntheticEvent, useEffect, useMemo, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 // import getUser from "../../api/user/getUser";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useAuth } from "../../auth/hooks/useAuth";
@@ -14,52 +13,31 @@ import { pinkSunWallpaper } from "../../assets/wallpapers";
 import BackgroundImage from "../../common/backgroundImage/BackgroundImage";
 import { useErrorBoundary } from "react-error-boundary";
 import CircularProgressBar from "../../common/circularProgressBar/CircularProgressBar";
-import {
-  LoadingStatus,
-  loadingUserData,
-  GAP_TO_BORDER,
-  notLoading,
-  UserPlaylist,
-} from "../../common";
+import { LOADING_USER_DATA, GAP_TO_BORDER, UserPlaylist } from "../../common";
+import useGetPlaylists from "../../api/hooks/useGetPlaylists";
 
 const Home = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
-  const [loadingStatus, setLoadingStatus] =
-    useState<LoadingStatus>(loadingUserData);
-  const [playlists, setPlaylists] = useState<UserPlaylist[]>([]);
+  const { showBoundary } = useErrorBoundary();
   const [selectedPlaylist, setSelectedPlaylist] = useState<UserPlaylist | null>(
     null
   );
-  const { showBoundary } = useErrorBoundary();
+
+  const { data: playlists, isLoading, isError, error } = useGetPlaylists();
+  const allPlaylistNames = playlists ? playlists.map((p) => p.name) : [];
 
   useEffect(() => {
-    const setupHomePage = async () => {
-      try {
-        const sessionPlaylists = sessionStorage.getItem("userPlaylists");
-        if (sessionPlaylists) {
-          setPlaylists(JSON.parse(sessionPlaylists));
-        } else {
-          const playlists = await getPlaylists();
-          sessionStorage.setItem("userPlaylists", JSON.stringify(playlists));
-          setPlaylists(playlists);
-        }
-        setLoadingStatus(notLoading);
+    if (!isAuthenticated) navigate("/login");
+  }, [isAuthenticated, navigate]);
 
-        if (!isAuthenticated) {
-          navigate("/login");
-        }
-      } catch (error) {
-        showBoundary(error);
-      }
-    };
-    setupHomePage();
-  }, [isAuthenticated, navigate, showBoundary]);
-
-  const allPlaylistNames = useMemo(
-    () => playlists.map((playlist: UserPlaylist) => playlist.name),
-    [playlists]
-  );
+  useEffect(() => {
+    if (isError && error) {
+      setSelectedPlaylist(null);
+      showBoundary(error);
+      return;
+    }
+  }, [isError, error, showBoundary]);
 
   const onSelectedPlaylistChange = (
     e: SyntheticEvent<Element, Event>,
@@ -88,8 +66,8 @@ const Home = () => {
     });
   };
 
-  return loadingStatus.isLoading === true ? (
-    <CircularProgressBar text={loadingStatus.text} />
+  return isLoading === true ? (
+    <CircularProgressBar text={LOADING_USER_DATA} />
   ) : (
     <>
       <AppBarHeader />

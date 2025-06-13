@@ -14,14 +14,13 @@ const AppBarHeader = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const navigateBack = () => {
+  const navigateBack = async () => {
     // Don't try to navigate back from /login, to avoid auth issues
     if (location.pathname === "/login") {
       return;
     }
     if (location.pathname === "/home") {
-      navigate("/login");
-      endUserSession();
+      await endUserSession();
     } else {
       navigate(-1);
     }
