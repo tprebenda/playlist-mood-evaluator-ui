@@ -1,6 +1,6 @@
 // Used for Spotify OAuth Code flow:
 // https://developer.spotify.com/documentation/web-api/tutorials/code-flow
-const CLIENT_ID = "5b9ee404632b45f6a6d6cc35824554a6";
+const CLIENT_ID = "XXXXXX";
 
 // playlist-read-private playlist-read-collaborative: required to view playlists
 const SCOPE = "playlist-read-private playlist-read-collaborative";
