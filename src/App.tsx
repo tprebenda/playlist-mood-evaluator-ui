@@ -1,5 +1,3 @@
-"use client";
-
 import Login from "./views/login/Login";
 import "./App.css";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";

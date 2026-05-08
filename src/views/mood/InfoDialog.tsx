@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 import {
   DANCEABILITY,
   ENERGY,
-  SPEECHNESS,
+  SPEECHINESS,
   ACOUSTICNESS,
   INSTRUMENTALNESS,
   VALENCE,
@@ -65,7 +65,7 @@ const InfoDialog = ({ open, handleClose }: InfoDialogProps) => {
           {ENERGY}
           <br />
           <AudioFeatureTitle feature="Speechiness" />
-          {SPEECHNESS}
+          {SPEECHINESS}
           <br />
           <AudioFeatureTitle feature="Acousticness" />
           {ACOUSTICNESS}

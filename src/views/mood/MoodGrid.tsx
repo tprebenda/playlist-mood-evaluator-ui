@@ -19,9 +19,9 @@ const DATA_COLUMNS = [
   "valence",
 ];
 
-// Adds 'significantCell' class styling if field is a data column, and value is >= 0.65
-const getCellStyling = (params: GridCellParams<any, any, number>) => {
-  if (!DATA_COLUMNS.includes(params.field) || !params.value) {
+// Adds 'significantCell' class styling if field is a data column and value is >= 0.65
+const getCellStyling = (params: GridCellParams<TrackDetails, number>) => {
+  if (!DATA_COLUMNS.includes(params.field) || params.value == null) {
     return "";
   }
   return params.value >= 0.65 ? "significantCell" : "";
@@ -34,7 +34,7 @@ const columns: GridColDef[] = [
     headerName: "Track Name",
     width: 225,
     headerClassName: "trackNameCell",
-    renderCell: (params: GridCellParams<any, string>) => (
+    renderCell: (params: GridCellParams<TrackDetails, string>) => (
       <Link
         onClick={() => openInNewTab(params.row.url)}
         sx={{ color: "lightgreen", cursor: "pointer" }}

@@ -1,6 +1,7 @@
 export interface TrackDetails {
   id: string;
   name: string;
+  url: string;
   album: string;
   artists: string;
   danceability: number;

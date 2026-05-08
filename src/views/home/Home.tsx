@@ -4,7 +4,6 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router-dom";
 import { SyntheticEvent, useEffect, useState } from "react";
-// import getUser from "../../api/user/getUser";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useAuth } from "../../auth/hooks/useAuth";
 import AppBarHeader from "../../common/appBar/AppBar";
@@ -21,7 +20,7 @@ const Home = () => {
   const { isAuthenticated } = useAuth();
   const { showBoundary } = useErrorBoundary();
   const [selectedPlaylist, setSelectedPlaylist] = useState<UserPlaylist | null>(
-    null
+    null,
   );
 
   const { data: playlists, isLoading, isError, error } = useGetPlaylists();
@@ -41,14 +40,14 @@ const Home = () => {
 
   const onSelectedPlaylistChange = (
     e: SyntheticEvent<Element, Event>,
-    value: string | null
+    value: string | null,
   ) => {
     if (!playlists || !value) {
       setSelectedPlaylist(null);
       return;
     }
     const playlist = playlists.find(
-      (playlist: UserPlaylist) => playlist.name === value
+      (playlist: UserPlaylist) => playlist.name === value,
     );
     setSelectedPlaylist(playlist!);
   };
@@ -66,9 +65,10 @@ const Home = () => {
     });
   };
 
-  return isLoading === true ? (
-    <CircularProgressBar text={LOADING_USER_DATA} />
-  ) : (
+  if (isLoading) {
+    return <CircularProgressBar text={LOADING_USER_DATA} />;
+  }
+  return (
     <>
       <AppBarHeader />
       <BackgroundImage imageUrl={pinkSunWallpaper}>

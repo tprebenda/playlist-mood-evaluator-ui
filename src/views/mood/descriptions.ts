@@ -9,7 +9,7 @@ death metal has high energy, while a Bach prelude scores low on the scale. Perce
 contributing to this attribute include dynamic range, perceived loudness, timbre, onset rate, \
 and general entropy.`;
 
-export const SPEECHNESS = `Speechiness detects the presence of spoken words in a track. The \
+export const SPEECHINESS = `Speechiness detects the presence of spoken words in a track. The \
 more exclusively speech-like the recording (e.g. talk show, audio book, poetry), the closer to 1.0 \
 the attribute value.`;
 

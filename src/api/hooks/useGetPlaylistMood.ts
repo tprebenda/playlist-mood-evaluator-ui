@@ -13,6 +13,7 @@ const useGetPlaylistMood = (playlistId: string) => {
   return useQuery<MoodResponse>({
     queryKey: ["playlist-mood", playlistId],
     queryFn: () => getPlaylistMood(playlistId),
+    enabled: Boolean(playlistId),
   });
 };
 

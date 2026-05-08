@@ -4,7 +4,8 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { useLocation } from "react-router-dom";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { useLocation, useNavigate } from "react-router-dom";
 import AppBarHeader from "../../common/appBar/AppBar";
 import { RefObject, useEffect, useMemo, useRef, useState } from "react";
 import InfoDialog from "./InfoDialog";
@@ -14,36 +15,51 @@ import {
   MOOD_WALLPAPERS,
 } from "../../assets/wallpapers";
 import AppLogo from "../../common/appLogo/AppLogo";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import IconButton from "@mui/material/IconButton";
 import SpotifyIcon from "../../common/spotify/SpotifyIcon";
 import { getLoadingStatusForPlaylist, GAP_TO_BORDER } from "../../common";
 import CircularProgressBar from "../../common/circularProgressBar/CircularProgressBar";
 import { useErrorBoundary } from "react-error-boundary";
 import MoodGrid from "./MoodGrid";
+import ScrollArrow from "./ScrollArrow";
 import useGetPlaylistMood from "../../api/hooks/useGetPlaylistMood";
 
-const MoodDisplay = () => {
-  // Pull playlist identifiers that were passed as state in navigate()
-  const { state } = useLocation();
-  const { playlistName, playlistId } = state;
+const INFO_BUTTON_SX = {
+  textTransform: "none",
+  color: "#83c3f7",
+  borderColor: "#83c3f7",
+  marginBottom: 1,
+  "&:hover": {
+    borderColor: "#83c3f7",
+    bgcolor: "rgba(131, 195, 247, 0.1)",
+  },
+} as const;
 
-  const [infoDialogIsOpen, setInfoDialogIsOpen] = useState<boolean>(false);
+const MoodDisplay = () => {
+  const { state } = useLocation();
+  const navigate = useNavigate();
+
+  const { playlistName, playlistId } = state ?? {};
+
+  const [infoDialogIsOpen, setInfoDialogIsOpen] = useState(false);
   const {
     data: playlistMoodDetails,
     isLoading,
     isError,
     error,
-  } = useGetPlaylistMood(playlistId);
+  } = useGetPlaylistMood(playlistId ?? "");
 
   const { showBoundary } = useErrorBoundary();
+
+  useEffect(() => {
+    if (!state?.playlistId) {
+      navigate("/home", { replace: true });
+    }
+  }, [state, navigate]);
 
   useEffect(() => {
     if (isError && error) {
       setInfoDialogIsOpen(false);
       showBoundary(error);
-      return;
     }
   }, [isError, error, showBoundary]);
 
@@ -55,9 +71,9 @@ const MoodDisplay = () => {
   }, [playlistMoodDetails]);
 
   // used for snap scrolling
-  const displaySection = useRef<HTMLInputElement>(null);
-  const gridSection = useRef<HTMLInputElement>(null);
-  const scrollTo = (section: RefObject<HTMLInputElement>) => {
+  const displaySection = useRef<HTMLDivElement>(null);
+  const gridSection = useRef<HTMLDivElement>(null);
+  const scrollTo = (section: RefObject<HTMLDivElement>) => {
     section.current?.scrollIntoView({ behavior: "smooth" });
   };
 
@@ -66,20 +82,18 @@ const MoodDisplay = () => {
     return MOOD_WALLPAPERS[randomIdx];
   }, []);
 
-  const handleDialogOpen = () => {
-    setInfoDialogIsOpen(true);
-  };
-  const handleDialogClose = () => {
-    setInfoDialogIsOpen(false);
-  };
+  const handleDialogOpen = () => setInfoDialogIsOpen(true);
+  const handleDialogClose = () => setInfoDialogIsOpen(false);
+
+  if (!state?.playlistId) return null;
 
   if (isLoading) {
     return (
       <CircularProgressBar text={getLoadingStatusForPlaylist(playlistName)} />
     );
   }
+
   return (
-    // MOOD DISPLAY (FIRST PAGE)
     <Box
       position="relative"
       height="100vh"
@@ -90,6 +104,7 @@ const MoodDisplay = () => {
         scrollBehavior: "smooth",
       }}
     >
+      {/* MOOD DISPLAY (FIRST PAGE) */}
       <Box ref={displaySection} sx={{ scrollSnapAlign: "start" }}>
         <AppBarHeader />
         <BackgroundImage imageUrl={randomMoodWallpaper}>
@@ -113,22 +128,16 @@ const MoodDisplay = () => {
                     display="flex"
                     flexDirection="column"
                     alignContent="space-around"
-                    sx={{
-                      gap: { xl: 1, md: 0.5, xs: 0 },
-                    }}
+                    sx={{ gap: { xl: 1, md: 0.5, xs: 0 } }}
                   >
                     <Typography
                       color="green"
-                      sx={{
-                        typography: { xxl: "h5", xs: "h5" },
-                      }}
+                      sx={{ typography: { xxl: "h5", xs: "h5" } }}
                     >
                       Playlist Name:
                     </Typography>
                     <Typography
-                      sx={{
-                        typography: { xxl: "h6", xs: "body1" },
-                      }}
+                      sx={{ typography: { xxl: "h6", xs: "body1" } }}
                       gutterBottom
                     >
                       "{playlistName}"
@@ -157,22 +166,12 @@ const MoodDisplay = () => {
                     </Typography>
                   </Box>
                 </CardContent>
-                <CardActions
-                  style={{
-                    justifyContent: "center",
-                    marginTop: -14,
-                  }}
-                >
+                <CardActions sx={{ justifyContent: "center", mt: -1.5 }}>
                   <Button
-                    variant="text"
+                    variant="outlined"
+                    startIcon={<InfoOutlinedIcon />}
                     onClick={handleDialogOpen}
-                    sx={{
-                      textTransform: "none", // Disables standard MUI styling
-                      textDecoration: "underline",
-                      fontStyle: "italic",
-                      color: "lightgray",
-                      fontSize: "15px",
-                    }}
+                    sx={INFO_BUTTON_SX}
                   >
                     What does this mean?
                   </Button>
@@ -190,24 +189,19 @@ const MoodDisplay = () => {
           >
             <Typography
               color="lightgray"
-              sx={{
-                typography: { xxl: "h6", xl: "body1", lg: "body2" },
-              }}
+              sx={{ typography: { xxl: "h6", xl: "body1", lg: "body2" } }}
             >
               (Track Details)
             </Typography>
-            <IconButton
+            <ScrollArrow
+              direction="down"
               onClick={() => scrollTo(gridSection)}
-              sx={{ borderRadius: 2 }}
-            >
-              <KeyboardArrowDownIcon
-                sx={{ fontSize: { xxl: 70, xs: 45 }, color: "green" }}
-              />
-            </IconButton>
+            />
           </Box>
         </BackgroundImage>
         <InfoDialog open={infoDialogIsOpen} handleClose={handleDialogClose} />
       </Box>
+
       {/* GRID DISPLAY (SECOND PAGE) */}
       <Box
         position="relative"
@@ -220,14 +214,10 @@ const MoodDisplay = () => {
             position="absolute"
             sx={{ top: { xl: "8%", xs: "9%" } }}
           >
-            <IconButton
+            <ScrollArrow
+              direction="up"
               onClick={() => scrollTo(displaySection)}
-              sx={{ borderRadius: 5 }}
-            >
-              <KeyboardArrowUpIcon
-                sx={{ fontSize: { xl: 70, xs: 45 }, color: "green" }}
-              />
-            </IconButton>
+            />
           </Box>
           <Box
             display="flex"
@@ -245,8 +235,10 @@ const MoodDisplay = () => {
               display="flex"
               flexDirection="row"
               alignItems="center"
-              mt={4}
-              mb={3}
+              sx={{
+                mt: { xxl: 4, xl: 2.5, md: 2, xs: 1.5 },
+                mb: { md: 1, xs: 0.5 },
+              }}
               gap={1.5}
             >
               <SpotifyIcon />
@@ -260,22 +252,41 @@ const MoodDisplay = () => {
               </Typography>
               <SpotifyIcon />
             </Box>
-            <Box height="75%" width="90%">
-              <MoodGrid topTracks={playlistMoodDetails?.top_tracks || []} />
-            </Box>
-            <Typography
-              color="green"
+            <Box
               sx={{
-                typography: {
-                  xxl: "h6",
-                  md: "body1",
-                  xs: "body2",
-                },
-                mt: { xxl: 4, xs: 2 },
+                height: { xxl: "75%", xl: "72%", md: "70%", xs: "65%" },
+                width: "90%",
               }}
             >
-              (You can sort columns by clicking on the column header.)
-            </Typography>
+              <MoodGrid topTracks={playlistMoodDetails?.top_tracks || []} />
+            </Box>
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              gap={{ xs: 0.25, md: 0.5 }}
+              sx={{
+                mt: { xxl: 2, xl: 1.5, md: 1, xs: 0.5 },
+              }}
+            >
+              <Button
+                variant="outlined"
+                startIcon={<InfoOutlinedIcon />}
+                onClick={handleDialogOpen}
+                size="small"
+                sx={INFO_BUTTON_SX}
+              >
+                What do these values mean?
+              </Button>
+              <Typography
+                color="green"
+                sx={{
+                  typography: { xxl: "h6", md: "body1", xs: "caption" },
+                }}
+              >
+                (Sort columns by clicking headers)
+              </Typography>
+            </Box>
           </Box>
         </BackgroundImage>
       </Box>
